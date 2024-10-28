@@ -1,4 +1,3 @@
-import time
 import pigpio
 
 class Buzzer:
@@ -14,5 +13,6 @@ class Buzzer:
     
     def activate(self):
         self.pi.set_PWM_dutycycle(self.pin, self.volume)
-        time.sleep(2.0)
+        
+    def deactivate(self):
         self.pi.set_PWM_dutycycle(self.pin, 0)

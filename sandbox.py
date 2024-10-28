@@ -2,10 +2,12 @@
 
 import smbus
 
+I2C_CHANNEL = 1
+
 
 # Scan I2C bus for devices
 def scan_i2c():
-    i2c = smbus.SMBus(1)
+    i2c = smbus.SMBus(I2C_CHANNEL)
     devices = []
     for addr in range(0x03, 0x78):
         try:

@@ -1,0 +1,51 @@
+import ntplib
+import time
+import datetime
+from wifi import Cell, Scheme
+
+class WifiTimeUtils:
+    def __init__(self, ssid, password, ntp_server="ca.pool.ntp.org"):
+        self.ssid = ssid
+        self.password = password
+        self.ntp_server = ntp_server
+        self.gmt_offset_sec = -8 * 60 * 60  # -8 hours for Pacific Time
+        self.daylight_offset_sec = 3600  # 1 hour for DST
+        self.last_sync_ts = 0
+        self.sync_duration = 60  # Sync every 60 seconds
+        self.ntp_client = ntplib.NTPClient()
+
+    def connect_to_wifi(self):
+        print(f"Connecting to WiFi network {self.ssid}...")
+        try:
+            # Create a WiFi scheme
+            scheme = Scheme.for_cell('wlan0', self.ssid, Cell.all('wlan0')[0], self.password)
+            scheme.activate()
+            print("Connected to WiFi")
+        except Exception as e:
+            print(f"WiFi connection failed: {e}")
+
+    def configure_time(self):
+        try:
+            response = self.ntp_client.request(self.ntp_server, version=3)
+            self.last_sync_ts = int(response.tx_time) + self.gmt_offset_sec
+            print("Time configured successfully")
+        except ntplib.NTPException as e:
+            print(f"Failed to obtain time: {e}")
+
+    def get_unix_timestamp(self):
+        try:
+            response = self.ntp_client.request(self.ntp_server, version=3)
+            unix_timestamp = int(response.tx_time) + self.gmt_offset_sec
+            return unix_timestamp
+        except ntplib.NTPException as e:
+            print(f"Failed to obtain time: {e}")
+            return 0
+
+    def print_local_time(self):
+        try:
+            # Fetch the local time based on the NTP response
+            unix_timestamp = self.get_unix_timestamp()
+            local_time = datetime.datetime.fromtimestamp(unix_timestamp)
+            print("Current Local Time:", local_time.strftime("%A, %B %d %Y %H:%M:%S"))
+        except Exception as e:
+            print(f"Failed to obtain time: {e}")

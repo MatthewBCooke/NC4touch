@@ -26,3 +26,18 @@ if __name__ == '__main__':
     pi = pigpio.pi()
     buzzer = Buzzer(pi, 12)
     buzzer.activate()
+    reward_led = LED(pi, 10, brightness=60)  
+    house_led = LED(pi, 11, brightness=100)  
+
+
+    buzzer.activate()
+    time.sleep(1)  
+    buzzer.deactivate()
+
+    reward_led.activate()
+    time.sleep(5)
+    reward_led.deactivate()
+
+    house_led.activate()
+    time.sleep(10)
+    house_led.deactivate()

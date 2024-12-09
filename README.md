@@ -3,12 +3,40 @@
 # Setting Up Raspberry Pi OS with SSH and VS Code Remote Development
 
 ## 1. Install Raspberry Pi OS
-1. Flash Raspberry Pi OS onto the SD card using the Raspberry Pi Imager.
-2. During setup, set the following:
-   - **Username**: `nc4`
-   - **Password**: `1434`
+1. Instal Raspberry Pi Imager `https://www.raspberrypi.com/software/`.
+2. Plug a micro SD card into an addapter on your computer.
+3. Set the following:
+   - Rasberry Pi Device: `Raspberry Pi 5`
+   - Operating System: `Raspberry Pi OS (64-bit)`
+   - Operating System: The drive associated with your SD card.
+4. Edit settings when prompted:
+   - **Set username and password**
+      - **Username**: `nc4`
+      - **Password**: `1434`
+   - **Configure wireless LAN**
+      - **SSID**: `NC4_Neurogenesis_Exposure`
+      - **Password**: `nc4lab1434`
+      - **Wireless LAN Country**: `CA` 
+   - **Set lacale settings**
+      - Check the box
+      - **Timezone**: `US/Vanvouver`
+      - **Keyboard**: `us`
+- **SERVICES** Tab
+   - **Enable SSH**: Checked and set to `Use password authentication` 
+5. Apply the setup settings to the SD card.
+6. Install Updates
+   - Plug in the SD card and power on the Pi
+   - Open a terminal and run:
+   ```
+   sudo apt update
+   sudo apt full-upgrade -y
+   ``` 
+   - Reboot:
+   ```
+   sudo reboot
+   ```
 
-## 2. Enable SSH on the Raspberry Pi
+## 2. Enable SSH on the Raspberry Pi if needed
 1. Boot the Raspberry Pi.
 2. Open a terminal on the Pi and run:
    ```bash
@@ -21,7 +49,7 @@
 ## 3. Configure Your Windows PC for Ethernet Connection
 1. Connect the Raspberry Pi to the PC via Ethernet.
 2. Find the Raspberry Pi's IP address:
-   - Open Command Prompt (`Win + R`, type `cmd`, press Enter).
+   - Open Command Prompt terminal:
    - Run:
      ```bash
      arp -a
@@ -31,7 +59,7 @@
      ```bash
      ipconfig
      ```
-   - Look for the associated `169.254.x.x` IP address.
+   - Look for the associated `169.254.x.x` IP address (e.g.,`169.254.55.239`).
 
 ## 4. Assign a Static IP to the Raspberry Pi
 1. Power off the Raspberry Pi and pull out the SD card.

@@ -1,29 +1,40 @@
-from luma.core.interface.serial import spi
-from luma.lcd.device import ili9488
-from PIL import Image, ImageDraw
+import gpiod
+import time
+
+# Constants
+CHIP_NAME = "gpiochip0"  # Default GPIO chip on most Raspberry Pi boards
+LINE_NUMBER = 17         # GPIO pin to test (BCM numbering)
 
 def main():
-    # Define your DC and RST GPIO pins
-    DC_PIN = 25  # Replace with your chosen GPIO pin for DC
-    RST_PIN = 24  # Replace with your chosen GPIO pin for Reset (if used)
+    # Get the GPIO chip
+    chip = gpiod.Chip(CHIP_NAME)
 
-    # Initialize SPI interface
-    serial = spi(port=0, device=0, gpio_DC=DC_PIN, gpio_RST=RST_PIN)
+    # Get the specific GPIO line
+    line = chip.get_line(LINE_NUMBER)
 
-    # Initialize the LCD device
-    device = ili9488(serial_interface=serial, width=320, height=480)
+    # Request the GPIO line for output
+    config = gpiod.LineRequest()
+    config.consumer = "lcd_test"
+    config.request_type = gpiod.LINE_REQ_DIR_OUT
 
-    # Create a blank image to display
-    image = Image.new("RGB", (320, 480), "black")  # Create a 320x480 black image
-    draw = ImageDraw.Draw(image)
+    line.request(config)
 
-    # Draw a simple test pattern
-    draw.rectangle((10, 10, 310, 470), outline="white", width=5)  # White border
-    draw.text((100, 220), "Hello, LCD!", fill="white")  # Add text
+    print(f"Testing GPIO line {LINE_NUMBER}...")
+    try:
+        # Toggle the GPIO line
+        for i in range(10):  # Blink 10 times
+            line.set_value(1)
+            print(f"GPIO {LINE_NUMBER} set HIGH")
+            time.sleep(0.5)
 
-    # Send the image to the LCD
-    device.display(image)
-    print("Image displayed on the LCD!")
+            line.set_value(0)
+            print(f"GPIO {LINE_NUMBER} set LOW")
+            time.sleep(0.5)
+
+    finally:
+        # Release the GPIO line
+        line.release()
+        print("GPIO test complete. Line released.")
 
 if __name__ == "__main__":
     main()

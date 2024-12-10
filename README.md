@@ -189,4 +189,4 @@
    ```
    code .
    ```
-7. Close the VS Code instance when you are done.  
+9. Close the VS Code instance when you are done.  

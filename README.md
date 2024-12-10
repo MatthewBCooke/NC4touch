@@ -46,52 +46,74 @@
    - **Interface Options > SSH**
    - Select **Enable**.
 
-## 3. Configure Your Windows PC for Ethernet Connection
-1. Connect the Raspberry Pi to the PC via Ethernet.
-2. Find the Raspberry Pi's IP address:
-   - Open Command Prompt terminal:
-   - Run:
-     ```bash
-     arp -a
-     ```
-   - Compare the output with the Raspberry Pi plugged in and unplugged.
-   - Alternatively, run:
-     ```bash
-     ipconfig
-     ```
-   - Look for the associated `169.254.x.x` IP address (e.g.,`169.254.55.239`).
+## 3. Assign a Static IP and Configure Internet Access for the Raspberry Pi
 
-## 4. Assign a Static IP to the Raspberry Pi
-1. Power off the Raspberry Pi and pull out the SD card.
-2. Insert the SD card into your computer and open the **boot** partition.
-3. Open the `cmdline.txt` file with a text editor.
-4. Add the following to the end of the single line:
+### 1: Power Off and Prepare the SD Card
+1. Power off the Raspberry Pi by running:
    ```
-   ip=169.254.55.240::169.254.55.239:255.255.0.0::eth0:off
+   sudo poweroff
    ```
-   - Replace `169.254.55.240` with the desired static IP for the Pi.
-   - Replace `169.254.55.239` with your PC's IP.
+2. Wait for the Pi to shut down, then remove the SD card.
+3. Insert the SD card into your computer and open the **boot** partition.
 
-5. Save the file, eject the SD card, and reboot the Raspberry Pi.
+### 2: Configure a Static IP for the Ethernet Interface
+1. Open the `cmdline.txt` file in the **boot** partition using a text editor.
+2. Add the following to the end of the single line (ensure everything remains on a single line):
+   ```
+   ip=169.254.55.240::0.0.0.0:255.255.0.0::eth0:off
+   ```
+- Explanation:
+  - `169.254.55.240`: Static IP for the Raspberry Pi’s Ethernet interface.
+  - `0.0.0.0`: No default gateway for Ethernet (traffic won’t be routed through this interface).
+  - `255.255.0.0`: Subnet mask for the Ethernet interface.
+  - `eth0:off`: Specifies the Ethernet interface and disables DHCP.
+3. Save the file and close the editor.
 
-## 5. Test the Connection
-1. Open Command Prompt and ping the Raspberry Pi:
+### 3: Configure Wi-Fi for Internet Access
+1. Create or edit the `wpa_supplicant.conf` file in the **boot** partition.
+2. Add the following content:
+   ```
+   country=CA
+   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+   update_config=1
+
+   network={
+       ssid="NC4_Neurogenesis_Exposure"
+       psk="nc4lab1434"
+   }
+   ```
+3. Save the file and eject the SD card.
+
+### 4: Boot the Raspberry Pi
+1. Reinsert the SD card into the Raspberry Pi.
+2. Connect an Ethernet cable between your computer and the Pi.
+3. Power on the Raspberry Pi.
+
+### 5: Connect to the Raspberry Pi via SSH
+1. On your computer, open a terminal or SSH client.
+2. Ping the Raspberry Pi:
    ```bash
    ping 169.254.55.240
    ```
-2. If the ping is successful, SSH into the Raspberry Pi:
+3. If the ping is successful, SSH into the Raspberry Pi:
    ```bash
    ssh nc4@169.254.55.240
    ```
-3. When prompted:
+4. When prompted:
    - Type `yes` to continue connecting.
    - Enter the password: `1434`.
-4. Verify the connection works, then exit the SSH session:
+5. Verify the connection works, then exit the SSH session:
    ```bash
    exit
    ```
 
-## 6. Set Up Remote Development in VS Code
+### 6: Verify Internet Access on the Raspberry Pi
+1. After connecting via SSH, test the Wi-Fi connection:
+   ```
+   ping -c 4 google.com
+   ```
+
+## 4. Set Up Remote Development in VS Code
 1. Open Visual Studio Code on your Windows PC.
 2. Press `Ctrl + Shift + P` to open the Command Palette.
 3. Search for and select:
@@ -114,7 +136,37 @@
 3. Enter the password again: `1434`.
 4. VS Code will automatically download and set up the remote server on the Raspberry Pi.
 
-Your Raspberry Pi is now ready for remote development with VS Code!
+## Setup access to GitHub
+
+1. Generate a new SSH key:
+   ```
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+   - Replace `your_email@example.com` with your GitHub email.
+   - Press `Enter` to accept all defaults and skip passphrase.
+
+2. Copy the public key:
+   ```
+   cat ~/.ssh/id_ed25519.pub
+   ```
+   - Copy the generated key.
+
+3. Add the key to GitHub:
+   - Go to https://github.com/settings/keys.
+   - Click **New SSH key**.
+   - **Title**: `nc4-raspi5_x` (e.g., `nc4-raspi5_1`)
+   - Paste the copied key and save.
+
+4. Test the connection:
+   ```
+   ssh -T git@github.com
+   ```
+
+5. Clone the repository:
+   ```
+   git clone git@github.com:NC4Lab/TouchscreenApparatus.git
+   ```
+
 
 # Working is SSH
 1. Open Visual Studio Code on your Windows PC.
@@ -129,4 +181,12 @@ Your Raspberry Pi is now ready for remote development with VS Code!
    ```
 5. Select your config when prompted (e.g., `~/.ssh/config`).
 6. Click **Connect**.
+7. Go to the repo:
+   ```
+   cd TouchscreenApparatus
+   ```
+8. Open the repo in VS Code:
+   ```
+   code .
+   ```
 7. Close the VS Code instance when you are done.  

@@ -144,29 +144,24 @@
    ```
    - Replace `your_email@example.com` with your GitHub email.
    - Press `Enter` to accept all defaults and skip passphrase.
-
 2. Copy the public key:
    ```
    cat ~/.ssh/id_ed25519.pub
    ```
    - Copy the generated key.
-
 3. Add the key to GitHub:
    - Go to https://github.com/settings/keys.
    - Click **New SSH key**.
    - **Title**: `nc4-raspi5_x` (e.g., `nc4-raspi5_1`)
    - Paste the copied key and save.
-
 4. Test the connection:
    ```
    ssh -T git@github.com
    ```
-
 5. Clone the repository:
    ```
    git clone git@github.com:NC4Lab/TouchscreenApparatus.git
    ```
-
 6. Set Your Git Username: Run this command in the VS Code terminal (connected to your Pi):
    ```
    git config --global user.name "Your Name"
@@ -175,7 +170,6 @@
    ```
    git config --global user.email "your_email@example.com"
    ```
-
 8. Verify Configuration: 
    ```
    git config --global --list
@@ -203,3 +197,4 @@
    code .
    ```
 9. Close the VS Code instance when you are done.  
+

@@ -167,6 +167,19 @@
    git clone git@github.com:NC4Lab/TouchscreenApparatus.git
    ```
 
+6. Set Your Git Username: Run this command in the VS Code terminal (connected to your Pi):
+   ```
+   git config --global user.name "Your Name"
+   ```
+7. Set Your Git Email: Run this command in the same terminal:
+   ```
+   git config --global user.email "your_email@example.com"
+   ```
+
+8. Verify Configuration: 
+   ```
+   git config --global --list
+   ```
 
 # Working is SSH
 1. Open Visual Studio Code on your Windows PC.

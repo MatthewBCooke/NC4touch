@@ -2,7 +2,7 @@
 
 # Setting Up Raspberry Pi OS with SSH and VS Code Remote Development
 
-## 1. Install Raspberry Pi OS
+## Install Raspberry Pi OS
 1. Instal Raspberry Pi Imager `https://www.raspberrypi.com/software/`.
 2. Plug a micro SD card into an addapter on your computer.
 3. Set the following:
@@ -36,7 +36,7 @@
    sudo reboot
    ```
 
-## 2. Enable SSH on the Raspberry Pi if needed
+## Enable SSH on the Raspberry Pi if needed
 1. Boot the Raspberry Pi.
 2. Open a terminal on the Pi and run:
    ```bash
@@ -46,7 +46,7 @@
    - **Interface Options > SSH**
    - Select **Enable**.
 
-## 3. Assign a Static IP and Configure Internet Access for the Raspberry Pi
+## Assign a Static IP and Configure Ethernet and Internet Access for the Raspberry Pi
 
 ### 1: Power Off and Prepare the SD Card
 1. Power off the Raspberry Pi by running:
@@ -113,7 +113,7 @@
    ping -c 4 google.com
    ```
 
-## 4. Set Up Remote Development in VS Code
+## Set Up Remote Development in VS Code
 1. Open Visual Studio Code on your Windows PC.
 2. Press `Ctrl + Shift + P` to open the Command Palette.
 3. Search for and select:
@@ -126,15 +126,23 @@
    ```
 5. Save the configuration when prompted (e.g., `~/.ssh/config`).
 6. Click **Connect**.
-
-## 7. Complete the Remote-SSH Setup
-1. A new VS Code window will open.
-2. When prompted to select the platform, choose:
+7. A new VS Code window will open.
+8. When prompted to select the platform, choose:
    ```
    Linux
    ```
-3. Enter the password again: `1434`.
-4. VS Code will automatically download and set up the remote server on the Raspberry Pi.
+9. Enter the password again: `1434`.
+10. VS Code will automatically download and set up the remote server on the Raspberry Pi.
+
+## Enable SPI communication 
+1. Boot the Raspberry Pi.
+2. Open a terminal on the Pi and run:
+   ```bash
+   sudo raspi-config
+   ```
+3. Navigate to:
+   - **Interface Options > SPI**
+   - Select **Enable**.
 
 ## Setup access to GitHub
 
@@ -198,3 +206,45 @@
    ```
 9. Close the VS Code instance when you are done.  
 
+# Setting up python environment
+1. Update and Upgrade Raspberry Pi Packages:
+   ```
+   sudo apt update
+   sudo apt upgrade -y
+   ```
+2. Install Required Python and System Packages:
+   ```
+   sudo apt install python3 python3-pip python3-venv python3-dev build-essential -y
+   ```
+3. Install the Virtual Environment Tool
+   ```
+   sudo apt install python3-venv -y
+   ```
+4. Create a Virtual Environment
+   - Navigate to the project directory and create an environement
+   ```
+   cd ~/TouchscreenApparatus
+   python3 -m venv venv
+   ```
+5. Activate the Virtual Environment
+   ```
+   source venv/bin/activate
+   ```
+6. Install Luma Specific Packages:
+   ```
+   sudo apt install libopenjp2-7 libtiff-dev -y
+   ```
+7. Install the Luma Library
+   ```
+   pip3 install luma.lcd
+   ```
+8. Keep Dependencies Organized: 
+   - Create `requirements.txt` file:
+   ```
+   pip freeze > requirements.txt
+   ```
+   - Dependencies can be reinstalled using:
+   ```
+   pip install -r requirements.txt
+   ```
+   - Rerun the 'Create' command when libraries are modified.

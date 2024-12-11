@@ -51,19 +51,23 @@
    sudo raspi-config
    ```
 
-3. Navigate to:
+3. Enable SSH:
    - **Interface Options > SSH**
    - Select **Enable**.
 
-4. Navigate to:
+4. Enable SPI:
    - **Interface Options > SPI**
    - Select **Enable**.
 
-5. Navigate to:
+5. Enable GPIO:
    - **Interface Options > Remote GPIO**
    - Select **Enable**.
 
-6. Reboot
+6. Enable I2C:
+   - **Interface Options > I2C**
+   - Select **Enable**.
+
+7. Reboot
    ```
    sudo reboot
    ```
@@ -185,7 +189,27 @@
 
 10. VS Code will automatically download and set up the remote server on the Raspberry Pi.
 
-## Setup User Permisions (may not be necessary)
+
+## Set up search by prefix functionality (Optional)
+   
+   1. Open the ~/.bashrc file for editing:
+   ```
+   nano ~/.bashrc
+   ```
+   
+   2. Add the following lines to your ~/.bashrc:
+   ```
+   # Enable history search with up/down arrows
+   bind '"\e[A": history-search-backward'
+   bind '"\e[B": history-search-forward'
+   ```
+
+   3. Save the pashrc and source it:
+   ```
+   source ~/.bashrc
+   ```
+
+## Setup User Permisions for GPIO and SPI (may not be necessary)
 
 1. Add the User to the gpio and spi Groups
    To ensure the user can access GPIO and SPI without sudo, run:
@@ -376,10 +400,14 @@ Run setup.sh:
 ## Pi to LCD
 | **LCD Pin**   | **Raspberry Pi GPIO Pin**                     | **Description**            |
 |---------------|-----------------------------------------------|----------------------------|
-| **VCC**   | Pin 1 or Pin 17 (3.3V)                       | Power supply for the LCD   |
-| **GND**   | Pin 6 or Pin 9 (GND)                         | Ground                     |
-| **MOSI**  | Pin 19 (GPIO 10, MOS0)                       | SPI data from Pi to LCD    |
-| **SCLK**  | Pin 23 (GPIO 11, SCLK)                       | SPI clock                  |
-| **CS**    | Pin 24 (GPIO 8, CE0)                         | SPI chip select            |
-| **DC**    | Custom (e.g., GPIO 25 on Pin 22, IO25)       | Data/Command signal        |
-| **RES**   | Custom (e.g., GPIO 24 on Pin 18, IO24)       | Reset signal               |
+| **VCC**       | Pin 1 or Pin 17 (3.3V)                       | Power supply for the LCD   |
+| **GND**       | Pin 6 or Pin 9 (GND)                         | Ground                     |
+| **MOSI**      | Pin 19 (GPIO 10, MOSI)                       | SPI data from Pi to LCD    |
+| **SCLK**      | Pin 23 (GPIO 11, SCLK)                       | SPI clock                  |
+| **CS**        | Pin 24 (GPIO 8, CE0)                         | SPI chip select            |
+| **DC**        | Pin 22 (GPIO 25)                             | Data/Command signal        |
+| **RES**       | Pin 18 (GPIO 24)                             | Reset signal               |
+| **SDA**       | Pin 3 (GPIO 2, SDA)                          | I2C data for touch control |
+| **SCL**       | Pin 5 (GPIO 3, SCL)                          | I2C clock for touch control|
+| **Backlight** | Custom (optional, e.g., GPIO 18 or 12)        | Backlight control (if needed) |
+

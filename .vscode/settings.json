@@ -1,3 +1,12 @@
 {
-    "ros.distro": "noetic"
+    "ros.distro": "noetic",
+    "files.associations": {
+        "unordered_map": "cpp",
+        "initializer_list": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp"
+    }
 }

@@ -3,6 +3,8 @@
 # Update and install dependencies
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y git build-essential bc bison flex libssl-dev libncurses5-dev raspberrypi-kernel-headers device-tree-compiler
+sudo apt install i2c-tools libi2c-dev
+sudo apt install libgpiod-dev
 
 # Build and install the ILI9488 driver
 cd src/lcd/ili9488

@@ -1,12 +1,16 @@
 # Setting Up Raspberry Pi OS with SSH and VS Code Remote Development
 
 ## Install Raspberry Pi OS
+
 1. Instal Raspberry Pi Imager `https://www.raspberrypi.com/software/`.
+
 2. Plug a micro SD card into an addapter on your computer.
+
 3. Set the following:
    - Rasberry Pi Device: `Raspberry Pi 5`
    - Operating System: `Raspberry Pi OS (64-bit)`
    - Operating System: The drive associated with your SD card.
+
 4. Edit settings when prompted:
    - **Set username and password**
       - **Username**: `nc4`
@@ -21,41 +25,67 @@
       - **Keyboard**: `us`
 - **SERVICES** Tab
    - **Enable SSH**: Checked and set to `Use password authentication` 
+
 5. Apply the setup settings to the SD card.
+
 6. Install Updates
-   - Plug in the SD card and power on the Pi
-   - Open a terminal and run:
+
+   Plug in the SD card and power on the Pi
+   Open a terminal and run:
    ```
    sudo apt update
    sudo apt full-upgrade -y
    ``` 
-   - Reboot:
+   
+   Reboot:
    ```
    sudo reboot
    ```
 
-## Enable SSH on the Raspberry Pi if needed
+## Enable SSH, SPI and GPIO on the Raspberry Pi if needed
+
 1. Boot the Raspberry Pi.
+
 2. Open a terminal on the Pi and run:
-   ```bash
+   ```
    sudo raspi-config
    ```
+
 3. Navigate to:
    - **Interface Options > SSH**
    - Select **Enable**.
 
+4. Navigate to:
+   - **Interface Options > SPI**
+   - Select **Enable**.
+
+5. Navigate to:
+   - **Interface Options > Remote GPIO**
+   - Select **Enable**.
+
+6. Reboot
+   ```
+   sudo reboot
+   ```
+
+
 ## Assign a Static IP and Configure Ethernet and Internet Access for the Raspberry Pi
 
 ### 1: Power Off and Prepare the SD Card
+
 1. Power off the Raspberry Pi by running:
    ```
    sudo poweroff
    ```
+
 2. Wait for the Pi to shut down, then remove the SD card.
+
 3. Insert the SD card into your computer and open the **boot** partition.
 
 ### 2: Configure a Static IP for the Ethernet Interface
+
 1. Open the `cmdline.txt` file in the **boot** partition using a text editor.
+
 2. Add the following to the end of the single line (ensure everything remains on a single line):
    ```
    ip=169.254.55.240::0.0.0.0:255.255.0.0::eth0:off
@@ -65,10 +95,13 @@
   - `0.0.0.0`: No default gateway for Ethernet (traffic won’t be routed through this interface).
   - `255.255.0.0`: Subnet mask for the Ethernet interface.
   - `eth0:off`: Specifies the Ethernet interface and disables DHCP.
+
 3. Save the file and close the editor.
 
 ### 3: Configure Wi-Fi for Internet Access
+
 1. Create or edit the `wpa_supplicant.conf` file in the **boot** partition.
+
 2. Add the following content:
    ```
    country=CA
@@ -80,94 +113,115 @@
        psk="nc4lab1434"
    }
    ```
+
 3. Save the file and eject the SD card.
 
 ### 4: Boot the Raspberry Pi
+
 1. Reinsert the SD card into the Raspberry Pi.
+
 2. Connect an Ethernet cable between your computer and the Pi.
+
 3. Power on the Raspberry Pi.
 
 ### 5: Connect to the Raspberry Pi via SSH
+
 1. On your computer, open a terminal or SSH client.
+
 2. Ping the Raspberry Pi:
    ```bash
    ping 169.254.55.240
    ```
+
 3. If the ping is successful, SSH into the Raspberry Pi:
    ```bash
    ssh nc4@169.254.55.240
    ```
+
 4. When prompted:
    - Type `yes` to continue connecting.
    - Enter the password: `1434`.
+
 5. Verify the connection works, then exit the SSH session:
    ```bash
    exit
    ```
 
 ### 6: Verify Internet Access on the Raspberry Pi
+
 1. After connecting via SSH, test the Wi-Fi connection:
    ```
    ping -c 4 google.com
    ```
 
 ## Set Up Remote Development in VS Code
+
 1. Open Visual Studio Code on your Windows PC.
+
 2. Press `Ctrl + Shift + P` to open the Command Palette.
+
 3. Search for and select:
    ```
    Remote-SSH: Add New SSH Host...
    ```
+
 4. Enter the Raspberry Pi's SSH connection string:
    ```
    nc4@169.254.55.240
    ```
+
 5. Save the configuration when prompted (e.g., `~/.ssh/config`).
+
 6. Click **Connect**.
+
 7. A new VS Code window will open.
+
 8. When prompted to select the platform, choose:
    ```
    Linux
    ```
+
 9. Enter the password again: `1434`.
+
 10. VS Code will automatically download and set up the remote server on the Raspberry Pi.
 
-## Enable SPI communication 
-1. Boot the Raspberry Pi.
-2. Open a terminal on the Pi and run:
-   ```bash
-   sudo raspi-config
-   ```
-3. Navigate to:
-   - **Interface Options > SPI**
-   - Select **Enable**.
+## Setup User Permisions (may not be necessary)
 
-## Setup User Permisions
 1. Add the User to the gpio and spi Groups
    To ensure the user can access GPIO and SPI without sudo, run:
    ```
    sudo usermod -aG gpio,spi $(whoami)
    ```
+
 2. Reboot the Raspberry Pi:
    ```
    sudo reboot
    ```
+
 3. Check Group Membership
    Verify that the user has been added to the gpio and spi groups:
    ```
    groups
    ```
    Ensure the output includes both gpio and spi.
+
 4. Test GPIO Pin Configuration:
-   This command outputs the current state of all GPIO pins, showing whether they are configured as inputs or outputs, and their current values.
+   
+   Install libgpiod Tools:
+   Install the GPIO tools package to manage GPIO on the Raspberry Pi 5:
    ```
-   raspi-gpio get
-   raspi-gpio set 18 op
-   raspi-gpio set 18 dh
-   raspi-gpio set 18 dl
+   sudo apt install gpiod -y
    ```
-   Check for errors.
+   
+   Check GPIO Line Information:
+   Use the gpioinfo command to list all GPIO lines and their statuses:
+   ```
+   gpioinfo
+   ```
+   If this command executes without errors and lists GPIO details, you have sufficient permissions to access GPIO.
+
 5. Check SPI Setup
+
    Check if the SPI device files are available:
    ```
    ls /dev/spi*
@@ -177,13 +231,24 @@
    /dev/spidev0.0
    /dev/spidev0.1
    ```
+
    Check the status of the SPI kernel module:
    ```
    lsmod | grep spi
    ```
    The output should include lines like:
    ```
-   spi_bcm2835            20480  0
+   spi_bcm2835            49152  0
+   ```
+
+   Check the permissions of the SPI device files:
+   ```
+   ls -l /dev/spi*
+   ```
+   Example output:
+   ```
+   crw-rw---- 1 root spi 153, 0 Dec 10 10:00 /dev/spidev0.0
+   crw-rw---- 1 root spi 153, 1 Dec 10 10:00 /dev/spidev0.1
    ```
 
 ## Setup access to GitHub
@@ -251,45 +316,60 @@
 # Setting up python environment
 1. Update and Upgrade Raspberry Pi Packages:
    ```
-   sudo apt update
-   sudo apt upgrade -y
+   sudo apt update && sudo apt upgrade -y
+
    ```
-2. Install Required Python and System Packages:
+
+2. Install general essentials:
    ```
-   sudo apt install python3 python3-pip python3-venv python3-dev build-essential python3-rpi.gpio -y
+   sudo apt install build-essential git python3-dev python3-venv python3-pip -y
    ```
-3. Install the Virtual Environment Tool
+
+3. Project-specific essentials:
    ```
-   sudo apt install python3-venv -y
+   sudo apt install gpiod libgpiod-dev spi-tools fbset device-tree-compiler -y
+   sudo apt install lgpio
    ```
+
 4. Create a Virtual Environment
    - Navigate to the project directory and create an environement
    ```
    cd ~/TouchscreenApparatus
    python3 -m venv venv
    ```
+
 5. Activate the Virtual Environment
    ```
-   
+   source venv/bin/activate
    ```
-6. Install Luma Specific Packages:
+
+6. Install Project specific Packages:
    ```
-   sudo apt install libopenjp2-7 libtiff-dev -y
+   pip install gpiod numpy pillow spidev
    ```
-7. Install the Luma Library
+
+7. Install LCD libraries:
    ```
-   pip3 install luma.lcd
+   pip install luma.lcd luma.core
    ```
+
 8. Keep Dependencies Organized: 
    - Create `requirements.txt` file:
    ```
    pip freeze > requirements.txt
    ```
-   - Dependencies can be reinstalled using:
+   Dependencies can be reinstalled using:
    ```
    pip install -r requirements.txt
    ```
-   - Rerun the 'Create' command when libraries are modified.
+   Rerun the 'Create' command when libraries are modified.
+
+# Setting up C++
+
+Run setup.sh:
+   ```
+   sudo ./setup.sh
+   ```
 
 # Pin Mapping
 

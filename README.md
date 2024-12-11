@@ -337,6 +337,30 @@
    ```
 9. Close the VS Code instance when you are done.  
 
+# Setup the Platform IO extension
+
+1. Install the Platform IO extension.
+
+2. Update your Raspberry Pi’s package manager:
+   ```
+   sudo apt update && sudo apt upgrade -y
+   ```
+
+3. Install Python 3 (if not already installed) and pip:
+   ```
+   sudo apt install python3 python3-pip -y
+   ```
+
+4. Install the PlatformIO Core CLI:
+   ```
+   pip3 install platformio
+   ```
+5. Verify the installation:
+   ```
+   pio --version
+   ```
+
+
 # Setting up python environment
 1. Update and Upgrade Raspberry Pi Packages:
    ```
@@ -397,17 +421,14 @@ Run setup.sh:
 
 # Pin Mapping
 
-## Pi to LCD
-| **LCD Pin**   | **Raspberry Pi GPIO Pin**                     | **Description**            |
-|---------------|-----------------------------------------------|----------------------------|
-| **VCC**       | Pin 1 or Pin 17 (3.3V)                       | Power supply for the LCD   |
-| **GND**       | Pin 6 or Pin 9 (GND)                         | Ground                     |
-| **MOSI**      | Pin 19 (GPIO 10, MOSI)                       | SPI data from Pi to LCD    |
-| **SCLK**      | Pin 23 (GPIO 11, SCLK)                       | SPI clock                  |
-| **CS**        | Pin 24 (GPIO 8, CE0)                         | SPI chip select            |
-| **DC**        | Pin 22 (GPIO 25)                             | Data/Command signal        |
-| **RES**       | Pin 18 (GPIO 24)                             | Reset signal               |
-| **SDA**       | Pin 3 (GPIO 2, SDA)                          | I2C data for touch control |
-| **SCL**       | Pin 5 (GPIO 3, SCL)                          | I2C clock for touch control|
-| **Backlight** | Custom (optional, e.g., GPIO 18 or 12)        | Backlight control (if needed) |
-
+## Pi to M0
+| **Raspberry Pi Pin** | **M0 Pin**   | **Purpose**             |
+|-----------------------|--------------|-------------------------|
+| GPIO 9 (pin 21, MIS0)    | MISO (MO) | Data from M0 to Pi          |
+| GPIO 10 (pin 19, MOS0)   | MOSI (MI) | Data from Pi to M0          |
+| GPIO 11 (pin 23, SCLK)   | SCK       | SPI clock signal            |
+| GPIO 8 (CE0)             | CS (5)    | Slave Select for each M0_0  |
+| GPIO 7 (CE1)             | CS (5)    | Slave Select for each M0_1  |
+| GPIO 25 (IO25)           | CS (5)    | Slave Select for each M0_2  |
+| GND (any GND pin)        | GND       | Ground reference            |
+| 3.3V (pin 1 or 17)       | 3.3V      | Power to M0                 |

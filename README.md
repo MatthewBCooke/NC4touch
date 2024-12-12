@@ -431,6 +431,8 @@ Run setup.sh:
 | **CS**        | Pin 24 (GPIO 8, CE0)                         | SPI chip select            |
 | **DC**        | Pin 22 (GPIO 25)                             | Data/Command signal        |
 | **RES**       | Pin 18 (GPIO 24)                             | Reset signal               |
-| **SDA**       | Pin 3 (GPIO 2, SDA)                          | I2C data for touch control |
-| **SCL**       | Pin 5 (GPIO 3, SCL)                          | I2C clock for touch control|
+| **SDA**       | Pin 3 (GPIO 2, SDA)                          | LCD_0 I2C data for touch control |
+| **SCL**       | Pin 5 (GPIO 3, SCL)                          | LCD_0 I2C clock for touch control|
+| **SDA**       | Pin 3 (GPIO 4, SDA)                          | LCD_1 I2C data for touch control |
+| **SCL**       | Pin 5 (GPIO 5, SCL)                          | LCD_1 I2C clock for touch control|
 | **Backlight** | Custom (optional, e.g., GPIO 18 or 12)        | Backlight control (if needed) |

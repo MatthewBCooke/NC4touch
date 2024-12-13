@@ -394,8 +394,8 @@
 
 2. Install dependencies
    ```
-   sudo apt install git bc bison flex libssl-dev libncurses5-dev
-   sudo apt-get install raspberrypi-kernel-headers
+   sudo apt install git bc bison flex libssl-dev libncurses5-dev -y
+   sudo apt-get install raspberrypi-kernel-headers -y
    ```
 
 3. Compile driver
@@ -420,6 +420,84 @@
    dtparam=speed=62000000
    dtparam=rotation=90
    ```
+
+# Setting up the ti9488 driver
+
+1. Update the Pi and reboot
+   ```
+   sudo apt update
+   sudo apt upgrade
+   sudo reboot
+   ```
+
+2. Install dependencies
+   ```
+   sudo apt install git bc bison flex libssl-dev libncurses5-dev
+   sudo apt-get install raspberrypi-kernel-headers
+   ```
+
+3. Compile driver
+   ```
+   cd /home/nc4/TouchscreenApparatus/src/lcd/ti9488
+   make
+   sudo cp ili9488.ko /lib/modules/`uname -r`/kernel/drivers/gpu/drm/tiny/
+   sudo depmod
+   ```
+4. Set up overlay
+   ```
+   cd /home/nc4/TouchscreenApparatus/src/lcd/ti9488/rpi-overlays
+   sudo dtc -@ -I dts -O dtb -o /boot/overlays/generictft-9488-overlay.dtbo generictft-9488-overlay.dts
+   ```
+   Open the config file:
+   ```
+   sudo nano /boot/firmware/config.txt
+   ```
+   Add the following lines to the end:
+   ```
+   dtoverlay=generictft-9488-overlay
+   dtparam=speed=62000000
+   dtparam=rotation=90
+   ```
+
+### BUNCH OF SHIT
+Copy the ili9488.ko module to the kernel's module directory:
+
+bash
+Copy code
+sudo cp ili9488.ko /lib/modules/`uname -r`/kernel/drivers/gpu/drm/tiny/
+Update module dependencies:
+
+bash
+Copy code
+sudo depmod
+Attempt to load the module:
+
+bash
+Copy code
+sudo modprobe ili9488
+Verify that the module is loaded:
+
+bash
+Copy code
+lsmod | grep ili9488
+
+Step 1: Manually Load the Driver
+sudo modprobe ili9488
+
+Verify the Driver is Loaded, run the following command:
+lsmod | grep ili9488
+
+Confirm the framebuffer device is registered correctly.
+ls /dev | grep fb
+
+Verify the framebuffer device name.
+cat /sys/class/graphics/fb0/name
+
+Test the framebuffer by displaying an image.
+sudo fbi -d /dev/fb0 -T 1 /path/to/test_image.bmp
+
+Set pin high
+gpioset gpiochip0 23=1
 
 
 # Setting up python environment
@@ -487,9 +565,9 @@ Run setup.sh:
 |-----------------|----------------------------------------------|----------------------------
 | **VCC**         | Pin 1 or Pin 17 (3.3V)                       | Shared Power supply for the LCD   
 | **GND**         | Pin 6 or Pin 9 (GND)                         | Shared Ground                     
-| **DC**          | Pin 22 (GPIO 25)                             | Shared Data/Command signal        
-| **RES**         | Pin 18 (GPIO 23)                             | Shared Reset signal               
-| **Backlight**   | Custom (GPIO 22)                             | Shared Backlight control          
+| **DC**          | Pin 22 (GPIO 24)                             | Shared Data/Command signal        
+| **RES**         | Pin 18 (GPIO 25)                             | Shared Reset signal               
+| **Backlight**   | Custom (GPIO 23)                             | Shared Backlight control          
 | **MOSI**        | Pin 19 (GPIO 10, MOSI)                       | Shared SPI data from Pi to LCD    
 | **SCLK**        | Pin 23 (GPIO 11, SCLK)                       | Shared SPI clock                  
 | **CS**          | Pin 24 (GPIO 8, CE0)                         | LCD_0 SPI chip select             

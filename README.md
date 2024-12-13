@@ -148,14 +148,14 @@
    - Type `yes` to continue connecting.
    - Enter the password: `1434`.
 
-5. Verify the connection works, then exit the SSH session:
-   ```bash
-   exit
-   ```
-
-6. After connecting via SSH, varify the Wi-Fi connection:
+5. After connecting via SSH, varify the Wi-Fi connection:
    ```
    ping -c 4 google.com
+   ```
+
+6. Verify the connection works, then exit the SSH session:
+   ```bash
+   exit
    ```
 
 ## Set Up Remote Development in VS Code
@@ -209,7 +209,7 @@
    source ~/.bashrc
    ```
 
-## Setup User Permisions for GPIO and SPI (may not be necessary)
+## Setup User Permisions for GPIO and SPI (Optional?)
 
 1. Add the User to the gpio and spi Groups
    To ensure the user can access GPIO and SPI without sudo, run:
@@ -282,9 +282,12 @@
    ssh-keygen -t ed25519 -C "your_email@example.com"
    ```
    - Replace `your_email@example.com` with your GitHub email.
+   ```
+   ssh-keygen -t ed25519 -C "adamwardlester@gmail.com"
+   ```
    - Press `Enter` to accept all defaults and skip passphrase.
 
-2. Copy the public key:
+2. Print the public key:
    ```
    cat ~/.ssh/id_ed25519.pub
    ```
@@ -300,6 +303,7 @@
    ```
    ssh -T git@github.com
    ```
+   Type `yes` and press `Enter`.
 
 5. Clone the repository:
    ```
@@ -310,10 +314,16 @@
    ```
    git config --global user.name "Your Name"
    ```
+   ```
+   git config --global user.name "AdamWardLester"
+   ```
 
 7. Set Your Git Email: Run this command in the same terminal:
    ```
    git config --global user.email "your_email@example.com"
+   ```
+   ```
+   git config --global user.email "adamwardlester@gmail.com"
    ```
 
 8. Verify Configuration: 
@@ -345,6 +355,8 @@
    cd TouchscreenApparatus
    ```
 
+8. Enter the Pi password `1434` in the VS Code search bar.
+ 
 8. Open the repo in VS Code:
    ```
    code .

@@ -2,8 +2,6 @@ import numpy as np
 import os
 import time
 
-print("Initializing framebuffer test..."
-
 print("Initializing framebuffer test...")
 
 # Map the framebuffer device

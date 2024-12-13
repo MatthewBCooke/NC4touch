@@ -5,6 +5,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y git build-essential bc bison flex libssl-dev libncurses5-dev raspberrypi-kernel-headers device-tree-compiler
 sudo apt install i2c-tools libi2c-dev
 sudo apt install libgpiod-dev
+sudo apt install gpiod
 
 # Build and install the ILI9488 driver
 cd /home/nc4/TouchscreenApparatus/src/lcd/ili9488

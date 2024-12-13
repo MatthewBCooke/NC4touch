@@ -4,8 +4,8 @@
 #include <fcntl.h>  // for open()
 #include <gpiod.h>  // for GPIO control
 
-#define FRAMEBUFFER_DEVICE "/dev/fb1"
-#define BACKLIGHT_PIN 22 // GPIO 22 for backlight control
+#define FRAMEBUFFER_DEVICE "/dev/fb0"
+#define BACKLIGHT_PIN 23 // GPIO 23 for backlight control (update to match your configuration)
 
 void set_backlight(bool state)
 {

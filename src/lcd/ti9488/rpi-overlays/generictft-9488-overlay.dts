@@ -30,6 +30,7 @@
             status = "disabled";
         };
     };
+    
     fragment@3 {
         target = <&gpio>;
         __overlay__ {

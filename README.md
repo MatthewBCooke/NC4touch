@@ -59,15 +59,11 @@
    - **Interface Options > SPI**
    - Select **Enable**.
 
-5. Enable GPIO:
-   - **Interface Options > Remote GPIO**
-   - Select **Enable**.
-
-6. Enable I2C:
+5. Enable I2C:
    - **Interface Options > I2C**
    - Select **Enable**.
 
-7. Reboot
+6. Reboot
    ```
    sudo reboot
    ```
@@ -327,7 +323,10 @@
 
 # Working is SSH
 1. Open Visual Studio Code on your Windows PC.
+
 2. Press `Ctrl + Shift + P` to open the Command Palette.
+
+
 3. Search for and select:
    ```
    Remote-SSH: Add New SSH Host...
@@ -336,23 +335,28 @@
    ```
    nc4@169.254.55.240
    ```
+
 5. Select your config when prompted (e.g., `~/.ssh/config`).
+
 6. Click **Connect**.
+
 7. Go to the repo:
    ```
    cd TouchscreenApparatus
    ```
+
 8. Open the repo in VS Code:
    ```
    code .
    ```
+
 9. Close the VS Code instance when you are done.  
 
 # Enabling additional I2C busses on the Pi
 
 1. Edit the Configuration File: Open the config.txt file:
    ```
-   /boot/firmware/config.txt
+   sudo nano /boot/firmware/config.txt
    ```
 
 2. Add the Following Lines to enable additional buses 3 and 4 after `dtparam=i2c_arm=on`:
@@ -362,10 +366,12 @@
    ```
 
 3. Save and Exit: Save the file (Ctrl+O, Enter, Ctrl+X)
+
 4. Reboot:
    ```
    sudo reboot
    ```
+
 5. Varify the busses by listing them:
    ```
    ls /dev/i2c-*
@@ -375,6 +381,44 @@
    /dev/i2c-1
    /dev/i2c-3 (or some other number sufix)
    /dev/i2c-4 (or some other number sufix)
+   ```
+
+# Setting up the ili9488 driver
+
+1. Update the Pi and reboot
+   ```
+   sudo apt update
+   sudo apt upgrade
+   sudo reboot
+   ```
+
+2. Install dependencies
+   ```
+   sudo apt install git bc bison flex libssl-dev libncurses5-dev
+   sudo apt-get install raspberrypi-kernel-headers
+   ```
+
+3. Compile driver
+   ```
+   cd TouchscreenApparatus/src/lcd/ili9488
+   make
+   sudo cp ili9488.ko /lib/modules/`uname -r`/kernel/drivers/gpu/drm/tiny/
+   sudo depmod -a
+   ```
+4. Set up overlay
+   ```
+   cd TouchscreenApparatus/src/lcd/ili9488/rpi-overlays
+   sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili-9488.dtbo ili-9488.dts
+   ```
+   Open the config file:
+   ```
+   sudo nano /boot/firmware/config.txt
+   ```
+   Add the following lines to the end:
+   ```
+   dtoverlay=ili-9488-overlay
+   dtparam=speed=62000000
+   dtparam=rotation=90
    ```
 
 

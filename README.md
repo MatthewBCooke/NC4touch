@@ -395,15 +395,17 @@
    /dev/i2c-4 (or some other number sufix)
    ```
    
-# Setting up the ti9488 driver
+# Setting up the ili9488 driver
 
 1. Update the Pi and reboot
+   
    ```
    sudo apt update && sudo apt upgrade -y
    sudo reboot
    ```
 
 2. Install dependencies
+   
    ```
    sudo apt install git bc bison flex libssl-dev libncurses5-dev -y
    sudo apt-get install raspberrypi-kernel-headers -y
@@ -414,8 +416,9 @@
    ```
 
 3. Build the driver
+  
    ```
-   cd /home/nc4/TouchscreenApparatus/src/lcd/ti9488
+   cd /home/nc4/TouchscreenApparatus/src/lcd/ili9488
    make
    ```
    Verify the file was created:
@@ -424,6 +427,7 @@
    ```
 
 4. Compile the driver
+   
    Copy the compiled driver to the appropriate directory:
    ```
    sudo cp ili9488.ko /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/
@@ -438,13 +442,14 @@
    ```
 
 5. Set up the device tree overlay
-   Navigate to the directory containing the generictft-9488-overlay.dts file:
+   
+   Navigate to the directory containing the ili-9488.dts file:
    ```
-   cd /home/nc4/TouchscreenApparatus/src/lcd/ti9488/rpi-overlays
+   cd /home/nc4/TouchscreenApparatus/src/lcd/ili9488/rpi-overlays
    ```
    Compile the overlay file to a .dtbo binary:
    ```
-   sudo dtc -@ -I dts -O dtb -o /boot/overlays/generictft-9488-overlay.dtbo generictft-9488-overlay.dts
+   sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili-9488.dtbo ili-9488.dts
    ```
    Edit the config.txt file to include the overlay and set SPI parameters:
    ```
@@ -452,8 +457,8 @@
    ```
    Add the following lines to the end:
    ```
-   # ti9488 overlay and SPI parameters
-   dtoverlay=generictft-9488-overlay
+   # ili9488 overlay and SPI parameters
+   dtoverlay=ili-9488-overlay
    dtparam=speed=62000000
    dtparam=rotation=90
    ```
@@ -461,21 +466,23 @@
    ```
    sudo reboot
    ```
-   Run the following command to ensure the generictft-9488-overlay was successfully loaded:
+   Run the following command to ensure the ili-9488 was successfully loaded:
    ```
-   ls /proc/device-tree/overlays/generictft-9488-overlay
+   ls /proc/device-tree/overlays/ili-9488
    ```
    Expected outcomes: the directory exists and contains files like `status` and `name.
 
 6. Temporarily reinable HDMI to use a monitor 
+   
    You cannot use a monitor (HDMI) with the ILI9488 driver installed.
+   
    Disable the dtoverlay for the ILI9488:
    ```
    sudo nano /boot/firmware/config.txt
    ```
    Comment out the line:
    ```
-   #dtoverlay=generictft-9488-overlay
+   #dtoverlay=ili-9488
    ```
    Change this back when you need to use the ILI9488 driver.
 

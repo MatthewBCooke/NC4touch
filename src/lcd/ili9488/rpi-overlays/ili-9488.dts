@@ -6,16 +6,15 @@
 /dts-v1/;
 /plugin/;
 
-
 / {
-        compatible = "brcm,bcm2835";
+	compatible = "brcm,bcm2835";
 
 	fragment@0 {
 		target = <&spi0>;
-                __overlay__ {
+		__overlay__ {
 			status = "okay";
 		};
-        };
+	};
 
 	fragment@1 {
 		target = <&spidev0>;
@@ -24,40 +23,40 @@
 		};
 	};
 
-        fragment@2 {
-                target = <&gpio>;
-                __overlay__ {
-                        pitft_pins: pitft_pins {
-                                brcm,pins = <22 23 25>;
-                                brcm,function = <1 1 1>; /* out out out */
-                        };
-                };
-        };
+	fragment@2 {
+		target = <&gpio>;
+		__overlay__ {
+			pitft_pins: pitft_pins {
+				brcm,pins = <22 23 25>;
+				brcm,function = <1 1 1>; /* out out out */
+			};
+		};
+	};
 
-        fragment@3 {
-                target = <&spi0>;
-                __overlay__ {
-                        /* needed to avoid dtc warning */
-                        #address-cells = <1>;
-                        #size-cells = <0>;
+	fragment@3 {
+		target = <&spi0>;
+		__overlay__ {
+			/* needed to avoid dtc warning */
+			#address-cells = <1>;
+			#size-cells = <0>;
 
-                        pitft: pitft@0{
-                                compatible = "ili9488";
-                                pinctrl-names = "default";
-                                pinctrl-0 = <&pitft_pins>;
+			pitft: pitft@0 {
+				compatible = "ili9488";
+				pinctrl-names = "default";
+				pinctrl-0 = <&pitft_pins>;
 
-                                reg = <0>;
-                                spi-max-frequency = <128000000>;
+				reg = <0>;
+				spi-max-frequency = <128000000>;
 
-                                rotation = <0>;
+				rotation = <0>;
 				reset-gpios = <&gpio 23 0>;
-                                dc-gpios = <&gpio 25 0>;
-                                backlight = <&backlight>;
-                        };
-                };
-        };
-	
-        fragment@4 {
+				dc-gpios = <&gpio 25 0>;
+				backlight = <&backlight>;
+			};
+		};
+	};
+
+	fragment@4 {
 		target-path = "/soc";
 		__overlay__ {
 			backlight: backlight {
@@ -66,9 +65,9 @@
 			};
 		};
 	};
-        
-        __overrides__ {
-                speed =   <&pitft>,"spi-max-frequency:0";
-                rotation =  <&pitft>,"rotation:0";
-        };
+
+	__overrides__ {
+		speed = <&pitft>,"spi-max-frequency:0";
+		rotation = <&pitft>,"rotation:0";
+	};
 };

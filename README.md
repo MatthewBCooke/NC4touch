@@ -428,7 +428,7 @@
 
 4. Compile the driver
    
-   Copy the compiled driver to the appropriate directory:
+   Copy the kernel module to the appropriate directory:
    ```
    sudo cp ili9488.ko /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/
    ```
@@ -592,9 +592,9 @@ Run setup.sh:
 |-----------------|----------------------------------------------|----------------------------
 | **VCC**         | Pin 1 or Pin 17 (3.3V)                       | Shared Power supply for the LCD   
 | **GND**         | Pin 6 or Pin 9 (GND)                         | Shared Ground                     
-| **DC**          | Pin 22 (GPIO 24)                             | Shared Data/Command signal        
-| **RES**         | Pin 18 (GPIO 25)                             | Shared Reset signal               
-| **Backlight**   | Custom (GPIO 23)                             | Shared Backlight control          
+| **DC**          | Pin 22 (GPIO 25)                             | Shared Data/Command signal        
+| **RES**         | Pin 18 (GPIO 23)                             | Shared Reset signal               
+| **Backlight**   | Pin 15 (GPIO 22)                             | Shared Backlight control          
 | **MOSI**        | Pin 19 (GPIO 10, MOSI)                       | Shared SPI data from Pi to LCD    
 | **SCLK**        | Pin 23 (GPIO 11, SCLK)                       | Shared SPI clock                  
 | **CS**          | Pin 24 (GPIO 8, CE0)                         | LCD_0 SPI chip select             

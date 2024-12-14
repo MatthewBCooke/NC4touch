@@ -410,6 +410,7 @@
    sudo apt install git bc bison flex libssl-dev libncurses5-dev -y
    sudo apt-get install raspberrypi-kernel-headers -y
    ```
+   
    Confirm the Raspberry Pi kernel headers were installed correctly by checking if the /build directory exists (Optional):
    ```
    ls /lib/modules/$(uname -r)/build
@@ -421,6 +422,7 @@
    cd /home/nc4/TouchscreenApparatus/src/lcd/ili9488
    make
    ```
+   
    Verify the file was created:
    ```
    ls ili9488.ko
@@ -447,14 +449,17 @@
    ```
    cd /home/nc4/TouchscreenApparatus/src/lcd/ili9488/rpi-overlays
    ```
+   
    Compile the overlay file to a .dtbo binary:
    ```
    sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili-9488.dtbo ili-9488.dts
    ```
+   
    Edit the config.txt file to include the overlay and set SPI parameters:
    ```
    sudo nano /boot/firmware/config.txt
    ```
+  
    Add the following lines to the end:
    ```
    # ili9488 overlay and SPI parameters
@@ -462,15 +467,22 @@
    dtparam=speed=62000000
    dtparam=rotation=90
    ```
+   
    Reboot:
    ```
    sudo reboot
    ```
+   
    Run the following command to ensure the ili-9488 was successfully loaded:
    ```
    ls /proc/device-tree/overlays/ili-9488
    ```
    Expected outcomes: the directory exists and contains files like `status` and `name.
+   
+   Check for errors in the .dtbo
+   ```
+   sudo dtc -I dtb -O dts -o /dev/null /boot/overlays/ili-9488.dtbo
+   ```
 
 6. Temporarily reinable HDMI to use a monitor 
    
@@ -480,10 +492,12 @@
    ```
    sudo nano /boot/firmware/config.txt
    ```
+   
    Comment out the line:
    ```
    #dtoverlay=ili-9488
    ```
+  
    Change this back when you need to use the ILI9488 driver.
 
 ### BUNCH OF SHIT
@@ -525,6 +539,12 @@ sudo fbi -d /dev/fb0 -T 1 /path/to/test_image.bmp
 
 Set pin high
 gpioset gpiochip0 23=1
+
+Remove the .git Folder: This folder makes the directory a separate Git repository.
+rm -rf .git
+
+Add the lcd/ili9488 Folder to the Main Repository:
+git add lcd/ili9488
 
 
 # Setting up python environment

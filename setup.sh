@@ -7,6 +7,9 @@ sudo apt install i2c-tools libi2c-dev
 sudo apt install libgpiod-dev
 sudo apt install gpiod
 
+# TEMP
+sudo apt install pigpio
+
 # Build and install the ILI9488 driver
 cd /home/nc4/TouchscreenApparatus/src/lcd/ili9488
 make

@@ -565,7 +565,8 @@
      `ili9488 spi0.0: [drm] fb0: ili9488drmfb frame buffer device`
    - Issue: GPIO configuration for `reset`, `dc`, and `backlight` is missing, likely due to overlay failure.
 
-3. The Kernel Fails to Load the Overlay
+3. The Kernel Fails Loads the Overlay but fails to apply it
+   - With the message `Failed to apply overlay '0_ili-9488' (kernel)`.
    - Listing overlays under `/proc/device-tree/overlays/` confirms the overlay is not applied:
      `ls /proc/device-tree/overlays/ili-9488`
    - Output:
@@ -592,28 +593,6 @@
      Output:
      `Failed to apply overlay '0_ili-9488' (kernel)`
 
-6. The Device Tree Shows SPI Issues
-   - The `/dev/spidev0.1` node is created, but `/dev/spidev0.0` is missing.
-   - Attempting to load `spi0-1cs` or `spi0-2cs` overlays does not resolve the missing `/dev/spidev0.0` issue.
-   - The base device tree (`/proc/device-tree/soc/spi@7e204000`) shows SPI0 is enabled (`status = "okay";`), but CS0 is not exposed.
-
-7. Phandle Resolution Errors Persist in the `.dtbo`
-   - `reset-gpios`, `dc-gpios`, and `backlight` references fail to resolve during overlay compilation, likely due to missing or improperly linked nodes in the base device tree.
-   - The `target = <0xffffffff>;` placeholder for the SPI node in the decompiled `.dtbo` suggests the overlay is failing to link to the `spi0` node in the base device tree.
-
-8. Backlight Node Seems Misconfigured
-   - The `backlight` property resolves to `<0x02>` in the decompiled `.dtbo`, but it’s unclear whether `<0x02>` correctly maps to GPIO 22 or another valid backlight controller.
-   - Manually setting GPIO 22 (backlight) works to turn the backlight on, confirming the driver is not properly controlling it.
-
-9. Framebuffer Works but the Display Shows No Output
-   - The framebuffer (`/dev/fb0`) is initialized and sized correctly for the display (480x320), but no visible output appears.
-   - SPI communication between the Pi and the ILI9488 controller is suspected to be non-functional.
-
-10. ILI9488 Driver Version
-    - The driver initializes with version `1.0.0 20230414`, but compatibility with the current kernel (`6.6.62+rpt-rpi-v8`) is unconfirmed. It’s worth exploring whether the driver needs to be patched or updated.
-
-11. Confirm Overlay Compatibility with Kernel Version
-    - The current `.dts` might not align with the updated Raspberry Pi kernel/device tree structure. Compare the `.dts` with a similar overlay known to work on the same kernel version (e.g., an Adafruit TFT overlay).
 
 
 

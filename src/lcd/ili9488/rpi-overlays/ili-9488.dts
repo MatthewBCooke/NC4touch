@@ -34,6 +34,16 @@
 	};
 
 	fragment@3 {
+		target-path = "/soc";
+		__overlay__ {
+			backlight: backlight {
+				compatible = "gpio-backlight";
+				gpios = <&gpio 22 0>;
+			};
+		};
+	};
+
+	fragment@4 {
 		target = <&spi0>;
 		__overlay__ {
 			/* needed to avoid dtc warning */
@@ -52,16 +62,6 @@
 				reset-gpios = <&gpio 23 0>;
 				dc-gpios = <&gpio 25 0>;
 				backlight = <&backlight>;
-			};
-		};
-	};
-
-	fragment@4 {
-		target-path = "/soc";
-		__overlay__ {
-			backlight: backlight {
-				compatible = "gpio-backlight";
-				gpios = <&gpio 22 0>;
 			};
 		};
 	};

@@ -43,6 +43,7 @@ int main()
 
     // Set the backlight pin high
     gpioWrite(BACKLIGHT_PIN, 1);
+    printf("Backlight on\n");
 
     // Example: Fill the screen with a red color
     for (int y = 0; y < HEIGHT; ++y)
@@ -66,14 +67,16 @@ int main()
 
     // Draw the buffer to the LCD
     lcd1->DrawFrame(drawBuffer, 3 * WIDTH * HEIGHT);
+    printf("Set to red\n");
 
     delete lcd1;
     delete drawBuffer;
 
-    usleep(10000000); // Wait 
+    usleep(10000000); // Wait
 
     // Set the backlight pin low
     gpioWrite(BACKLIGHT_PIN, 0);
+    printf("Backlight off\n");
 
     // Terminate the session
     gpioTerminate();

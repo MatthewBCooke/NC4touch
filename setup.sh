@@ -70,15 +70,18 @@ done
 echo "==== Building and Installing the ILI9488 Driver ===="
 # Build and install the ILI9488 driver
 ILI9488_DIR="/home/nc4/TouchscreenApparatus/src/drivers/ili9488"
-if [ -d "$ILI9488_DIR" ]; then
-    cd "$ILI9488_DIR"
-    make
-    sudo cp ili9488.ko /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/
-    sudo depmod -a
-else
-    echo "Error: ILI9488 driver directory not found at $ILI9488_DIR"
-    exit 1
-fi
+DRIVER_REPO="https://github.com/your-repo/ili9488-driver.git"  # Update with the correct repository
+
+# Perform a clean build
+cd "$ILI9488_DIR"
+echo "Cleaning previous build..."
+make clean || true              # Ignore errors if no previous build exists
+echo "Building driver..."
+make
+echo "Installing driver..."
+sudo cp ili9488.ko /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/
+sudo depmod -a
+echo "Driver successfully built and installed."
 
 echo "==== Setting Up Device Tree Overlay ===="
 # Compile and install the device tree overlay

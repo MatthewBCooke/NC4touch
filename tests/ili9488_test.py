@@ -1,24 +1,38 @@
-import numpy as np
 import os
 import time
 
-print("Initializing framebuffer test...")
+# Paths to images
+IMAGE_PATHS = [
+    "/home/nc4/TouchscreenApparatus/tests/A01.bmp",
+    "/home/nc4/TouchscreenApparatus/tests/B01.bmp"
+]
 
-# Map the framebuffer device
-try:
-    buf = np.memmap('/dev/fb0', dtype='uint16', mode='w+', shape=(480, 320))
-    print("Framebuffer mapped successfully.")
-except Exception as e:
-    print(f"Error mapping framebuffer: {e}")
-    exit(1)
+# Framebuffer device
+FRAMEBUFFER_DEVICE = "/dev/fb0"
 
-# Fill the screen with white
-print("Filling screen with white (0xFFFF)...")
-buf[:] = 0xFFFF
-time.sleep(1)
+def display_image(image_path):
+    """Uses fbi to display the image."""
+    print(f"Displaying image: {image_path}")
+    command = f"sudo fbi -d {FRAMEBUFFER_DEVICE} -T 1 --noverbose {image_path}"
+    os.system(command)
 
-# Fill the screen with yellow (0xFFC0)
-print("Filling screen with yellow (0xFFC0)...")
-buf[:] = 0xFFC0
+def clear_framebuffer():
+    """Clears the framebuffer display."""
+    os.system(f"sudo fbi -d {FRAMEBUFFER_DEVICE} -T 1 --noverbose --blank 0")
 
-print("Test complete. Screen should have transitioned from white to yellow.")
+# Main script
+if __name__ == "__main__":
+    print("Starting image display test...")
+
+    for image_path in IMAGE_PATHS:
+        if not os.path.exists(image_path):
+            print(f"Error: File '{image_path}' does not exist.")
+            continue
+
+        # Display image
+        display_image(image_path)
+        time.sleep(2)  # Delay between images
+
+    # Clear framebuffer (optional)
+    clear_framebuffer()
+    print("Image display test complete.")

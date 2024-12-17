@@ -420,6 +420,8 @@
   
    ```
    cd /home/nc4/TouchscreenApparatus/src/lcd/ili9488
+   ```
+   ```
    make
    ```
    
@@ -575,100 +577,15 @@
    ```
    echo 0 | sudo tee /sys/class/backlight/soc:backlight/brightness
    ```
+- Draw an image to the fb0 buffer:
+   ```
+   sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/tests/A01.bmp
+   ```
 
 - Check for SPI 
    ```
    ls /dev/spi*
    ```
-
-
-## Identified issues
-
-
-1. The `.dtbo` File Exists in `/boot/overlays/`
-   - Verified that the file is present using:
-     `ls /boot/overlays/ili-9488.dtbo`
-
-2. The `ili9488` Driver is Loaded Successfully (but Without GPIO Configuration)
-   - The driver initializes and creates a framebuffer (`/dev/fb0`), confirmed by:
-     `dmesg | grep -i ili9488`
-   - Example output indicates successful driver initialization:
-     `[drm] Initialized ili9488 1.0.0 20230414 for spi0.0 on minor 0`
-     `ili9488 spi0.0: [drm] fb0: ili9488drmfb frame buffer device`
-   - Issue: GPIO configuration for `reset`, `dc`, and `backlight` is missing, likely due to overlay failure.
-
-3. The Kernel Fails Loads the Overlay but fails to apply it
-   - With the message `Failed to apply overlay '0_ili-9488' (kernel)`.
-
-4. The `.dtbo` File Contains Errors or Warnings
-   - Decompiling the `.dtbo` file with `dtc` reveals the following issues:
-     - Mismatched `#address-cells` and `#size-cells`.
-     - Unresolved GPIO phandle references (`reset-gpios`, `dc-gpios`, `backlight`).
-   - Verified using:
-     `sudo dtc -I dtb -O dts -o /dev/null /boot/overlays/ili-9488.dtbo`
-   - Example output:
-     `Warning (unit_address_vs_reg): node has a unit name, but no reg or ranges property`
-     `Warning (gpios_property): Could not get phandle node for GPIO references`
-
-5. The Overlay Fails to Apply on Boot or Manually
-   - No overlay-related logs appear in `dmesg` after boot, even with `dtdebug=on`:
-     `dmesg | grep -i overlay`
-   - Output:
-     `(empty)`
-   - Attempting to apply the overlay manually fails:
-     `sudo dtoverlay ili-9488`
-     Output:
-     `Failed to apply overlay '0_ili-9488' (kernel)`
-
-
-
-
-# BUNCH OF SHIT
-Copy the ili9488.ko module to the kernel's module directory:
-
-bash
-Copy code
-sudo cp ili9488.ko /lib/modules/`uname -r`/kernel/drivers/gpu/drm/tiny/
-Update module dependencies:
-
-bash
-Copy code
-sudo depmod
-Attempt to load the module:
-
-bash
-Copy code
-sudo modprobe ili9488
-Verify that the module is loaded:
-
-bash
-Copy code
-lsmod | grep ili9488
-
-Step 1: Manually Load the Driver
-sudo modprobe ili9488
-
-Verify the Driver is Loaded, run the following command:
-lsmod | grep ili9488
-
-Confirm the framebuffer device is registered correctly.
-ls /dev | grep fb
-
-Verify the framebuffer device name.
-cat /sys/class/graphics/fb0/name
-
-Test the framebuffer by displaying an image.
-sudo fbi -d /dev/fb0 -T 1 /path/to/test_image.bmp
-
-Set pin high
-gpioset gpiochip0 23=1
-
-Remove the .git Folder: This folder makes the directory a separate Git repository.
-rm -rf .git
-
-Add the lcd/ili9488 Folder to the Main Repository:
-git add lcd/ili9488
-
 
 # Setting up python environment
 1. Update and Upgrade Raspberry Pi Packages:

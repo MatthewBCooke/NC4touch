@@ -49,7 +49,7 @@
 				spi-max-frequency = <128000000>;
 
 				rotation = <0>;
-				reset-gpios = <&gpio 23 0>;
+				reset-gpios = <&gpio 24 0>;
 				dc-gpios = <&gpio 25 0>;
 				backlight = <&backlight>;
 			};
@@ -61,7 +61,7 @@
 		__overlay__ {
 			backlight: backlight {
 				compatible = "gpio-backlight";
-				gpios = <&gpio 22 0>;
+				gpios = <&gpio 18 0>;
 			};
 		};
 	};

@@ -474,7 +474,7 @@
    ```
    sudo reboot
    ```
-   
+    
    Verify the overlay's boot application using:
    ```
    dmesg | grep -i 'ili9488'
@@ -675,14 +675,14 @@ Run setup.sh:
 |              | SCLK            | Pin 23 (GPIO 11, SCLK)       | Shared SPI clock                |
 | **LCD_0**    | CS              | Pin 24 (GPIO 8, CE0)         | LCD_0 SPI Chip Select           |
 |              | DC              | Pin 22 (GPIO 25)             | LCD_0 Data/Command signal       |
-|              | RES             | Pin 18 (GPIO 23)             | LCD_0 Reset signal              |
-|              | Backlight       | Pin 15 (GPIO 22)             | LCD_0 Backlight control         |
+|              | RES             | Pin 18 (GPIO 24)             | LCD_0 Reset signal              |
+|              | Backlight       | Pin 12 (GPIO 18)             | LCD_0 Backlight control         |
 |              | SDA             | Pin 3 (GPIO 2, SDA)          | LCD_0 I2C data for touch        |
 |              | SCL             | Pin 5 (GPIO 3, SCL)          | LCD_0 I2C clock for touch       |
 | **LCD_1**    | CS              | Pin 26 (GPIO 7, CE1)         | LCD_1 SPI Chip Select           |
 |              | DC              | Pin 13 (GPIO 27)             | LCD_1 Data/Command signal       |
-|              | RES             | Pin 16 (GPIO 27)             | LCD_1 Reset signal              |
-|              | Backlight       | Pin 12 (GPIO 18)             | LCD_1 Backlight control         |
+|              | RES             | Pin 16 (GPIO 23)             | LCD_1 Reset signal              |
+|              | Backlight       | Pin 33 (GPIO 13)             | LCD_1 Backlight control         |
 |              | SDA             | Pin 3 (GPIO 2, SDA)          | LCD_1 I2C data for touch        |
 |              | SCL             | Pin 5 (GPIO 3, SCL)          | LCD_1 I2C clock for touch       |
 | **LCD_2**    | CS              | Pin 7 (GPIO 4)               | LCD_2 SPI Chip Select           |
@@ -691,3 +691,5 @@ Run setup.sh:
 |              | Backlight       | Pin 32 (GPIO 12)             | LCD_2 Backlight control         |
 |              | SDA             | Pin 3 (GPIO 2, SDA)          | LCD_2 I2C data for touch        |
 |              | SCL             | Pin 5 (GPIO 3, SCL)          | LCD_2 I2C clock for touch       |
+
+

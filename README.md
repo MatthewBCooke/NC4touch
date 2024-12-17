@@ -506,6 +506,38 @@
   
    Change this back when you need to use the ILI9488 driver.
 
+# Uninstall the ili9488 driver
+
+1. Remove the Driver File
+   ```
+   sudo rm /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/ili9488.ko
+   ```
+
+2. Update Module Dependencies
+   ```
+   sudo depmod
+   ```
+
+3. Comment out lines in config.txt:
+   ```
+   sudo nano /boot/firmware/config.txt
+   ```
+   ```
+   # ili9488 overlay and SPI parameters
+   dtoverlay=ili-9488
+   dtparam=speed=62000000
+   dtparam=rotation=90
+   ```
+
+   ```
+   sudo reboot
+   ```
+
+4. Verify Removal
+   ```
+   modinfo ili9488
+   ```
+
 # Debugging the ili9488 driver
 
 ## Commands
@@ -567,11 +599,6 @@
 
 3. The Kernel Fails Loads the Overlay but fails to apply it
    - With the message `Failed to apply overlay '0_ili-9488' (kernel)`.
-   - Listing overlays under `/proc/device-tree/overlays/` confirms the overlay is not applied:
-     `ls /proc/device-tree/overlays/ili-9488`
-   - Output:
-     `ls: cannot access '/proc/device-tree/overlays/ili-9488': No such file or directory`
-   - Issue: The kernel fails to apply the overlay due to errors in the `.dtbo` file.
 
 4. The `.dtbo` File Contains Errors or Warnings
    - Decompiling the `.dtbo` file with `dtc` reveals the following issues:

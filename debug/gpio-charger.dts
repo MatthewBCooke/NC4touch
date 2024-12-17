@@ -1,0 +1,71 @@
+/dts-v1/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <0xffffffff>;
+
+		__overlay__ {
+
+			charger_pins@0 {
+				brcm,pins = <0x04>;
+				brcm,function = <0x00>;
+				brcm,pull = <0x01>;
+				phandle = <0x01>;
+			};
+		};
+	};
+
+	fragment@1 {
+		target-path = "/";
+
+		__overlay__ {
+
+			charger@0 {
+				compatible = "gpio-charger";
+				pinctrl-0 = <0x01>;
+				status = "okay";
+				gpios = <0xffffffff 0x04 0x00>;
+				charger-type = "mains";
+				phandle = <0x02>;
+			};
+		};
+	};
+
+	__overrides__ {
+		gpio = <0x02 0x7265673a 0x30000000 0x26770 0x696f733a 0x34000000 0x17265 0x673a3000 0x01 0x6272636d 0x2c70696e 0x733a3000>;
+		type = [00 00 00 02 63 68 61 72 67 65 72 2d 74 79 70 65 00];
+		gpio_pull = <0x01 0x6272636d 0x2c70756c 0x6c3a3000>;
+		active_low = <0x02 0x6770696f 0x733a3800>;
+	};
+
+	__symbols__ {
+		pin_state = "/fragment@0/__overlay__/charger_pins@0";
+		charger = "/fragment@1/__overlay__/charger@0";
+	};
+
+	__fixups__ {
+		gpio = "/fragment@0:target:0\0/fragment@1/__overlay__/charger@0:gpios:0";
+	};
+
+	__local_fixups__ {
+
+		fragment@1 {
+
+			__overlay__ {
+
+				charger@0 {
+					pinctrl-0 = <0x00>;
+				};
+			};
+		};
+
+		__overrides__ {
+			gpio = <0x00 0x0a 0x16 0x20>;
+			type = <0x00>;
+			gpio_pull = <0x00>;
+			active_low = <0x00>;
+		};
+	};
+};

@@ -357,12 +357,12 @@
 
 8. Enter the Pi password `1434` in the VS Code search bar.
  
-8. Open the repo in VS Code:
+9. Open the repo in VS Code:
    ```
    code .
    ```
 
-9. Close the VS Code instance when you are done.  
+10. Close the VS Code instance when you are done.  
 
 # Enabling additional I2C busses on the Pi
 
@@ -397,161 +397,226 @@
    
 # Setting up the ili9488 driver
 
-1. Update the Pi and reboot
-   
-   ```
-   sudo apt update && sudo apt upgrade -y
-   sudo reboot
-   ```
+## Update the Pi and reboot
 
-2. Install dependencies
-   
-   ```
-   sudo apt install git bc bison flex libssl-dev libncurses5-dev -y
-   sudo apt-get install raspberrypi-kernel-headers -y
-   ```
-   
-   Confirm the Raspberry Pi kernel headers were installed correctly by checking if the /build directory exists (Optional):
-   ```
-   ls /lib/modules/$(uname -r)/build
-   ```
+```
+sudo apt update && sudo apt upgrade -y
+sudo reboot
+```
 
-3. Build the driver
+## Install dependencies
+   
+```
+sudo apt install git bc bison flex libssl-dev libncurses5-dev -y
+sudo apt-get install raspberrypi-kernel-headers -y
+```
+
+Confirm the Raspberry Pi kernel headers were installed correctly by checking if the /build directory exists (Optional):
+```
+ls /lib/modules/$(uname -r)/build
+```
+
+## Build the driver
   
-   ```
-   cd /home/nc4/TouchscreenApparatus/src/drivers/ili9488
-   ```
-   ```
-   make clean || true
-   ```
-   ```
-   make
-   ```
-   
-   Verify the file was created:
-   ```
-   ls ili9488.ko
-   ```
+```
+cd /home/nc4/TouchscreenApparatus/src/drivers/ili9488
+```
 
-4. Compile the driver
-   
-   Copy the kernel module to the appropriate directory:
-   ```
-   sudo cp ili9488.ko /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/
-   ```
-   Update module dependencies to include the new driver:
-   ```
-   sudo depmod
-   ```
-   Confirm that the driver is available:
-   ```
-   modinfo ili9488
-   ```
+Do a clean build
+```
+make clean || true
+```
 
-5. Set up the device tree overlay
+Clean Build Artifacts
+```
+git clean -fd
+```
+
+Build
+```
+make
+```
+
+Verify the file was created:
+```
+ls ili9488.ko
+```
+
+## Compile the driver
    
-   Navigate to the directory containing the ili9488.dts file:
-   ```
-   cd /home/nc4/TouchscreenApparatus/src/drivers/ili9488/rpi-overlays
-   ```
+Copy the kernel module to the appropriate directory:
+```
+sudo cp /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ili9488.ko /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/
+```
+Update module dependencies to include the new driver:
+```
+sudo depmod
+sudo depmod -a
+```
+Confirm that the driver is available:
+```
+modinfo ili9488
+```
+
+## Set up the device tree overlay
    
-   Compile the overlay file to a .dtbo binary:
-   ```
-   sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili9488.dtbo ili9488.dts
-   ```
-   
-   Edit the config.txt file to include the overlay and set SPI parameters:
-   ```
-   sudo nano /boot/firmware/config.txt
-   ```
-  
-   Add the following lines to the end:
-   ```
-   # ili9488 overlay and SPI parameters
-   dtoverlay=ili9488
-   dtparam=speed=62000000
-   dtparam=rotation=90
-   ```
-   
-   Reboot:
-   ```
-   sudo reboot
-   ```
+Navigate to the directory containing the ili9488.dts file:
+```
+cd /home/nc4/TouchscreenApparatus/src/drivers/ili9488/rpi-overlays
+```
+
+Compile the overlay file to a .dtbo binary:
+```
+sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili9488.dtbo ili9488.dts
+```
+
+Edit the config.txt file to include the overlay and set SPI parameters:
+```
+sudo nano /boot/firmware/config.txt
+```
+
+Add the following lines to the end:
+```
+# ili9488 overlay and SPI parameters
+dtoverlay=ili9488
+dtparam=speed=62000000
+dtparam=rotation=90
+
+# Use increased debugging level
+dtdebug=on
+```
+
+Print the contents o /boot/firmware/config.txt:
+```
+cat /boot/firmware/config.txt
+```
+
+Power off:
+```
+sudo poweroff
+```
+
+Unplig and replug the power
+
+## Run checks
     
-   Verify the overlay's boot application using:
-   ```
-   dmesg | grep -i 'ili9488'
-   ```
-   Expected outcomes: Should see `Initialized ili9488` 
-   
-   Run the following command to ensure the ili9488 overlay was successfully loaded:
-   ```
-   ls /proc/device-tree/overlays/ili9488
-   ```
-   Expected outcomes: the directory exists and contains files like `status` and `name.
-   
-   Check for errors in the .dtbo
-   ```
-   sudo dtc -I dtb -O dts -o /dev/null /boot/overlays/ili9488.dtbo
-   ```
+Increase the console log level (Optional):
+```
+sudo dmesg -n 8
+```
 
-6. Temporarily reinable HDMI to use a monitor 
-   
-   You cannot use a monitor (HDMI) with the ILI9488 driver installed.
-   
-   Disable the dtoverlay for the ILI9488:
-   ```
-   sudo nano /boot/firmware/config.txt
-   ```
-   
-   Comment out the line:
-   ```
-   #dtoverlay=ili9488
-   ```
-  
-   Change this back when you need to use the ILI9488 driver.
+Verify the overlay's boot application using:
+```
+dmesg | grep -i 'ili9488'
+```
+Expected outcomes: Should see `Initialized ili9488` along with any error messages
+If this fails try unloading and reloading the module
+```
+sudo rmmod ili9488
+sudo insmod /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/ili9488.ko
+dmesg | grep -i 'ili9488'
+```
+
+Run the following command to ensure the ili9488 overlay was successfully loaded:
+```
+ls /proc/device-tree/overlays/ili9488
+```
+Expected outcomes: the directory exists and contains files like `status` and `name.
+
+Check for errors in the .dtbo
+```
+sudo dtc -I dtb -O dts -o /dev/null /boot/overlays/ili9488.dtbo
+```
 
 # Uninstall the ili9488 driver
 
-1. Unload the driver
-   ```
-   sudo rmmod ili9488
-   ```
+## Unload the driver
+```
+sudo rmmod ili9488
+```
+If you encounter "module is in use", run:
+```
+sudo modprobe -r ili9488
+```
 
-2. If you encounter "module is in use", run:
-   ```
-   sudo modprobe -r ili9488
-   ```
+## Remove the Driver File
+```
+sudo rm /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/ili9488.ko
+```
 
-2. Remove the Driver File
-   ```
-   sudo rm /lib/modules/$(uname -r)/kernel/drivers/gpu/drm/tiny/ili9488.ko
-   ```
+## Update Module Dependencies
+```
+sudo depmod
+```
 
-2. Update Module Dependencies
-   ```
-   sudo depmod
-   ```
+## Clear any cached kernel module information
+```
+sudo modprobe -c | grep ili9488
+``` "spi0.0" | sudo tee /sys/bus/spi/drivers/ili9488/unbind
+```
 
-3. Comment out lines in config.txt:
-   ```
-   sudo nano /boot/firmware/config.txt
-   ```
-   ```
-   # ili9488 overlay and SPI parameters
-   dtoverlay=ili9488
-   dtparam=speed=62000000
-   dtparam=rotation=90
-   ```
+## Remove the overlay
+```
+sudo rm /boot/firmware/overlays/ili9488.dtbo
+```
 
-   ```
-   sudo reboot
-   ```
+## Comment out lines in config.txt:
+```
+sudo nano /boot/firmware/config.txt
+```
+```
+# ili9488 overlay and SPI parameters
+dtoverlay=ili9488
+dtparam=speed=62000000
+dtparam=rotation=90
+```
 
-4. Verify Removal
-   ```
-   modinfo ili9488
-   ```
+## Check Kernel Modules in Use
+```
+lsmod | grep ili9488
+```
+
+## Power off
+Reboot
+```
+sudo poweroff
+```
+
+Unplig and replug the power
+
+## Verify Removal
+```
+modinfo ili9488
+```
+
+Check for Residual Entries in /proc/device-tree:
+```
+grep -ril 'ili9488' /proc/device-tree/
+```
+
+Verify No Kernel Logs Reference:
+```
+dmesg | grep -i 'ili9488'
+```
+Expected outcome: No references to ili9488 in the logs.
+
+Check for Residual SPI Driver Bindings for each SPI device:
+```
+ls -l /sys/bus/spi/devices/spi0.0/driver
+ls -l /sys/bus/spi/devices/spi0.1/driver
+```
+
+Search for Residual Configurations
+```
+grep -i 'ili9488' /boot/config.txt
+```
+grep -ril 'ili9488' /boot/
+```
+
+Confirm No Residual Modules in /lib/modules
+```
+find /lib/modules/$(uname -r)/ -name '*ili9488*'
+```
 
 # Debugging the ili9488 driver
 
@@ -598,6 +663,21 @@
 - Check for SPI 
    ```
    ls /dev/spi*
+   ```
+
+- Search for a specific file that matches a string:
+   ```
+   sudo find / -type f -name "*ili9488*" 2>/dev/null
+   ```
+
+- Search all files that contain a given string
+   ```
+   sudo grep -rli "ili9488" / 2>/dev/null
+   ```
+
+- Search within subfolders for files that contain a given string
+   ```
+   sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/dev/null
    ```
 
 # Setting up python environment

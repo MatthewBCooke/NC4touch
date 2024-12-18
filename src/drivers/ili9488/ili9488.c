@@ -38,6 +38,9 @@
 #include <linux/of.h>
 #include <linux/of_device.h>
 
+/* AWL: Track the version for debugging */
+#define ILI9488_DRIVER_VERSION "v2.0"
+
 /* Level 1 Commands (from the display Datasheet) */
 #define ILI9488_CMD_NOP 0x00
 #define ILI9488_CMD_SOFTWARE_RESET 0x01
@@ -482,6 +485,9 @@ static int ili9488_probe(struct spi_device *spi)
 	u32 rotation = 0;
 	int ret;
 	const char *name;
+
+	/* AWL: Track the version for debugging */
+	dev_info(dev, "Loading ILI9488 driver %s\n", ILI9488_DRIVER_VERSION);
 
 	dbidev = devm_drm_dev_alloc(dev, &ili9488_driver, struct mipi_dbi_dev, drm);
 	if (IS_ERR(dbidev))

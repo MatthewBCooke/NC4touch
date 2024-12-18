@@ -557,7 +557,7 @@ sudo modprobe -c | grep ili9488
 "spi0.0" | sudo tee /sys/bus/spi/drivers/ili9488/unbind
 ```
 
-Rebuild the Initramfs:
+## Rebuild the Initramfs (Critical!):
 ```
 sudo update-initramfs -u
 ```

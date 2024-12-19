@@ -411,7 +411,7 @@ out_enable:
 			    ILI9488_MADCTL_MX;
 		break;
 	}
-	//addr_mode |= ILI9488_MADCTL_BGR;
+	// addr_mode |= ILI9488_MADCTL_BGR;
 	mipi_dbi_command(dbi, MIPI_DCS_SET_ADDRESS_MODE, addr_mode);
 	mipi_dbi18_enable_flush(dbidev, crtc_state, plane_state);
 out_exit:

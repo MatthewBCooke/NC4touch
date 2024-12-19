@@ -628,65 +628,70 @@ find /lib/modules/$(uname -r)/ -name '*ili9488*'
 
 # Debugging the ili9488 driver
 
-## Commands
-- Check Kernel Logs for Overlay Errors
-   ```
-   dmesg | grep -i 'overlay'
-   ```
+## Check Kernel Logs for Overlay Errors
+```
+dmesg | grep -i 'overlay'
+```
 
-- Verify the overlay's boot application using:
-   ```
-   dmesg | grep -i 'ili9488'
-   ```
+## Verify the overlay's boot application using:
+```
+dmesg | grep -i 'ili9488'
+```
 
-- Directly Inspect the Alias Mapping: Run:
-   ```
-   cat /sys/firmware/devicetree/base/aliases/gpio
-   ```
+## Directly Inspect the Alias Mapping: Run:
+```
+cat /sys/firmware/devicetree/base/aliases/gpio
+```
 
-- Manually load the overlay at runtime to get immediate feedback:
-   ```
-   sudo dtoverlay ili9488
-   dmesg | tail -50
-   ```
+## Check active frame buffers
+```
+ls /dev/fb*
+```
 
-- Decompile the .dtbo to a .dts
-   ```
-   sudo dtc -I dtb -O dts -o /home/nc4/TouchscreenApparatus/debug/ili9488.dts /boot/overlays/ili9488.dtbo
-   ```
+## Manually load the overlay at runtime to get immediate feedback:
+```
+sudo dtoverlay ili9488
+dmesg | tail -50
+```
 
-- Turn the backlight on (maximum brightness):
-   ```
-   echo 1 | sudo tee /sys/class/backlight/soc:backlight/brightness
-   ```
-- Turn the backlight off:
-   ```
-   echo 0 | sudo tee /sys/class/backlight/soc:backlight/brightness
-   ```
-- Draw an image to the fb0 buffer:
-   ```
-   sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/assets/images/A01.bmp
-   ```
+## Decompile the .dtbo to a .dts
+```
+sudo dtc -I dtb -O dts -o /home/nc4/TouchscreenApparatus/debug/ili9488.dts /boot/overlays/ili9488.dtbo
+```
 
-- Check for SPI 
-   ```
-   ls /dev/spi*
-   ```
+## Turn the backlight on (maximum brightness):
+```
+echo 1 | sudo tee /sys/class/backlight/soc:backlight/brightness
+```
+## Turn the backlight off:
+```
+echo 0 | sudo tee /sys/class/backlight/soc:backlight/brightness
+```
 
-- Search for a specific file that matches a string:
-   ```
-   sudo find / -type f -name "*ili9488*" 2>/dev/null
-   ```
+## Draw an image to the fb0 buffer:
+```
+sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/assets/images/A01.bmp
+```
 
-- Search all files that contain a given string
-   ```
-   sudo grep -rli "ili9488" / 2>/dev/null
-   ```
+## Check for SPI 
+```
+ls /dev/spi*
+```
 
-- Search within subfolders for files that contain a given string
-   ```
-   sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/dev/null
-   ```
+## Search for a specific file that matches a string:
+```
+sudo find / -type f -name "*ili9488*" 2>/dev/null
+```
+
+## Search all files that contain a given string
+```
+sudo grep -rli "ili9488" / 2>/dev/null
+```
+
+## Search within subfolders for files that contain a given string
+```
+sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/dev/null
+```
 
 # Setting up python environment
 1. Update and Upgrade Raspberry Pi Packages:

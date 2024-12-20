@@ -53,5 +53,5 @@ dtoverlay=dwc2,dr_mode=host
 [all]
 # ili9488 overlay and SPI parameters
 dtoverlay=ili9488
-dtparam=speed=20000000
+dtparam=speed=62000000
 dtparam=rotation=0

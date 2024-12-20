@@ -450,7 +450,6 @@ sudo cp /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ili9488.ko /lib/modul
 ```
 Update module dependencies to include the new driver:
 ```
-sudo depmod
 sudo depmod -a
 ```
 Confirm that the driver is available:

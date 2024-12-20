@@ -1,0 +1,34 @@
+// nc4_ili9488-overlay.dts
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    fragment@0 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            panel0: panel0@0 {
+                compatible = "nc4,ili9488";
+                reg = <0>; /* chip select LCD_0 */
+                dc-gpios = <&gpio 25 0>;
+                reset-gpios = <&gpio 24 0>;
+                backlight-gpios = <&gpio 18 0>;
+                spi-max-frequency = <4000000>;
+            };
+
+            panel1: panel1@1 {
+                compatible = "nc4,ili9488";
+                reg = <1>; /* chip select LCD_1 */
+                dc-gpios = <&gpio 27 0>;
+                reset-gpios = <&gpio 23 0>;
+                backlight-gpios = <&gpio 18 0>;
+                spi-max-frequency = <4000000>;
+            };
+        };
+    };
+};

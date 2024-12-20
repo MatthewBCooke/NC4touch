@@ -13,11 +13,8 @@ if __name__ == "__main__":
     # Initialize the LCD class
     lcd = LCD(framebuffer_device="/dev/fb0", image_dir="data/images")
 
-    # List of images to display
-    images = ["A01.bmp", "B01.bmp"]
-
     # Load first image
-    lcd.load_image("A01.bmp")
+    lcd.load_image("C01.png")
     time.sleep(2)
 
     # Load second image

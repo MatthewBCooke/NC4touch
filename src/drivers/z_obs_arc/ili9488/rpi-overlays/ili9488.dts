@@ -1,0 +1,125 @@
+/*
+ * Enhanced Device Tree overlay for ILI-9488
+ * Modified to support two displays (pitft@0 and pitft@1)
+ *
+ * Notes:
+ * - This overlay enables SPI0 and configures two ILI9488 devices on CE0 and CE1.
+ * - Each display node uses a unique DC and RESET GPIO line.
+ * - Both displays share the same SPI lines (MOSI, SCLK) and the same backlight.
+ * - The "pitft_pins" and "pitft_pins_1" pinctrl groups are used to set these GPIOs as outputs.
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	/* Fragment to enable SPI0 hardware */
+	fragment@0 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	/* Fragment to disable the default spidev0 device */
+	fragment@1 {
+		target = <&spidev0>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	/* Fragment for the first display's pins (LCD_0):
+	 * GPIO24 = RESET (out)
+	 * GPIO25 = DC (out)
+	 * GPIO18 = Backlight (out, shared)
+	 */
+	fragment@2 {
+		target = <&gpio>;
+		__overlay__ {
+			pitft_pins: pitft_pins {
+				brcm,pins = <24 25 18>;
+				brcm,function = <1 1 1>; /* set as output */
+			};
+		};
+	};
+
+	/* Fragment for the first ILI9488 device node (LCD_0) on SPI0 CE0 */
+	fragment@3 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			pitft: pitft@0 {
+				compatible = "ili9488";
+				pinctrl-names = "default";
+				pinctrl-0 = <&pitft_pins>;
+
+				reg = <0>; /* CE0 line */
+				spi-max-frequency = <62000000>;
+
+				/* Rotation, DC, RESET and backlight for the first panel */
+				rotation = <0>;
+				reset-gpios = <&gpio 24 0>;
+				dc-gpios = <&gpio 25 0>;
+				backlight = <&backlight>;
+			};
+		};
+	};
+
+	/* Fragment defining the backlight control, shared by all displays */
+	fragment@4 {
+		target-path = "/soc";
+		__overlay__ {
+			backlight: backlight {
+				compatible = "gpio-backlight";
+				gpios = <&gpio 18 0>;
+			};
+		};
+	};
+
+	/* Fragment for the second display's pins (LCD_1):
+	 * GPIO23 = RESET (out)
+	 * GPIO27 = DC (out)
+	 * Note: Backlight is shared and already defined above.
+	 */
+	fragment@5 {
+		target = <&gpio>;
+		__overlay__ {
+			pitft_pins_1: pitft_pins_1 {
+				brcm,pins = <23 27>;
+				brcm,function = <1 1>; /* set as output */
+			};
+		};
+	};
+
+	/* Fragment for the second ILI9488 device node (LCD_1) on SPI0 CE1 */
+	fragment@6 {
+		target = <&spi0>;
+		__overlay__ {
+			pitft1: pitft@1 {
+				compatible = "ili9488";
+				pinctrl-names = "default";
+				pinctrl-0 = <&pitft_pins_1>;
+
+				reg = <1>; /* CE1 line */
+				spi-max-frequency = <62000000>;
+
+				/* Rotation, DC, RESET for the second panel, share same backlight */
+				rotation = <0>;
+				reset-gpios = <&gpio 23 0>;
+				dc-gpios = <&gpio 27 0>;
+				backlight = <&backlight>;
+			};
+		};
+	};
+
+	/* Override parameters for speed and rotation */
+	__overrides__ {
+		speed = <&pitft>,"spi-max-frequency:0";
+		rotation = <&pitft>,"rotation:0";
+	};
+};

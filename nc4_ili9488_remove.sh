@@ -16,6 +16,18 @@ else
     echo "Warning: Driver file not found or already removed." >&2
 fi
 
+# Remove compressed driver file if it exists
+echo "Checking for compressed driver file..."
+if [ -f /lib/modules/$(uname -r)/updates/nc4_ili9488.ko.xz ]; then
+    if sudo rm /lib/modules/$(uname -r)/updates/nc4_ili9488.ko.xz; then
+        echo "Compressed driver file removed successfully."
+    else
+        echo "Warning: Failed to remove compressed driver file." >&2
+    fi
+else
+    echo "No compressed driver file found."
+fi
+
 # Update module dependencies
 echo "Updating module dependencies..."
 sudo depmod -a
@@ -104,4 +116,5 @@ fi
 echo "Checking for residual modules in /lib/modules..."
 find /lib/modules/$(uname -r)/ -name '*nc4_ili9488*' || echo "No nc4_ili9488 modules found in /lib/modules."
 
-echo "==== Uninstallation Complete ===="
+echo "==== Uninstallation Rebooting Now ===="
+sudo reboot

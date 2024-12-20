@@ -69,10 +69,9 @@ done
 
 echo "==== Building and Installing the ILI9488 Driver ===="
 # Build and install the ILI9488 driver
-ILI9488_DIR="/home/nc4/TouchscreenApparatus/src/drivers/ili9488"
-DRIVER_REPO="https://github.com/your-repo/ili9488-driver.git"  # Update with the correct repository
 
 # Perform a clean build
+ILI9488_DIR="/home/nc4/TouchscreenApparatus/src/drivers/ili9488"
 cd "$ILI9488_DIR"
 echo "Cleaning previous build..."
 make clean || true              # Ignore errors if no previous build exists

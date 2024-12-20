@@ -38,9 +38,6 @@
 #include <linux/of.h>
 #include <linux/of_device.h>
 
-/* AWL: Track the version for debugging */
-#define ILI9488_DRIVER_VERSION "v3.0"
-
 /* Level 1 Commands (from the display Datasheet) */
 #define ILI9488_CMD_NOP 0x00
 #define ILI9488_CMD_SOFTWARE_RESET 0x01
@@ -323,85 +320,85 @@ static void sx035hv006_enable(struct drm_simple_display_pipe *pipe,
 		struct drm_plane_state *plane_state)
 {
 	struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(pipe->crtc.dev);
+	struct device *dev = pipe->crtc.dev->dev;
 	struct mipi_dbi *dbi = &dbidev->dbi;
-	struct device *ddev = dbi->dev;
-	struct spi_device *spi = to_spi_device(ddev);
 	u8 addr_mode;
 	int ret, idx;
 
-	dev_info(ddev, "DEBUG (v3.0): sx035hv006_enable called, chip_select=%d, rotation=%u\n",
-		 spi->chip_select, dbidev->rotation);
+	dev_info(dev, "Enabling display: rotation=%u\n", dbidev->rotation);
 
 	if (!drm_dev_enter(pipe->crtc.dev, &idx))
 		return;
 
-	dev_info(ddev, "DEBUG (v3.0): Before mipi_dbi_poweron_conditional_reset, chip_select=%d\n", spi->chip_select);
 	ret = mipi_dbi_poweron_conditional_reset(dbidev);
-	if (ret < 0) {
-		dev_info(ddev, "DEBUG (v3.0): poweron_conditional_reset ret<0 for chip_select=%d\n", spi->chip_select);
+	if (ret < 0)
 		goto out_exit;
-	}
-	if (ret == 1) {
-		dev_info(ddev, "DEBUG (v3.0): poweron_conditional_reset ret=1 for chip_select=%d\n", spi->chip_select);
+	if (ret == 1)
 		goto out_enable;
-	}
 
-	dev_info(ddev, "DEBUG (v3.0): Sending MIPI_DCS_SET_DISPLAY_OFF, chip_select=%d\n", spi->chip_select);
 	mipi_dbi_command(dbi, MIPI_DCS_SET_DISPLAY_OFF);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending POSITIVE_GAMMA_CORRECTION, chip_select=%d\n", spi->chip_select);
+	/* Positive Gamma Control */
 	mipi_dbi_command(dbi, ILI9488_CMD_POSITIVE_GAMMA_CORRECTION,
-			 0x00, 0x03, 0x09, 0x08, 0x16,
-			 0x0a, 0x3f, 0x78, 0x4c, 0x09,
-			 0x0a, 0x08, 0x16, 0x1a, 0x0f);
+					 0x00, 0x03, 0x09, 0x08, 0x16,
+					 0x0a, 0x3f, 0x78, 0x4c, 0x09,
+					 0x0a, 0x08, 0x16, 0x1a, 0x0f);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending NEGATIVE_GAMMA_CORRECTION, chip_select=%d\n", spi->chip_select);
+	/* Negative Gamma Control */
 	mipi_dbi_command(dbi, ILI9488_CMD_NEGATIVE_GAMMA_CORRECTION,
-			 0x00, 0x16, 0x19, 0x03, 0x0f,
-			 0x05, 0x32, 0x45, 0x46, 0x04,
-			 0x0e, 0x0d, 0x35, 0x37, 0x0f);
+					 0x00, 0x16, 0x19, 0x03, 0x0f,
+					 0x05, 0x32, 0x45, 0x46, 0x04,
+					 0x0e, 0x0d, 0x35, 0x37, 0x0f);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending POWER_CONTROL_1, chip_select=%d\n", spi->chip_select);
+	/* Power Control 1,2 */
 	mipi_dbi_command(dbi, ILI9488_CMD_POWER_CONTROL_1, 0x17, 0x15);
-
-	dev_info(ddev, "DEBUG (v3.0): Sending POWER_CONTROL_2, chip_select=%d\n", spi->chip_select);
 	mipi_dbi_command(dbi, ILI9488_CMD_POWER_CONTROL_2, 0x41);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending VCOM_CONTROL_1, chip_select=%d\n", spi->chip_select);
+	/* VCOM Control 1 */
 	mipi_dbi_command(dbi, ILI9488_CMD_VCOM_CONTROL_1, 0x00, 0x12, 0x80);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending MEMORY_ACCESS_CONTROL, chip_select=%d\n", spi->chip_select);
+	/* Memory Access Contorl */
 	mipi_dbi_command(dbi, ILI9488_CMD_MEMORY_ACCESS_CONTROL, 0x48);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending PIXEL_FORMAT, chip_select=%d\n", spi->chip_select);
-	mipi_dbi_command(dbi, MIPI_DCS_SET_PIXEL_FORMAT, MIPI_DCS_PIXEL_FMT_18BIT<<1 | MIPI_DCS_PIXEL_FMT_18BIT);
+	/* Pixel Format */
+	mipi_dbi_command(dbi, MIPI_DCS_SET_PIXEL_FORMAT, MIPI_DCS_PIXEL_FMT_18BIT << 1 | MIPI_DCS_PIXEL_FMT_18BIT);
+	// mipi_dbi_command(dbi, MIPI_DCS_SET_PIXEL_FORMAT, MIPI_DCS_PIXEL_FMT_18BIT);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending INTERFACE_MODE_CONTROL, chip_select=%d\n", spi->chip_select);
 	mipi_dbi_command(dbi, ILI9488_CMD_INTERFACE_MODE_CONTROL, 0x00);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending FRAME_RATE_CONTROL_NORMAL, chip_select=%d\n", spi->chip_select);
+	/* Frame Rate Control */
+	/*	Frame rate = 60.76Hz.*/
+	// mipi_dbi_command(dbi, ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL, 0xa1);
 	mipi_dbi_command(dbi, ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL, 0xA0);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending DISPLAY_INVERSION_CONTROL, chip_select=%d\n", spi->chip_select);
+	/* Display Inversion Control */
+	/*	2 dot inversion */
 	mipi_dbi_command(dbi, ILI9488_CMD_DISPLAY_INVERSION_CONTROL, 0x02);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending DISPLAY_FUNCTION_CONTROL, chip_select=%d\n", spi->chip_select);
+	/* Set Image Function */
+	// mipi_dbi_command(dbi, ILI9488_CMD_SET_IMAGE_FUNCTION, 0x00);
+
+	/* Set Display Function Control */
 	mipi_dbi_command(dbi, ILI9488_CMD_DISPLAY_FUNCTION_CONTROL, 0x02, 0x02, 0x3B);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending ENTRY_MODE_SET, chip_select=%d\n", spi->chip_select);
+	/* Set Entry Mode */
 	mipi_dbi_command(dbi, ILI9488_CMD_ENTRY_MODE_SET, 0xC6);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending ADJUST_CONTROL_3, chip_select=%d\n", spi->chip_select);
-	mipi_dbi_command(dbi, ILI9488_CMD_ADJUST_CONTROL_3, 0xa9, 0x51, 0x2c, 0x82);
+	/* Adjust Control 3 */
+	mipi_dbi_command(dbi, ILI9488_CMD_ADJUST_CONTROL_3,
+					 0xa9, 0x51, 0x2c, 0x82);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending SLEEP_OUT, chip_select=%d\n", spi->chip_select);
+	/* CABC control 2 */
+	// mipi_dbi_command(dbi, ILI9488_CMD_CABC_CONTROL_2, 0xb0);
+
+	/* Sleep OUT */
 	mipi_dbi_command(dbi, ILI9488_CMD_SLEEP_OUT);
+
 	msleep(120);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending NORMAL_DISP_MODE_ON, chip_select=%d\n", spi->chip_select);
 	mipi_dbi_command(dbi, ILI9488_CMD_NORMAL_DISP_MODE_ON);
 
-	dev_info(ddev, "DEBUG (v3.0): Sending DISPLAY_ON, chip_select=%d\n", spi->chip_select);
+	/* Display ON */
 	mipi_dbi_command(dbi, ILI9488_CMD_DISPLAY_ON);
 	msleep(100);
 
@@ -420,17 +417,20 @@ out_enable:
 		addr_mode = ILI9488_MADCTL_MV | ILI9488_MADCTL_MY | ILI9488_MADCTL_MX;
 		break;
 	}
-	dev_info(ddev, "DEBUG (v3.0): Setting ADDRESS_MODE=%x for chip_select=%d\n", addr_mode, spi->chip_select);
-	mipi_dbi_command(dbi, MIPI_DCS_SET_ADDRESS_MODE, addr_mode);
 
-	dev_info(ddev, "DEBUG (v3.0): Calling mipi_dbi18_enable_flush for chip_select=%d\n", spi->chip_select);
+	mipi_dbi_command(dbi, MIPI_DCS_SET_ADDRESS_MODE, addr_mode);
 	mipi_dbi18_enable_flush(dbidev, crtc_state, plane_state);
 
 out_exit:
-	dev_info(ddev, "DEBUG (v3.0): sx035hv006_enable exit for chip_select=%d\n", spi->chip_select);
 	drm_dev_exit(idx);
 }
 
+static const struct drm_simple_display_pipe_funcs ili9488_pipe_funcs = {
+	.mode_valid = mipi_dbi_pipe_mode_valid,
+	.enable = sx035hv006_enable,
+	.disable = mipi_dbi_pipe_disable,
+	.update = mipi_dbi18_pipe_update,
+};
 
 static const struct drm_display_mode sx035hv006_mode = {
 	DRM_SIMPLE_MODE(320, 480, 49, 73),
@@ -481,68 +481,74 @@ static int ili9488_probe(struct spi_device *spi)
 	struct gpio_desc *dc;
 	u32 rotation = 0;
 	int ret;
-
-	dev_info(dev, "Loading ILI9488 driver %s\n", ILI9488_DRIVER_VERSION);
-	dev_info(dev, "DEBUG (v3.0): Probing ILI9488 device, chip_select=%d\n", spi->chip_select);
+	const char *name;
 
 	dbidev = devm_drm_dev_alloc(dev, &ili9488_driver, struct mipi_dbi_dev, drm);
-	if (IS_ERR(dbidev)) {
-		dev_err(dev, "DEBUG (v3.0): devm_drm_dev_alloc failed for chip_select=%d\n", spi->chip_select);
+	if (IS_ERR(dbidev))
 		return PTR_ERR(dbidev);
-	}
 
 	dbi = &dbidev->dbi;
 	drm = &dbidev->drm;
 
-	dbi->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-	if (IS_ERR(dbi->reset)) {
-		dev_err(dev, "DEBUG (v3.0): Failed to get 'reset' GPIO for chip_select=%d\n", spi->chip_select);
-		return dev_err_probe(dev, PTR_ERR(dbi->reset), "Failed to get GPIO 'reset'\n");
+	/* Identify device by chip select or node name */
+	if (dev->of_node)
+	{
+		name = dev->of_node->name;
 	}
+	else
+	{
+		name = dev_name(dev);
+	}
+	dev_info(dev, "Probing ILI9488 device node: %s, chip_select=%d\n", name, spi->chip_select);
+
+	/* Retrieve per-device rotation if available */
+	device_property_read_u32(dev, "rotation", &rotation);
+	dev_info(dev, "Device rotation: %u\n", rotation);
+
+	/* Get reset and dc lines from DT (already done by devm_gpiod_get_optional) */
+	dbi->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+	if (IS_ERR(dbi->reset))
+		return dev_err_probe(dev, PTR_ERR(dbi->reset), "Failed to get GPIO 'reset' for this device\n");
 
 	dc = devm_gpiod_get_optional(dev, "dc", GPIOD_OUT_LOW);
-	if (IS_ERR(dc)) {
-		dev_err(dev, "DEBUG (v3.0): Failed to get 'dc' GPIO for chip_select=%d\n", spi->chip_select);
-		return dev_err_probe(dev, PTR_ERR(dc), "Failed to get GPIO 'dc'\n");
-	}
+	if (IS_ERR(dc))
+		return dev_err_probe(dev, PTR_ERR(dc), "Failed to get GPIO 'dc' for this device\n");
 
 	dbidev->backlight = devm_of_find_backlight(dev);
-	if (IS_ERR(dbidev->backlight)) {
-		dev_err(dev, "DEBUG (v3.0): Failed to find backlight for chip_select=%d\n", spi->chip_select);
+	if (IS_ERR(dbidev->backlight))
 		return PTR_ERR(dbidev->backlight);
-	}
 
-	device_property_read_u32(dev, "rotation", &rotation);
-	dev_info(dev, "DEBUG (v3.0): rotation=%u for chip_select=%d\n", rotation, spi->chip_select);
-
-	dev_info(dev, "DEBUG (v3.0): Calling mipi_dbi_spi_init for chip_select=%d\n", spi->chip_select);
+	/* Initialize SPI interface for this device */
 	ret = mipi_dbi_spi_init(spi, dbi, dc);
-	if (ret) {
-		dev_err(dev, "DEBUG (v3.0): mipi_dbi_spi_init failed for chip_select=%d, ret=%d\n", spi->chip_select, ret);
+	if (ret)
+	{
+		dev_err(dev, "mipi_dbi_spi_init failed for device %s\n", name);
 		return ret;
 	}
-	dev_info(dev, "DEBUG (v3.0): Completed mipi_dbi_spi_init for chip_select=%d\n", spi->chip_select);
 
+	/* Initialize the DBI device with formats and mode */
 	ret = mipi_dbi18_dev_init(dbidev, &ili9488_pipe_funcs, &sx035hv006_mode, rotation);
-	if (ret) {
-		dev_err(dev, "DEBUG (v3.0): mipi_dbi18_dev_init failed for chip_select=%d, ret=%d\n", spi->chip_select, ret);
+	if (ret)
+	{
+		dev_err(dev, "mipi_dbi18_dev_init failed for device %s\n", name);
 		return ret;
 	}
-	dev_info(dev, "DEBUG (v3.0): Completed mipi_dbi18_dev_init for chip_select=%d\n", spi->chip_select);
 
+	/* Reset mode config and register DRM device */
 	drm_mode_config_reset(drm);
-
 	ret = drm_dev_register(drm, 0);
-	if (ret) {
-		dev_err(dev, "DEBUG (v3.0): drm_dev_register failed for chip_select=%d, ret=%d\n", spi->chip_select, ret);
+	if (ret)
+	{
+		dev_err(dev, "drm_dev_register failed for device %s\n", name);
 		return ret;
 	}
 
 	spi_set_drvdata(spi, drm);
 
+	/* Setup FBdev if needed (creates fb0, fb1, etc.) */
 	drm_fbdev_generic_setup(drm, 0);
 
-	dev_info(dev, "ILI9488 device chip_select=%d initialized successfully.\n", spi->chip_select);
+	dev_info(dev, "ILI9488 device %s initialized successfully.\n", name);
 	return 0;
 }
 

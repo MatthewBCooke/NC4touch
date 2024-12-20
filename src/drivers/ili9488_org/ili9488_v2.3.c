@@ -41,50 +41,49 @@
 #include <video/mipi_display.h>
 
 /* Driver version for reference in logs */
-#define ILI9488_DRIVER_VERSION "v3.0-debug"
+#define ILI9488_DRIVER_VERSION "v2.3-debug"
 
 /* Display-specific commands from the ILI9488 datasheet */
-#define ILI9488_CMD_NOP                           0x00
-#define ILI9488_CMD_SOFTWARE_RESET                0x01
-#define ILI9488_CMD_READ_DISP_ID                  0x04
-#define ILI9488_CMD_READ_DISP_STATUS              0x09
-#define ILI9488_CMD_SLEEP_OUT                     0x11
-#define ILI9488_CMD_DISPLAY_OFF                   0x28
-#define ILI9488_CMD_DISPLAY_ON                    0x29
-#define ILI9488_CMD_MEMORY_WRITE                  0x2C
-#define ILI9488_CMD_MEMORY_ACCESS_CONTROL         0x36
-#define ILI9488_CMD_SET_ADDRESS_MODE              0x36
-#define ILI9488_CMD_POSITIVE_GAMMA_CORRECTION     0xE0
-#define ILI9488_CMD_NEGATIVE_GAMMA_CORRECTION     0xE1
-#define ILI9488_CMD_POWER_CONTROL_1               0xC0
-#define ILI9488_CMD_POWER_CONTROL_2               0xC1
-#define ILI9488_CMD_VCOM_CONTROL_1                0xC5
-#define ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL     0xB1
-#define ILI9488_CMD_DISPLAY_INVERSION_CONTROL     0xB4
-#define ILI9488_CMD_DISPLAY_FUNCTION_CONTROL      0xB6
-#define ILI9488_CMD_ENTRY_MODE_SET                0xB7
-#define ILI9488_CMD_INTERFACE_MODE_CONTROL        0xB0
-#define ILI9488_CMD_ADJUST_CONTROL_3              0xF7
-#define ILI9488_CMD_NORMAL_DISP_MODE_ON           0x13
-#define ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET       0x3A
+#define ILI9488_CMD_NOP 0x00
+#define ILI9488_CMD_SOFTWARE_RESET 0x01
+#define ILI9488_CMD_READ_DISP_ID 0x04
+#define ILI9488_CMD_READ_DISP_STATUS 0x09
+#define ILI9488_CMD_SLEEP_OUT 0x11
+#define ILI9488_CMD_DISPLAY_OFF 0x28
+#define ILI9488_CMD_DISPLAY_ON 0x29
+#define ILI9488_CMD_MEMORY_WRITE 0x2C
+#define ILI9488_CMD_MEMORY_ACCESS_CONTROL 0x36
+#define ILI9488_CMD_SET_ADDRESS_MODE 0x36
+#define ILI9488_CMD_POSITIVE_GAMMA_CORRECTION 0xE0
+#define ILI9488_CMD_NEGATIVE_GAMMA_CORRECTION 0xE1
+#define ILI9488_CMD_POWER_CONTROL_1 0xC0
+#define ILI9488_CMD_POWER_CONTROL_2 0xC1
+#define ILI9488_CMD_VCOM_CONTROL_1 0xC5
+#define ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL 0xB1
+#define ILI9488_CMD_DISPLAY_INVERSION_CONTROL 0xB4
+#define ILI9488_CMD_DISPLAY_FUNCTION_CONTROL 0xB6
+#define ILI9488_CMD_ENTRY_MODE_SET 0xB7
+#define ILI9488_CMD_INTERFACE_MODE_CONTROL 0xB0
+#define ILI9488_CMD_ADJUST_CONTROL_3 0xF7
+#define ILI9488_CMD_NORMAL_DISP_MODE_ON 0x13
+#define ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET 0x3A
 
 /* Memory Access Control bits */
 #define ILI9488_MADCTL_BGR BIT(3)
-#define ILI9488_MADCTL_MV  BIT(5)
-#define ILI9488_MADCTL_MX  BIT(6)
-#define ILI9488_MADCTL_MY  BIT(7)
+#define ILI9488_MADCTL_MV BIT(5)
+#define ILI9488_MADCTL_MX BIT(6)
+#define ILI9488_MADCTL_MY BIT(7)
 
 static const uint32_t mipi_dbi_formats[] = {
 	DRM_FORMAT_RGB565,
-	DRM_FORMAT_XRGB8888
-};
+	DRM_FORMAT_XRGB8888};
 
 /* Forward declarations */
 static void mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rect);
 static int mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
-			       struct drm_rect *clip, bool swap);
+							   struct drm_rect *clip, bool swap);
 
-/* 
+/*
  * Debug wrapper for sending commands.
  * Logs every command and parameters sent to the panel for better traceability.
  */
@@ -95,7 +94,8 @@ static inline int ili9488_send_cmd(struct mipi_dbi *dbi, const char *name, u8 cm
 	int i;
 	int ret;
 
-	if (num > 16) {
+	if (num > 16)
+	{
 		DRM_DEBUG_KMS("ili9488: Command %s(%02X) with too many args: %d\n", name, cmd, num);
 		return -EINVAL;
 	}
@@ -111,20 +111,20 @@ static inline int ili9488_send_cmd(struct mipi_dbi *dbi, const char *name, u8 cm
 	DRM_DEBUG_KMS("\n");
 
 	ret = mipi_dbi_command(dbi, cmd, data[0], data[1], data[2], data[3],
-			       data[4], data[5], data[6], data[7],
-			       data[8], data[9], data[10], data[11],
-			       data[12], data[13], data[14], data[15]);
+						   data[4], data[5], data[6], data[7],
+						   data[8], data[9], data[10], data[11],
+						   data[12], data[13], data[14], data[15]);
 	return ret;
 }
 
 static void mipi_dbi_set_window_address(struct mipi_dbi_dev *dbidev,
-					unsigned int xs, unsigned int xe,
-					unsigned int ys, unsigned int ye)
+										unsigned int xs, unsigned int xe,
+										unsigned int ys, unsigned int ye)
 {
 	struct mipi_dbi *dbi = &dbidev->dbi;
 
 	DRM_DEBUG_KMS("ili9488: set_window_address dev=%s xs=%u xe=%u ys=%u ye=%u\n",
-		      dev_name(dbi->spi->dev.parent), xs, xe, ys, ye);
+				  dev_name(dbi->spi->dev.parent), xs, xe, ys, ye);
 
 	xs += dbidev->left_offset;
 	xe += dbidev->left_offset;
@@ -132,16 +132,16 @@ static void mipi_dbi_set_window_address(struct mipi_dbi_dev *dbidev,
 	ye += dbidev->top_offset;
 
 	mipi_dbi_command(dbi, MIPI_DCS_SET_COLUMN_ADDRESS,
-			 (xs >> 8) & 0xff, xs & 0xff,
-			 (xe >> 8) & 0xff, xe & 0xff);
+					 (xs >> 8) & 0xff, xs & 0xff,
+					 (xe >> 8) & 0xff, xe & 0xff);
 
 	mipi_dbi_command(dbi, MIPI_DCS_SET_PAGE_ADDRESS,
-			 (ys >> 8) & 0xff, ys & 0xff,
-			 (ye >> 8) & 0xff, ye & 0xff);
+					 (ys >> 8) & 0xff, ys & 0xff,
+					 (ye >> 8) & 0xff, ye & 0xff);
 }
 
 int mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
-			struct drm_rect *clip, bool swap)
+						struct drm_rect *clip, bool swap)
 {
 	struct drm_gem_object *gem = drm_gem_fb_get_obj(fb, 0);
 	struct iosys_map map[DRM_FORMAT_MAX_PLANES];
@@ -150,22 +150,25 @@ int mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
 	int ret;
 
 	DRM_DEBUG_KMS("ili9488: mipi_dbi18_buf_copy format=%p4cc swap=%d clip=(%d,%d)-(%d,%d)\n",
-		      &fb->format->format, (int)swap,
-		      clip->x1, clip->y1, clip->x2, clip->y2);
+				  &fb->format->format, (int)swap,
+				  clip->x1, clip->y1, clip->x2, clip->y2);
 
 	ret = drm_gem_fb_begin_cpu_access(fb, DMA_FROM_DEVICE);
-	if (ret) {
+	if (ret)
+	{
 		DRM_DEBUG_KMS("ili9488: begin_cpu_access failed: %d\n", ret);
 		return ret;
 	}
 
 	ret = drm_gem_fb_vmap(fb, map, data);
-	if (ret) {
+	if (ret)
+	{
 		DRM_DEBUG_KMS("ili9488: fb_vmap failed: %d\n", ret);
 		goto out_drm_gem_fb_end_cpu_access;
 	}
 
-	switch (fb->format->format) {
+	switch (fb->format->format)
+	{
 	case DRM_FORMAT_RGB565:
 		DRM_DEBUG_KMS("ili9488: Converting from RGB565%s\n", swap ? " with byte-swap" : "");
 		if (swap)
@@ -179,7 +182,7 @@ int mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
 		break;
 	default:
 		drm_err_once(fb->dev, "ili9488: Unsupported format: %p4cc\n",
-			     &fb->format->format);
+					 &fb->format->format);
 		ret = -EINVAL;
 	}
 
@@ -206,18 +209,20 @@ static void mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rec
 	if (WARN_ON(!fb))
 		return;
 
-	if (!drm_dev_enter(fb->dev, &idx)) {
+	if (!drm_dev_enter(fb->dev, &idx))
+	{
 		DRM_DEBUG_KMS("ili9488: drm_dev_enter failed\n");
 		return;
 	}
 
 	DRM_DEBUG_KMS("ili9488: FB dirty: fb_id=%d dev=%s cs=%d rect=(%d,%d)-(%d,%d)\n",
-		      fb->base.id, dev_name(fb->dev->dev),
-		      to_spi_device(fb->dev->dev)->chip_select,
-		      rect->x1, rect->y1, rect->x2, rect->y2);
+				  fb->base.id, dev_name(fb->dev->dev),
+				  to_spi_device(fb->dev->dev)->chip_select,
+				  rect->x1, rect->y1, rect->x2, rect->y2);
 
 	ret = drm_gem_fb_vmap(fb, map, data);
-	if (ret) {
+	if (ret)
+	{
 		DRM_DEBUG_KMS("ili9488: gem_fb_vmap failed: %d\n", ret);
 		drm_dev_exit(idx);
 		return;
@@ -225,19 +230,23 @@ static void mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rec
 
 	full = (width == fb->width && height == fb->height);
 	DRM_DEBUG_KMS("ili9488: full_update=%d fb_w=%d fb_h=%d update_w=%d update_h=%d\n",
-		      full, fb->width, fb->height, width, height);
+				  full, fb->width, fb->height, width, height);
 
 	if (!dbi->dc || !full || swap ||
-	    fb->format->format == DRM_FORMAT_XRGB8888) {
+		fb->format->format == DRM_FORMAT_XRGB8888)
+	{
 		DRM_DEBUG_KMS("ili9488: Using tx_buf for this update\n");
 		tr = dbidev->tx_buf;
 		drm_gem_fb_vunmap(fb, map);
 		ret = mipi_dbi18_buf_copy(dbidev->tx_buf, fb, rect, swap);
-		if (ret) {
+		if (ret)
+		{
 			drm_err_once(fb->dev, "ili9488: Failed to copy buffer: %d\n", ret);
 			goto err_exit;
 		}
-	} else {
+	}
+	else
+	{
 		DRM_DEBUG_KMS("ili9488: Directly using mapped fb data for update\n");
 		tr = data[0].vaddr;
 		drm_gem_fb_vunmap(fb, map);
@@ -254,30 +263,34 @@ err_exit:
 }
 
 void mipi_dbi18_pipe_update(struct drm_simple_display_pipe *pipe,
-			    struct drm_plane_state *old_state)
+							struct drm_plane_state *old_state)
 {
 	struct drm_plane_state *state = pipe->plane.state;
 	struct drm_rect rect;
 
 	DRM_DEBUG_KMS("ili9488: pipe_update called\n");
 
-	if (!pipe->crtc.state->active) {
+	if (!pipe->crtc.state->active)
+	{
 		DRM_DEBUG_KMS("ili9488: pipe_update aborted: crtc not active\n");
 		return;
 	}
 
-	if (drm_atomic_helper_damage_merged(old_state, state, &rect)) {
+	if (drm_atomic_helper_damage_merged(old_state, state, &rect))
+	{
 		DRM_DEBUG_KMS("ili9488: merged damage rect: (" DRM_RECT_FMT ")\n",
-			      DRM_RECT_ARG(&rect));
+					  DRM_RECT_ARG(&rect));
 		mipi_dbi18_fb_dirty(state->fb, &rect);
-	} else {
+	}
+	else
+	{
 		DRM_DEBUG_KMS("ili9488: no damage to update\n");
 	}
 }
 
 void mipi_dbi18_enable_flush(struct mipi_dbi_dev *dbidev,
-			     struct drm_crtc_state *crtc_state,
-			     struct drm_plane_state *plane_state)
+							 struct drm_crtc_state *crtc_state,
+							 struct drm_plane_state *plane_state)
 {
 	struct drm_framebuffer *fb = plane_state->fb;
 	struct drm_rect rect = {
@@ -290,7 +303,8 @@ void mipi_dbi18_enable_flush(struct mipi_dbi_dev *dbidev,
 
 	DRM_DEBUG_KMS("ili9488: enable_flush full screen\n");
 
-	if (!drm_dev_enter(&dbidev->drm, &idx)) {
+	if (!drm_dev_enter(&dbidev->drm, &idx))
+	{
 		DRM_DEBUG_KMS("ili9488: enable_flush drm_dev_enter failed\n");
 		return;
 	}
@@ -306,24 +320,24 @@ void mipi_dbi18_enable_flush(struct mipi_dbi_dev *dbidev,
  * Initialization function for the mipi_dbi_dev.
  */
 int mipi_dbi18_dev_init(struct mipi_dbi_dev *dbidev,
-			const struct drm_simple_display_pipe_funcs *funcs,
-			const struct drm_display_mode *mode, unsigned int rotation)
+						const struct drm_simple_display_pipe_funcs *funcs,
+						const struct drm_display_mode *mode, unsigned int rotation)
 {
 	size_t bufsize = mode->vdisplay * mode->hdisplay * sizeof(u32);
 
 	DRM_DEBUG_KMS("ili9488: mipi_dbi18_dev_init: mode=%dx%d rotation=%u\n",
-		      mode->hdisplay, mode->vdisplay, rotation);
+				  mode->hdisplay, mode->vdisplay, rotation);
 
 	dbidev->drm.mode_config.preferred_depth = 32;
 
 	return mipi_dbi_dev_init_with_formats(dbidev, funcs, mipi_dbi_formats,
-					      ARRAY_SIZE(mipi_dbi_formats),
-					      mode, rotation, bufsize);
+										  ARRAY_SIZE(mipi_dbi_formats),
+										  mode, rotation, bufsize);
 }
 
 static void sx035hv006_enable(struct drm_simple_display_pipe *pipe,
-			      struct drm_crtc_state *crtc_state,
-			      struct drm_plane_state *plane_state)
+							  struct drm_crtc_state *crtc_state,
+							  struct drm_plane_state *plane_state)
 {
 	struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(pipe->crtc.dev);
 	struct mipi_dbi *dbi = &dbidev->dbi;
@@ -331,44 +345,62 @@ static void sx035hv006_enable(struct drm_simple_display_pipe *pipe,
 	int ret, idx;
 
 	DRM_DEBUG_KMS("ili9488: sx035hv006_enable called dev=%s cs=%d\n",
-		      dev_name(pipe->crtc.dev->dev),
-		      to_spi_device(pipe->crtc.dev->dev)->chip_select);
+				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
 
-	if (!drm_dev_enter(pipe->crtc.dev, &idx)) {
+	if (!drm_dev_enter(pipe->crtc.dev, &idx))
+	{
 		DRM_DEBUG_KMS("ili9488: sx035hv006_enable drm_dev_enter failed\n");
 		return;
 	}
 
 	ret = mipi_dbi_poweron_conditional_reset(dbidev);
-	if (ret < 0) {
+	if (ret < 0)
+	{
 		drm_err_once(pipe->crtc.dev, "ili9488: poweron_reset failed: %d\n", ret);
 		goto out_exit;
 	}
 	if (ret == 1)
 		goto out_enable;
 
+	// Enforce a clear hardware reset pulse
+	if (dbi->reset)
+	{
+		// Drive reset line low for 20ms
+		gpiod_set_value_cansleep(dbi->reset, 0);
+		msleep(20);
+
+		// Drive reset line high and wait 120ms for the panel to stabilize
+		gpiod_set_value_cansleep(dbi->reset, 1);
+		msleep(120);
+	}
+
+	/* Send initialization commands */
+	ili9488_send_cmd(dbi, "SW_RESET", ILI9488_CMD_SOFTWARE_RESET, 0);
+	msleep(120);
+
 	/* Send initialization commands with debug logging */
 	ili9488_send_cmd(dbi, "DISPLAY_OFF", ILI9488_CMD_DISPLAY_OFF, 0);
 
 	ili9488_send_cmd(dbi, "POS_GAMMA", ILI9488_CMD_POSITIVE_GAMMA_CORRECTION, 15,
-			 0x00,0x03,0x09,0x08,0x16,0x0a,0x3f,0x78,0x4c,0x09,0x0a,0x08,0x16,0x1a,0x0f);
+					 0x00, 0x03, 0x09, 0x08, 0x16, 0x0a, 0x3f, 0x78, 0x4c, 0x09, 0x0a, 0x08, 0x16, 0x1a, 0x0f);
 	ili9488_send_cmd(dbi, "NEG_GAMMA", ILI9488_CMD_NEGATIVE_GAMMA_CORRECTION, 15,
-			 0x00,0x16,0x19,0x03,0x0f,0x05,0x32,0x45,0x46,0x04,0x0e,0x0d,0x35,0x37,0x0f);
+					 0x00, 0x16, 0x19, 0x03, 0x0f, 0x05, 0x32, 0x45, 0x46, 0x04, 0x0e, 0x0d, 0x35, 0x37, 0x0f);
 
-	ili9488_send_cmd(dbi, "PWR_CTRL1", ILI9488_CMD_POWER_CONTROL_1, 2, 0x17,0x15);
+	ili9488_send_cmd(dbi, "PWR_CTRL1", ILI9488_CMD_POWER_CONTROL_1, 2, 0x17, 0x15);
 	ili9488_send_cmd(dbi, "PWR_CTRL2", ILI9488_CMD_POWER_CONTROL_2, 1, 0x41);
-	ili9488_send_cmd(dbi, "VCOM_CTRL1", ILI9488_CMD_VCOM_CONTROL_1, 3, 0x00,0x12,0x80);
+	ili9488_send_cmd(dbi, "VCOM_CTRL1", ILI9488_CMD_VCOM_CONTROL_1, 3, 0x00, 0x12, 0x80);
 
 	ili9488_send_cmd(dbi, "MEM_ACCESS_CTRL", ILI9488_CMD_MEMORY_ACCESS_CONTROL, 1, 0x48);
 	ili9488_send_cmd(dbi, "PIXEL_FORMAT", ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET, 1,
-			 (MIPI_DCS_PIXEL_FMT_18BIT << 1) | MIPI_DCS_PIXEL_FMT_18BIT);
+					 (MIPI_DCS_PIXEL_FMT_18BIT << 1) | MIPI_DCS_PIXEL_FMT_18BIT);
 
 	ili9488_send_cmd(dbi, "IF_MODE_CTRL", ILI9488_CMD_INTERFACE_MODE_CONTROL, 1, 0x00);
 	ili9488_send_cmd(dbi, "FRAME_RATE", ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL, 1, 0xA0);
 	ili9488_send_cmd(dbi, "DISP_INV_CTRL", ILI9488_CMD_DISPLAY_INVERSION_CONTROL, 1, 0x02);
-	ili9488_send_cmd(dbi, "DISP_FUNC_CTRL", ILI9488_CMD_DISPLAY_FUNCTION_CONTROL, 3, 0x02,0x02,0x3B);
+	ili9488_send_cmd(dbi, "DISP_FUNC_CTRL", ILI9488_CMD_DISPLAY_FUNCTION_CONTROL, 3, 0x02, 0x02, 0x3B);
 	ili9488_send_cmd(dbi, "ENTRY_MODE_SET", ILI9488_CMD_ENTRY_MODE_SET, 1, 0xC6);
-	ili9488_send_cmd(dbi, "ADJUST_CTRL3", ILI9488_CMD_ADJUST_CONTROL_3, 4, 0xa9,0x51,0x2c,0x82);
+	ili9488_send_cmd(dbi, "ADJUST_CTRL3", ILI9488_CMD_ADJUST_CONTROL_3, 4, 0xa9, 0x51, 0x2c, 0x82);
 
 	ili9488_send_cmd(dbi, "SLEEP_OUT", ILI9488_CMD_SLEEP_OUT, 0);
 	msleep(120);
@@ -379,7 +411,8 @@ static void sx035hv006_enable(struct drm_simple_display_pipe *pipe,
 
 out_enable:
 	/* Determine address mode based on rotation */
-	switch (dbidev->rotation) {
+	switch (dbidev->rotation)
+	{
 	default:
 		addr_mode = ILI9488_MADCTL_MX;
 		break;
@@ -399,8 +432,8 @@ out_enable:
 	mipi_dbi18_enable_flush(dbidev, crtc_state, plane_state);
 
 	DRM_DEBUG_KMS("ili9488: Display enabled dev=%s cs=%d\n",
-		      dev_name(pipe->crtc.dev->dev),
-		      to_spi_device(pipe->crtc.dev->dev)->chip_select);
+				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
 
 out_exit:
 	drm_dev_exit(idx);
@@ -418,40 +451,37 @@ static const struct drm_display_mode sx035hv006_mode = {
 };
 
 static const struct file_operations ili9488_fops = {
-	.owner          = THIS_MODULE,
-	.open           = drm_open,
-	.release        = drm_release,
+	.owner = THIS_MODULE,
+	.open = drm_open,
+	.release = drm_release,
 	.unlocked_ioctl = drm_ioctl,
-	.compat_ioctl   = drm_compat_ioctl,
-	.poll           = drm_poll,
-	.read           = drm_read,
-	.llseek         = noop_llseek,
-	.mmap           = drm_gem_mmap,
-	DRM_GEM_DMA_UNMAPPED_AREA_FOPS
-};
+	.compat_ioctl = drm_compat_ioctl,
+	.poll = drm_poll,
+	.read = drm_read,
+	.llseek = noop_llseek,
+	.mmap = drm_gem_mmap,
+	DRM_GEM_DMA_UNMAPPED_AREA_FOPS};
 
 static struct drm_driver ili9488_driver = {
-	.driver_features    = DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
-	.fops               = &ili9488_fops,
+	.driver_features = DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
+	.fops = &ili9488_fops,
 	DRM_GEM_DMA_DRIVER_OPS_VMAP,
-	.debugfs_init       = mipi_dbi_debugfs_init,
-	.name               = "ili9488",
-	.desc               = "Ilitek ILI9488",
-	.date               = "20230414",
-	.major              = 1,
-	.minor              = 0,
+	.debugfs_init = mipi_dbi_debugfs_init,
+	.name = "ili9488",
+	.desc = "Ilitek ILI9488",
+	.date = "20230414",
+	.major = 1,
+	.minor = 0,
 };
 
 static const struct of_device_id ili9488_of_match[] = {
-	{ .compatible = "ilitek,ili9488" },
-	{ }
-};
+	{.compatible = "ilitek,ili9488"},
+	{}};
 MODULE_DEVICE_TABLE(of, ili9488_of_match);
 
 static const struct spi_device_id ili9488_id[] = {
-	{ "ili9488", 0 },
-	{ }
-};
+	{"ili9488", 0},
+	{}};
 MODULE_DEVICE_TABLE(spi, ili9488_id);
 
 static int ili9488_probe(struct spi_device *spi)
@@ -468,7 +498,8 @@ static int ili9488_probe(struct spi_device *spi)
 	dev_info(dev, "ili9488: Probing device (dev=%s cs=%d)\n", dev_name(dev), spi->chip_select);
 
 	dbidev = devm_drm_dev_alloc(dev, &ili9488_driver, struct mipi_dbi_dev, drm);
-	if (IS_ERR(dbidev)) {
+	if (IS_ERR(dbidev))
+	{
 		dev_err(dev, "ili9488: Failed to allocate drm device\n");
 		return PTR_ERR(dbidev);
 	}
@@ -478,27 +509,38 @@ static int ili9488_probe(struct spi_device *spi)
 
 	/* Attempt to get optional reset and dc lines */
 	dbi->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-	if (IS_ERR(dbi->reset)) {
+	if (IS_ERR(dbi->reset))
+	{
 		dev_err_probe(dev, PTR_ERR(dbi->reset), "ili9488: Failed to get 'reset' GPIO\n");
 		return PTR_ERR(dbi->reset);
-	} else if (dbi->reset) {
+	}
+	else if (dbi->reset)
+	{
 		dev_info(dev, "ili9488: reset GPIO acquired\n");
-	} else {
+	}
+	else
+	{
 		dev_info(dev, "ili9488: no reset GPIO defined\n");
 	}
 
 	dc = devm_gpiod_get_optional(dev, "dc", GPIOD_OUT_LOW);
-	if (IS_ERR(dc)) {
+	if (IS_ERR(dc))
+	{
 		dev_err_probe(dev, PTR_ERR(dc), "ili9488: Failed to get 'dc' GPIO\n");
 		return PTR_ERR(dc);
-	} else if (dc) {
+	}
+	else if (dc)
+	{
 		dev_info(dev, "ili9488: dc GPIO acquired\n");
-	} else {
+	}
+	else
+	{
 		dev_info(dev, "ili9488: no dc GPIO defined\n");
 	}
 
 	dbidev->backlight = devm_of_find_backlight(dev);
-	if (IS_ERR(dbidev->backlight)) {
+	if (IS_ERR(dbidev->backlight))
+	{
 		dev_err(dev, "ili9488: Failed to find backlight\n");
 		return PTR_ERR(dbidev->backlight);
 	}
@@ -506,18 +548,20 @@ static int ili9488_probe(struct spi_device *spi)
 
 	device_property_read_u32(dev, "rotation", &rotation);
 	dev_info(dev, "ili9488: Rotation property: %u (dev=%s cs=%d)\n",
-		 rotation, dev_name(dev), spi->chip_select);
+			 rotation, dev_name(dev), spi->chip_select);
 
 	ret = mipi_dbi_spi_init(spi, dbi, dc);
-	if (ret) {
+	if (ret)
+	{
 		dev_err(dev, "ili9488: SPI init failed: %d\n", ret);
 		return ret;
 	}
 	dev_info(dev, "ili9488: SPI init successful, mode=0x%X max_speed_hz=%u\n",
-		 spi->mode, spi->max_speed_hz);
+			 spi->mode, spi->max_speed_hz);
 
 	ret = mipi_dbi18_dev_init(dbidev, &ili9488_pipe_funcs, &sx035hv006_mode, rotation);
-	if (ret) {
+	if (ret)
+	{
 		dev_err(dev, "ili9488: mipi_dbi device init failed: %d\n", ret);
 		return ret;
 	}
@@ -526,7 +570,8 @@ static int ili9488_probe(struct spi_device *spi)
 	drm_mode_config_reset(drm);
 
 	ret = drm_dev_register(drm, 0);
-	if (ret) {
+	if (ret)
+	{
 		dev_err(dev, "ili9488: DRM device registration failed: %d\n", ret);
 		return ret;
 	}
@@ -536,7 +581,7 @@ static int ili9488_probe(struct spi_device *spi)
 	drm_fbdev_generic_setup(drm, 0);
 
 	dev_info(dev, "ili9488: Probe successful (dev=%s cs=%d), device ready\n",
-		 dev_name(dev), spi->chip_select);
+			 dev_name(dev), spi->chip_select);
 
 	return 0;
 }
@@ -546,7 +591,7 @@ static void ili9488_remove(struct spi_device *spi)
 	struct drm_device *drm = spi_get_drvdata(spi);
 
 	dev_info(&spi->dev, "ili9488: Removing device (dev=%s cs=%d)\n",
-		 dev_name(&spi->dev), spi->chip_select);
+			 dev_name(&spi->dev), spi->chip_select);
 
 	drm_dev_unplug(drm);
 	drm_atomic_helper_shutdown(drm);
@@ -555,7 +600,7 @@ static void ili9488_remove(struct spi_device *spi)
 static void ili9488_shutdown(struct spi_device *spi)
 {
 	dev_info(&spi->dev, "ili9488: Shutdown called (dev=%s cs=%d)\n",
-		 dev_name(&spi->dev), spi->chip_select);
+			 dev_name(&spi->dev), spi->chip_select);
 	drm_atomic_helper_shutdown(spi_get_drvdata(spi));
 }
 

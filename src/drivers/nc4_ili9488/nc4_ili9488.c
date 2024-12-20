@@ -359,31 +359,3 @@ MODULE_LICENSE("GPL");
 
 
 
-
-
-
-
-// static const struct of_device_id nc4_ili9488_of_match[] = {
-// 	{ .compatible = "nc4,ili9488", },
-// 	{}
-// };
-// MODULE_DEVICE_TABLE(of, nc4_ili9488_of_match);
-
-// static struct spi_driver nc4_ili9488_driver = {
-// 	.driver = {
-// 		.name = NC4_ILI9488_NAME,
-// 		.of_match_table = of_match_ptr(nc4_ili9488_of_match),
-// 	},
-// 	.probe = nc4_ili9488_probe,
-// 	.remove = nc4_ili9488_remove,
-// };
-
-// module_spi_driver(nc4_ili9488_driver);
-
-// MODULE_DESCRIPTION("nc4_ili9488 fbdev driver for ILI9488 LCD panels");
-// MODULE_AUTHOR("YourNameHere");
-// MODULE_LICENSE("GPL");
-
-
-
-

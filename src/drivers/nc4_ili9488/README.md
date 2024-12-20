@@ -107,6 +107,17 @@ Copy the driver to it:
 sudo cp nc4_ili9488.ko /lib/modules/$(uname -r)/extra/
 ```
 
+Ensure proper permissions for the driver file:
+```
+sudo chmod u=rw,go=r /lib/modules/$(uname -r)/extra/nc4_ili9488.ko
+```
+
+
+Verify the driver is available:
+```
+sudo modinfo /lib/modules/$(uname -r)/extra/nc4_ili9488.ko
+```
+
 Update module dependencies:
 ```
 sudo depmod -a
@@ -288,7 +299,7 @@ echo 0 | sudo tee /sys/class/backlight/soc:backlight/brightness
 
 Draw an image to the fb0 buffer:
 ```
-sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/data/images/A01.bmp
+sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/data/images/C01.png
 ```
 
 ### General
@@ -325,27 +336,27 @@ sudo dtc -I dtb -O dts -o /home/nc4/TouchscreenApparatus/debug/nc4_ili9488.dts /
 
 ## Uninstall the nc4_ili9488 Driver
 
-###  Unload the driver
+### Unload the driver
 ```
 sudo rmmod nc4_ili9488 || sudo modprobe -r nc4_ili9488
 ```
 
-###  Remove the driver file
+### Remove the driver file
 ```
 sudo rm /lib/modules/$(uname -r)/extra/nc4_ili9488.ko
 ```
 
-###  Update module dependencies
+### Update module dependencies
 ```
 sudo depmod -a
 ```
 
-###  Ensure the device is unbound (if still bound)
+### Ensure the device is unbound (if still bound)
 ```
 echo "spi0.0" | sudo tee /sys/bus/spi/drivers/nc4_ili9488/unbind
 ```
 
-###  Remove the overlay file
+### Remove the overlay file
 ```
 sudo rm /boot/overlays/nc4_ili9488.dtbo
 ```
@@ -375,36 +386,47 @@ dmesg | grep -i ili9488
 
 
 ## Verify Removal
+
+### Check if the module is still available
 ```
-modinfo nc4_ili9488
+modinfo nc4_ili9488 || echo "Module nc4_ili9488 not found (expected if removed)."
 ```
 
-Check for Residual Entries in /proc/device-tree:
+### Check for residual entries in /proc/device-tree
 ```
-grep -ril 'nc4_ili9488' /proc/device-tree/
-```
-
-Verify No Kernel Logs Reference:
-```
-dmesg | grep -i 'nc4_ili9488'
-```
-Expected outcome: No references to nc4_ili9488 in the logs.
-
-Check for Residual SPI Driver Bindings for each SPI device:
-```
-ls -l /sys/bus/spi/devices/spi0.0/driver
-ls -l /sys/bus/spi/devices/spi0.1/driver
+grep -ril 'nc4_ili9488' /proc/device-tree/ || echo "No residual device-tree entries for nc4_ili9488."
 ```
 
-Search for Residual Configurations
+### Verify no kernel logs reference the driver
 ```
-grep -i 'nc4_ili9488' /boot/config.txt
-```
-```
-grep -ril 'nc4_ili9488' /boot/
+dmesg | grep -i 'nc4_ili9488' || echo "No references to nc4_ili9488 found in dmesg logs."
 ```
 
-Confirm No Residual Modules in /lib/modules
+### Check for residual SPI driver bindings for each SPI device
 ```
-find /lib/modules/$(uname -r)/ -name '*nc4_ili9488*'
+if [ -d "/sys/bus/spi/devices/spi0.0" ]; then
+    ls -l /sys/bus/spi/devices/spi0.0/driver || echo "No driver bound to spi0.0."
+else
+    echo "No spi0.0 device found."
+fi
+```
+```
+if [ -d "/sys/bus/spi/devices/spi0.1" ]; then
+    ls -l /sys/bus/spi/devices/spi0.1/driver || echo "No driver bound to spi0.1."
+else
+    echo "No spi0.1 device found."
+fi
+```
+
+### Search for residual configurations in /boot
+```
+grep -i 'nc4_ili9488' /boot/config.txt || echo "No nc4_ili9488 references in /boot/config.txt."
+```
+```
+grep -ril 'nc4_ili9488' /boot/ || echo "No residual files related to nc4_ili9488 in /boot."
+```
+
+### Confirm no residual modules in /lib/modules
+```
+find /lib/modules/$(uname -r)/ -name '*nc4_ili9488*' || echo "No nc4_ili9488 modules found in /lib/modules."
 ```

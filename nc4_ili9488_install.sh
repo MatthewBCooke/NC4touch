@@ -1,25 +1,82 @@
 echo "==== Setting Up Device Tree Overlay ===="
-# Compile and install the device tree overlay
-DT_OVERLAY_DIR="/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/rpi-overlays"
+# Define directory for overlay
+DT_OVERLAY_DIR="/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488"
 cd "$DT_OVERLAY_DIR"
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+
+# Compile the overlay file with robust warnings
+sudo dtc -@ -f -I dts -O dtb -Wunit_address_vs_reg -Wavoid_unnecessary_addr_size -o /boot/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+
+# Verify the overlay file was created
+if ls /boot/overlays/*ili9488* 1>/dev/null 2>&1; then
+    echo "Overlay successfully compiled and installed."
+else
+    echo "Error: Overlay file not found. Compilation failed." >&2
+    exit 1
+fi
+
+# Print contents of config.txt for verification
+echo "Contents of /boot/firmware/config.txt:"
+cat /boot/firmware/config.txt
 
 echo "==== Building and Installing the ILI9488 Driver ===="
-# Build and install the ILI9488 driver
+# Define directory for driver
 ILI9488_DIR="/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488"
 cd "$ILI9488_DIR"
+
+# Clean previous builds
 echo "Cleaning previous build..."
-make clean || true             
+make clean || true
+
+# Build the driver
 echo "Building driver..."
-make
+if ! make; then
+    echo "Error: Driver build failed." >&2
+    exit 1
+fi
+
+# Verify the driver file was created
+if [ -f "nc4_ili9488.ko" ]; then
+    echo "Driver build successful."
+else
+    echo "Error: Driver file not found. Build failed." >&2
+    exit 1
+fi
+
+# Install the driver
 echo "Installing driver..."
 sudo mkdir -p /lib/modules/$(uname -r)/extra/
 sudo cp nc4_ili9488.ko /lib/modules/$(uname -r)/extra/
+sudo chmod u=rw,go=r /lib/modules/$(uname -r)/extra/nc4_ili9488.ko
 sudo depmod -a
-modinfo nc4_ili9488
-echo "Driver successfully built and installed."
-echo "Rebuild the Initramfs..."
-sudo update-initramfs -u
+
+# Verify the driver is available
+if sudo modinfo /lib/modules/$(uname -r)/extra/nc4_ili9488.ko; then
+    echo "Driver successfully installed."
+else
+    echo "Error: Driver not recognized by the kernel." >&2
+    exit 1
+fi
+
+echo "==== Loading the Driver ===="
+# Load the driver
+if sudo modprobe nc4_ili9488; then
+    echo "Driver successfully loaded."
+else
+    echo "Error: Failed to load the driver." >&2
+    exit 1
+fi
+
+# Verify the driver is loaded
+if lsmod | grep nc4_ili9488; then
+    echo "Driver is loaded."
+else
+    echo "Error: Driver is not loaded." >&2
+    exit 1
+fi
+
+# Check kernel logs
+echo "Checking kernel logs for driver initialization..."
+dmesg | grep nc4_ili9488
 
 echo "==== Setup Complete. Rebooting Now ===="
 sudo reboot

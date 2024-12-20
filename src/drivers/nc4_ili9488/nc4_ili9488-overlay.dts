@@ -1,0 +1,44 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	/*
+	 * Example configuration for two panels on SPI0 CE0 and CE1.
+	 * Add a third panel by duplicating the node with reg=<2> if needed.
+	 */
+
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			ili9488_panel0: ili9488-panel@0 {
+				compatible = "mycompany,ili9488";
+				reg = <0>; /* CE0 */
+				dc-gpios = <&gpio 25 0>;
+				reset-gpios = <&gpio 24 0>;
+				backlight-gpios = <&gpio 18 0>;
+				rotation = <0>;
+			};
+
+			ili9488_panel1: ili9488-panel@1 {
+				compatible = "mycompany,ili9488";
+				reg = <1>; /* CE1 */
+				dc-gpios = <&gpio 27 0>;
+				reset-gpios = <&gpio 23 0>;
+				backlight-gpios = <&gpio 18 0>;
+				rotation = <0>;
+			};
+		};
+	};
+};

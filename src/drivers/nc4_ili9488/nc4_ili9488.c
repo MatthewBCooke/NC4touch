@@ -1,472 +1,621 @@
-// nc4_ili9488.c
-// A simple fbdev driver for ILI9488 panels connected to SPI on a Raspberry Pi.
-// Supports multiple panels (initially two), easy to extend to a third.
-// Name: nc4_ili9488
-// License: GPL
-//
-// This version integrates backlight handling similar to ili9488.c, using the
-// backlight subsystem instead of directly toggling a GPIO for the backlight.
-// It also ensures that spi-max-frequency is respected as provided by the
-// device tree overlay, and that dc/reset/backlight properties are all read
-// from the device tree.
-//
-// Each panel defined in the overlay will produce a framebuffer device
-// (/dev/fbN), supporting multiple panels on the same SPI bus with unique chip selects.
-//
-// Internally, we use a 32-bit XRGB8888 framebuffer for alignment. At panel
-// init, we configure the ILI9488 for 18-bit (0x66), effectively discarding
-// some lower bits of color information.
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * DRM driver for Ilitek ILI9488 panels
+ *
+ * Copyright 2024 IHOR NEPOMNIASHCHYI
+ *
+ * This driver uses the mipi_dbi interface to set up and control ILI9488-based
+ * LCD panels over SPI. Each panel appears as a DRM device, enabling the creation
+ * of framebuffers and updates via /dev/fbX or DRM APIs.
+ *
+ * This version adds extensive debugging output. It logs initialization details,
+ * GPIO line presence, SPI setup, rotation configuration, command sequences, and
+ * framebuffer updates. The goal is to gather as much information as possible to
+ * diagnose issues with multiple displays or unexpected behavior.
+ *
+ * Use:
+ *   dmesg | grep -i 'ili9488'
+ * to filter logs. Adjust log levels as needed by changing dev_dbg/dev_info/etc.
+ */
 
-#include <linux/module.h>
-#include <linux/init.h>
-#include <linux/kernel.h>
-#include <linux/device.h>
-#include <linux/types.h>
-#include <linux/spi/spi.h>
-#include <linux/gpio/consumer.h>
-#include <linux/delay.h>
-#include <linux/fb.h>
-#include <linux/vmalloc.h>
-#include <linux/uaccess.h>
-#include <linux/of.h>
-#include <linux/of_gpio.h>
 #include <linux/backlight.h>
+#include <linux/delay.h>
+#include <linux/gpio/consumer.h>
+#include <linux/module.h>
+#include <linux/property.h>
+#include <linux/spi/spi.h>
+
+#include <drm/drm_atomic_helper.h>
+#include <drm/drm_damage_helper.h>
+#include <drm/drm_drv.h>
+#include <drm/drm_fbdev_generic.h>
+#include <drm/drm_framebuffer.h>
+#include <drm/drm_format_helper.h>
+#include <drm/drm_gem_framebuffer_helper.h>
+#include <drm/drm_fb_helper.h>
+#include <drm/drm_gem_atomic_helper.h>
+#include <drm/drm_gem_dma_helper.h>
+#include <drm/drm_managed.h>
+#include <drm/drm_mipi_dbi.h>
+#include <drm/drm_modeset_helper.h>
+#include <video/mipi_display.h>
 
 /* Driver version for reference in logs */
-#define ILI9488_DRIVER_VERSION "v2.0.1"
+#define ILI9488_DRIVER_VERSION "v2.3-debug"
 
-#define NC4_ILI9488_NAME "nc4_ili9488"
-#define LCD_WIDTH 320
-#define LCD_HEIGHT 480
+/* Display-specific commands from the ILI9488 datasheet */
+#define ILI9488_CMD_NOP 0x00
+#define ILI9488_CMD_SOFTWARE_RESET 0x01
+#define ILI9488_CMD_READ_DISP_ID 0x04
+#define ILI9488_CMD_READ_DISP_STATUS 0x09
+#define ILI9488_CMD_SLEEP_OUT 0x11
+#define ILI9488_CMD_DISPLAY_OFF 0x28
+#define ILI9488_CMD_DISPLAY_ON 0x29
+#define ILI9488_CMD_MEMORY_WRITE 0x2C
+#define ILI9488_CMD_MEMORY_ACCESS_CONTROL 0x36
+#define ILI9488_CMD_SET_ADDRESS_MODE 0x36
+#define ILI9488_CMD_POSITIVE_GAMMA_CORRECTION 0xE0
+#define ILI9488_CMD_NEGATIVE_GAMMA_CORRECTION 0xE1
+#define ILI9488_CMD_POWER_CONTROL_1 0xC0
+#define ILI9488_CMD_POWER_CONTROL_2 0xC1
+#define ILI9488_CMD_VCOM_CONTROL_1 0xC5
+#define ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL 0xB1
+#define ILI9488_CMD_DISPLAY_INVERSION_CONTROL 0xB4
+#define ILI9488_CMD_DISPLAY_FUNCTION_CONTROL 0xB6
+#define ILI9488_CMD_ENTRY_MODE_SET 0xB7
+#define ILI9488_CMD_INTERFACE_MODE_CONTROL 0xB0
+#define ILI9488_CMD_ADJUST_CONTROL_3 0xF7
+#define ILI9488_CMD_NORMAL_DISP_MODE_ON 0x13
+#define ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET 0x3A
 
-/* Per-panel context */
-struct nc4_ili9488_panel
-{
-	struct spi_device *spi;
-	struct fb_info *info;
-	u8 *buffer; // Framebuffer memory
-	size_t buffer_size;
+/* Memory Access Control bits */
+#define ILI9488_MADCTL_BGR BIT(3)
+#define ILI9488_MADCTL_MV BIT(5)
+#define ILI9488_MADCTL_MX BIT(6)
+#define ILI9488_MADCTL_MY BIT(7)
 
-	struct gpio_desc *reset_gpio;
-	struct gpio_desc *dc_gpio;
-
-	// We now rely on the kernel backlight subsystem
-	struct backlight_device *backlight;
-
-	u32 bus_speed_hz;
-	u16 width;
-	u16 height;
-};
+static const uint32_t mipi_dbi_formats[] = {
+	DRM_FORMAT_RGB565,
+	DRM_FORMAT_XRGB8888};
 
 /* Forward declarations */
-static int nc4_ili9488_init_panel(struct nc4_ili9488_panel *panel);
-static int nc4_ili9488_update_display(struct nc4_ili9488_panel *panel);
-
-/* Write command (DC=low) */
-static int nc4_ili9488_write_cmd(struct nc4_ili9488_panel *panel, u8 cmd)
-{
-	gpiod_set_value_cansleep(panel->dc_gpio, 0);
-	return spi_write(panel->spi, &cmd, 1);
-}
-
-/* Write data (DC=high) */
-static int nc4_ili9488_write_data(struct nc4_ili9488_panel *panel,
-								  const u8 *data, size_t len)
-{
-	gpiod_set_value_cansleep(panel->dc_gpio, 1);
-	return spi_write(panel->spi, data, len);
-}
-
-/* Helper: write one byte of data */
-static int nc4_ili9488_write_data_byte(struct nc4_ili9488_panel *panel, u8 val)
-{
-	return nc4_ili9488_write_data(panel, &val, 1);
-}
+static void mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rect);
+static int mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
+							   struct drm_rect *clip, bool swap);
 
 /*
- * Panel initialization sequence:
- * - Hardware reset
- * - Sleep Out
- * - Pixel format set to 18-bit (0x3A=0x66)
- * - Memory Access Control
- * - Display On
+ * Debug wrapper for sending commands.
+ * Logs every command and parameters sent to the panel for better traceability.
  */
-static int nc4_ili9488_init_panel(struct nc4_ili9488_panel *panel)
+static inline int ili9488_send_cmd(struct mipi_dbi *dbi, const char *name, u8 cmd, int num, ...)
 {
+	va_list args;
+	u8 data[16]; /* Should be enough for known commands */
+	int i;
 	int ret;
 
-	dev_info(&panel->spi->dev, "Starting panel initialization for ILI9488 driver %s\n", ILI9488_DRIVER_VERSION);
+	if (num > 16)
+	{
+		DRM_DEBUG_KMS("ili9488: Command %s(%02X) with too many args: %d\n", name, cmd, num);
+		return -EINVAL;
+	}
 
-	/* Hardware reset sequence */
-	dev_dbg(&panel->spi->dev, "Performing hardware reset\n");
-	gpiod_set_value_cansleep(panel->reset_gpio, 1);
-	mdelay(5);
-	gpiod_set_value_cansleep(panel->reset_gpio, 0);
-	mdelay(20);
-	gpiod_set_value_cansleep(panel->reset_gpio, 1);
-	mdelay(120);
+	va_start(args, num);
+	for (i = 0; i < num; i++)
+		data[i] = (u8)va_arg(args, int);
+	va_end(args);
 
-	/* Sleep Out (0x11) */
-	dev_dbg(&panel->spi->dev, "Sending Sleep Out command (0x11)\n");
-	ret = nc4_ili9488_write_cmd(panel, 0x11);
-	if (ret)
-		goto err;
-	mdelay(120);
+	DRM_DEBUG_KMS("ili9488: Sending CMD:%s(0x%02X), args(%d):", name, cmd, num);
+	for (i = 0; i < num; i++)
+		DRM_DEBUG_KMS(" 0x%02X", data[i]);
+	DRM_DEBUG_KMS("\n");
 
-	/* Pixel Format Set (0x3A) => 0x66 for 18-bit mode */
-	dev_dbg(&panel->spi->dev, "Setting pixel format (18-bit RGB666)\n");
-	ret = nc4_ili9488_write_cmd(panel, 0x3A);
-	if (ret)
-		goto err;
-	ret = nc4_ili9488_write_data_byte(panel, 0x66);
-	if (ret)
-		goto err;
-
-	/* Memory Access Control (0x36). Example: 0x48 for top->bottom, left->right. */
-	dev_dbg(&panel->spi->dev, "Configuring memory access control\n");
-	ret = nc4_ili9488_write_cmd(panel, 0x36);
-	if (ret)
-		goto err;
-	ret = nc4_ili9488_write_data_byte(panel, 0x48);
-	if (ret)
-		goto err;
-
-	/* Display On (0x29) */
-	dev_dbg(&panel->spi->dev, "Turning on the display (0x29)\n");
-	ret = nc4_ili9488_write_cmd(panel, 0x29);
-	if (ret)
-		goto err;
-
-	mdelay(20);
-
-	dev_info(&panel->spi->dev, "Panel initialized successfully\n");
-	return 0;
-
-err:
-	dev_err(&panel->spi->dev, "Failed during panel init\n");
+	ret = mipi_dbi_command(dbi, cmd, data[0], data[1], data[2], data[3],
+						   data[4], data[5], data[6], data[7],
+						   data[8], data[9], data[10], data[11],
+						   data[12], data[13], data[14], data[15]);
 	return ret;
 }
 
-/*
- * Set address window: full-screen by default in update_display,
- * or partial for partial updates if needed.
- */
-static int nc4_ili9488_set_window(struct nc4_ili9488_panel *panel,
-								  u16 x1, u16 y1, u16 x2, u16 y2)
+static void mipi_dbi_set_window_address(struct mipi_dbi_dev *dbidev,
+										unsigned int xs, unsigned int xe,
+										unsigned int ys, unsigned int ye)
 {
-	u8 buf[4];
-	int ret;
+	struct mipi_dbi *dbi = &dbidev->dbi;
 
-	/* Column Address Set (0x2A) */
-	ret = nc4_ili9488_write_cmd(panel, 0x2A);
-	if (ret)
-		return ret;
-	buf[0] = (x1 >> 8) & 0xFF;
-	buf[1] = x1 & 0xFF;
-	buf[2] = (x2 >> 8) & 0xFF;
-	buf[3] = x2 & 0xFF;
-	ret = nc4_ili9488_write_data(panel, buf, 4);
-	if (ret)
-		return ret;
+	DRM_DEBUG_KMS("ili9488: set_window_address dev=%s xs=%u xe=%u ys=%u ye=%u\n",
+				  dev_name(dbi->spi->dev.parent), xs, xe, ys, ye);
 
-	/* Page Address Set (0x2B) */
-	ret = nc4_ili9488_write_cmd(panel, 0x2B);
-	if (ret)
-		return ret;
-	buf[0] = (y1 >> 8) & 0xFF;
-	buf[1] = y1 & 0xFF;
-	buf[2] = (y2 >> 8) & 0xFF;
-	buf[3] = y2 & 0xFF;
-	ret = nc4_ili9488_write_data(panel, buf, 4);
-	if (ret)
-		return ret;
+	xs += dbidev->left_offset;
+	xe += dbidev->left_offset;
+	ys += dbidev->top_offset;
+	ye += dbidev->top_offset;
 
-	/* Memory Write (0x2C) */
-	ret = nc4_ili9488_write_cmd(panel, 0x2C);
-	return ret;
+	mipi_dbi_command(dbi, MIPI_DCS_SET_COLUMN_ADDRESS,
+					 (xs >> 8) & 0xff, xs & 0xff,
+					 (xe >> 8) & 0xff, xe & 0xff);
+
+	mipi_dbi_command(dbi, MIPI_DCS_SET_PAGE_ADDRESS,
+					 (ys >> 8) & 0xff, ys & 0xff,
+					 (ye >> 8) & 0xff, ye & 0xff);
 }
 
-/* Send the entire framebuffer to the display */
-static int nc4_ili9488_update_display(struct nc4_ili9488_panel *panel)
+int mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
+						struct drm_rect *clip, bool swap)
 {
+	struct drm_gem_object *gem = drm_gem_fb_get_obj(fb, 0);
+	struct iosys_map map[DRM_FORMAT_MAX_PLANES];
+	struct iosys_map data[DRM_FORMAT_MAX_PLANES];
+	struct iosys_map dst_map = IOSYS_MAP_INIT_VADDR(dst);
 	int ret;
 
-	/* Full window update */
-	ret = nc4_ili9488_set_window(panel, 0, 0,
-								 panel->width - 1,
-								 panel->height - 1);
+	DRM_DEBUG_KMS("ili9488: mipi_dbi18_buf_copy format=%p4cc swap=%d clip=(%d,%d)-(%d,%d)\n",
+				  &fb->format->format, (int)swap,
+				  clip->x1, clip->y1, clip->x2, clip->y2);
+
+	ret = drm_gem_fb_begin_cpu_access(fb, DMA_FROM_DEVICE);
 	if (ret)
 	{
-		dev_err(&panel->spi->dev, "Failed to set window\n");
+		DRM_DEBUG_KMS("ili9488: begin_cpu_access failed: %d\n", ret);
 		return ret;
 	}
 
-	/* Send all pixels. DC must be high for data. */
-	gpiod_set_value_cansleep(panel->dc_gpio, 1);
-	ret = spi_write(panel->spi, panel->buffer, panel->buffer_size);
+	ret = drm_gem_fb_vmap(fb, map, data);
 	if (ret)
-		dev_err(&panel->spi->dev, "Failed to write framebuffer to panel\n");
+	{
+		DRM_DEBUG_KMS("ili9488: fb_vmap failed: %d\n", ret);
+		goto out_drm_gem_fb_end_cpu_access;
+	}
 
+	switch (fb->format->format)
+	{
+	case DRM_FORMAT_RGB565:
+		DRM_DEBUG_KMS("ili9488: Converting from RGB565%s\n", swap ? " with byte-swap" : "");
+		if (swap)
+			drm_fb_swab(&dst_map, NULL, data, fb, clip, !gem->import_attach);
+		else
+			drm_fb_memcpy(&dst_map, NULL, data, fb, clip);
+		break;
+	case DRM_FORMAT_XRGB8888:
+		DRM_DEBUG_KMS("ili9488: Converting from XRGB8888 to RGB888\n");
+		drm_fb_xrgb8888_to_rgb888(&dst_map, NULL, data, fb, clip);
+		break;
+	default:
+		drm_err_once(fb->dev, "ili9488: Unsupported format: %p4cc\n",
+					 &fb->format->format);
+		ret = -EINVAL;
+	}
+
+	drm_gem_fb_vunmap(fb, map);
+
+out_drm_gem_fb_end_cpu_access:
+	drm_gem_fb_end_cpu_access(fb, DMA_FROM_DEVICE);
 	return ret;
 }
 
-/*
- * fb_blank() => toggles the backlight using the standard Linux backlight subsystem.
- */
-static int nc4_ili9488_blank(int blank, struct fb_info *info)
+static void mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rect)
 {
-	struct nc4_ili9488_panel *panel = info->par;
+	struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(fb->dev);
+	struct mipi_dbi *dbi = &dbidev->dbi;
+	unsigned int width = rect->x2 - rect->x1;
+	unsigned int height = rect->y2 - rect->y1;
+	bool swap = dbi->swap_bytes;
+	int idx, ret = 0;
+	bool full;
+	void *tr;
+	struct iosys_map map[DRM_FORMAT_MAX_PLANES];
+	struct iosys_map data[DRM_FORMAT_MAX_PLANES];
 
-	if (!panel->backlight)
-		return 0;
+	if (WARN_ON(!fb))
+		return;
 
-	if (blank)
+	if (!drm_dev_enter(fb->dev, &idx))
 	{
-		backlight_disable(panel->backlight);
-		dev_info(&panel->spi->dev, "Backlight off\n");
+		DRM_DEBUG_KMS("ili9488: drm_dev_enter failed\n");
+		return;
+	}
+
+	DRM_DEBUG_KMS("ili9488: FB dirty: fb_id=%d dev=%s cs=%d rect=(%d,%d)-(%d,%d)\n",
+				  fb->base.id, dev_name(fb->dev->dev),
+				  to_spi_device(fb->dev->dev)->chip_select,
+				  rect->x1, rect->y1, rect->x2, rect->y2);
+
+	ret = drm_gem_fb_vmap(fb, map, data);
+	if (ret)
+	{
+		DRM_DEBUG_KMS("ili9488: gem_fb_vmap failed: %d\n", ret);
+		drm_dev_exit(idx);
+		return;
+	}
+
+	full = (width == fb->width && height == fb->height);
+	DRM_DEBUG_KMS("ili9488: full_update=%d fb_w=%d fb_h=%d update_w=%d update_h=%d\n",
+				  full, fb->width, fb->height, width, height);
+
+	if (!dbi->dc || !full || swap ||
+		fb->format->format == DRM_FORMAT_XRGB8888)
+	{
+		DRM_DEBUG_KMS("ili9488: Using tx_buf for this update\n");
+		tr = dbidev->tx_buf;
+		drm_gem_fb_vunmap(fb, map);
+		ret = mipi_dbi18_buf_copy(dbidev->tx_buf, fb, rect, swap);
+		if (ret)
+		{
+			drm_err_once(fb->dev, "ili9488: Failed to copy buffer: %d\n", ret);
+			goto err_exit;
+		}
 	}
 	else
 	{
-		backlight_enable(panel->backlight);
-		dev_info(&panel->spi->dev, "Backlight on\n");
+		DRM_DEBUG_KMS("ili9488: Directly using mapped fb data for update\n");
+		tr = data[0].vaddr;
+		drm_gem_fb_vunmap(fb, map);
 	}
-	return 0;
+
+	mipi_dbi_set_window_address(dbidev, rect->x1, rect->x2 - 1, rect->y1, rect->y2 - 1);
+	DRM_DEBUG_KMS("ili9488: Writing memory start cmd for region\n");
+	ret = mipi_dbi_command_buf(dbi, MIPI_DCS_WRITE_MEMORY_START, tr, width * height * 3);
+	if (ret)
+		drm_err_once(fb->dev, "ili9488: Failed to update display memory: %d\n", ret);
+
+err_exit:
+	drm_dev_exit(idx);
+}
+
+void mipi_dbi18_pipe_update(struct drm_simple_display_pipe *pipe,
+							struct drm_plane_state *old_state)
+{
+	struct drm_plane_state *state = pipe->plane.state;
+	struct drm_rect rect;
+
+	DRM_DEBUG_KMS("ili9488: pipe_update called\n");
+
+	if (!pipe->crtc.state->active)
+	{
+		DRM_DEBUG_KMS("ili9488: pipe_update aborted: crtc not active\n");
+		return;
+	}
+
+	if (drm_atomic_helper_damage_merged(old_state, state, &rect))
+	{
+		DRM_DEBUG_KMS("ili9488: merged damage rect: (" DRM_RECT_FMT ")\n",
+					  DRM_RECT_ARG(&rect));
+		mipi_dbi18_fb_dirty(state->fb, &rect);
+	}
+	else
+	{
+		DRM_DEBUG_KMS("ili9488: no damage to update\n");
+	}
+}
+
+void mipi_dbi18_enable_flush(struct mipi_dbi_dev *dbidev,
+							 struct drm_crtc_state *crtc_state,
+							 struct drm_plane_state *plane_state)
+{
+	struct drm_framebuffer *fb = plane_state->fb;
+	struct drm_rect rect = {
+		.x1 = 0,
+		.y1 = 0,
+		.x2 = fb->width,
+		.y2 = fb->height,
+	};
+	int idx;
+
+	DRM_DEBUG_KMS("ili9488: enable_flush full screen\n");
+
+	if (!drm_dev_enter(&dbidev->drm, &idx))
+	{
+		DRM_DEBUG_KMS("ili9488: enable_flush drm_dev_enter failed\n");
+		return;
+	}
+
+	mipi_dbi18_fb_dirty(fb, &rect);
+	DRM_DEBUG_KMS("ili9488: enabling backlight\n");
+	backlight_enable(dbidev->backlight);
+
+	drm_dev_exit(idx);
 }
 
 /*
- * fb_ops: we keep this so the fbdev console can do normal drawing.
- * The core fbcon code calls these for read/write, blit, etc.
+ * Initialization function for the mipi_dbi_dev.
  */
-static struct fb_ops nc4_ili9488_fbops = {
-	.owner = THIS_MODULE,
-	.fb_read = fb_sys_read,
-	.fb_write = fb_sys_write,
-	.fb_fillrect = sys_fillrect,
-	.fb_copyarea = sys_copyarea,
-	.fb_imageblit = sys_imageblit,
-	.fb_blank = nc4_ili9488_blank,
+int mipi_dbi18_dev_init(struct mipi_dbi_dev *dbidev,
+						const struct drm_simple_display_pipe_funcs *funcs,
+						const struct drm_display_mode *mode, unsigned int rotation)
+{
+	size_t bufsize = mode->vdisplay * mode->hdisplay * sizeof(u32);
+
+	DRM_DEBUG_KMS("ili9488: mipi_dbi18_dev_init: mode=%dx%d rotation=%u\n",
+				  mode->hdisplay, mode->vdisplay, rotation);
+
+	dbidev->drm.mode_config.preferred_depth = 32;
+
+	return mipi_dbi_dev_init_with_formats(dbidev, funcs, mipi_dbi_formats,
+										  ARRAY_SIZE(mipi_dbi_formats),
+										  mode, rotation, bufsize);
+}
+
+static void sx035hv006_enable(struct drm_simple_display_pipe *pipe,
+							  struct drm_crtc_state *crtc_state,
+							  struct drm_plane_state *plane_state)
+{
+	struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(pipe->crtc.dev);
+	struct mipi_dbi *dbi = &dbidev->dbi;
+	u8 addr_mode;
+	int ret, idx;
+
+	DRM_DEBUG_KMS("ili9488: sx035hv006_enable called dev=%s cs=%d\n",
+				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
+
+	if (!drm_dev_enter(pipe->crtc.dev, &idx))
+	{
+		DRM_DEBUG_KMS("ili9488: sx035hv006_enable drm_dev_enter failed\n");
+		return;
+	}
+
+	ret = mipi_dbi_poweron_conditional_reset(dbidev);
+	if (ret < 0)
+	{
+		drm_err_once(pipe->crtc.dev, "ili9488: poweron_reset failed: %d\n", ret);
+		goto out_exit;
+	}
+	if (ret == 1)
+		goto out_enable;
+
+	// Enforce a clear hardware reset pulse
+	if (dbi->reset)
+	{
+		// Drive reset line low for 20ms
+		gpiod_set_value_cansleep(dbi->reset, 0);
+		msleep(20);
+
+		// Drive reset line high and wait 120ms for the panel to stabilize
+		gpiod_set_value_cansleep(dbi->reset, 1);
+		msleep(120);
+	}
+
+	// Send initialization commands with a sleep delay
+	ili9488_send_cmd(dbi, "SW_RESET", ILI9488_CMD_SOFTWARE_RESET, 0);
+	msleep(120);
+
+	/* Send initialization commands with debug logging */
+	ili9488_send_cmd(dbi, "DISPLAY_OFF", ILI9488_CMD_DISPLAY_OFF, 0);
+
+	ili9488_send_cmd(dbi, "POS_GAMMA", ILI9488_CMD_POSITIVE_GAMMA_CORRECTION, 15,
+					 0x00, 0x03, 0x09, 0x08, 0x16, 0x0a, 0x3f, 0x78, 0x4c, 0x09, 0x0a, 0x08, 0x16, 0x1a, 0x0f);
+	ili9488_send_cmd(dbi, "NEG_GAMMA", ILI9488_CMD_NEGATIVE_GAMMA_CORRECTION, 15,
+					 0x00, 0x16, 0x19, 0x03, 0x0f, 0x05, 0x32, 0x45, 0x46, 0x04, 0x0e, 0x0d, 0x35, 0x37, 0x0f);
+
+	ili9488_send_cmd(dbi, "PWR_CTRL1", ILI9488_CMD_POWER_CONTROL_1, 2, 0x17, 0x15);
+	ili9488_send_cmd(dbi, "PWR_CTRL2", ILI9488_CMD_POWER_CONTROL_2, 1, 0x41);
+	ili9488_send_cmd(dbi, "VCOM_CTRL1", ILI9488_CMD_VCOM_CONTROL_1, 3, 0x00, 0x12, 0x80);
+
+	ili9488_send_cmd(dbi, "MEM_ACCESS_CTRL", ILI9488_CMD_MEMORY_ACCESS_CONTROL, 1, 0x48);
+	ili9488_send_cmd(dbi, "PIXEL_FORMAT", ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET, 1,
+					 (MIPI_DCS_PIXEL_FMT_18BIT << 1) | MIPI_DCS_PIXEL_FMT_18BIT);
+
+	ili9488_send_cmd(dbi, "IF_MODE_CTRL", ILI9488_CMD_INTERFACE_MODE_CONTROL, 1, 0x00);
+	ili9488_send_cmd(dbi, "FRAME_RATE", ILI9488_CMD_FRAME_RATE_CONTROL_NORMAL, 1, 0xA0);
+	ili9488_send_cmd(dbi, "DISP_INV_CTRL", ILI9488_CMD_DISPLAY_INVERSION_CONTROL, 1, 0x02);
+	ili9488_send_cmd(dbi, "DISP_FUNC_CTRL", ILI9488_CMD_DISPLAY_FUNCTION_CONTROL, 3, 0x02, 0x02, 0x3B);
+	ili9488_send_cmd(dbi, "ENTRY_MODE_SET", ILI9488_CMD_ENTRY_MODE_SET, 1, 0xC6);
+	ili9488_send_cmd(dbi, "ADJUST_CTRL3", ILI9488_CMD_ADJUST_CONTROL_3, 4, 0xa9, 0x51, 0x2c, 0x82);
+
+	ili9488_send_cmd(dbi, "SLEEP_OUT", ILI9488_CMD_SLEEP_OUT, 0);
+	msleep(120);
+
+	ili9488_send_cmd(dbi, "NORMAL_MODE_ON", ILI9488_CMD_NORMAL_DISP_MODE_ON, 0);
+	ili9488_send_cmd(dbi, "DISPLAY_ON", ILI9488_CMD_DISPLAY_ON, 0);
+	msleep(100);
+
+out_enable:
+	/* Determine address mode based on rotation */
+	switch (dbidev->rotation)
+	{
+	default:
+		addr_mode = ILI9488_MADCTL_MX;
+		break;
+	case 90:
+		addr_mode = ILI9488_MADCTL_MV;
+		break;
+	case 180:
+		addr_mode = ILI9488_MADCTL_MY;
+		break;
+	case 270:
+		addr_mode = ILI9488_MADCTL_MV | ILI9488_MADCTL_MY | ILI9488_MADCTL_MX;
+		break;
+	}
+	DRM_DEBUG_KMS("ili9488: setting address mode=0x%02X for rotation=%u\n", addr_mode, dbidev->rotation);
+	mipi_dbi_command(dbi, ILI9488_CMD_SET_ADDRESS_MODE, addr_mode);
+
+	mipi_dbi18_enable_flush(dbidev, crtc_state, plane_state);
+
+	DRM_DEBUG_KMS("ili9488: Display enabled dev=%s cs=%d\n",
+				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
+
+out_exit:
+	drm_dev_exit(idx);
+}
+
+static const struct drm_simple_display_pipe_funcs ili9488_pipe_funcs = {
+	.mode_valid = mipi_dbi_pipe_mode_valid,
+	.enable = sx035hv006_enable,
+	.disable = mipi_dbi_pipe_disable,
+	.update = mipi_dbi18_pipe_update,
 };
 
-/* After any write, do a full display update (simple approach). */
-static void nc4_ili9488_flush(struct fb_info *info)
-{
-	struct nc4_ili9488_panel *panel = info->par;
-	nc4_ili9488_update_display(panel);
-}
+static const struct drm_display_mode sx035hv006_mode = {
+	DRM_SIMPLE_MODE(320, 480, 49, 73),
+};
 
-/*
- * spi_driver probe => set up GPIOs, backlight, SPI, then allocate
- * a 32-bit XRGB8888 fbdev. Finally, initialize the panel and enable it.
- */
-static int nc4_ili9488_probe(struct spi_device *spi)
-{
-	struct device *dev = &spi->dev;
-	struct nc4_ili9488_panel *panel;
-	struct fb_info *info;
-	int ret;
+static const struct file_operations ili9488_fops = {
+	.owner = THIS_MODULE,
+	.open = drm_open,
+	.release = drm_release,
+	.unlocked_ioctl = drm_ioctl,
+	.compat_ioctl = drm_compat_ioctl,
+	.poll = drm_poll,
+	.read = drm_read,
+	.llseek = noop_llseek,
+	.mmap = drm_gem_mmap,
+	DRM_GEM_DMA_UNMAPPED_AREA_FOPS};
 
-	pr_debug("Entering nc4_ili9488_probe for device %s\n", dev_name(dev));
-	// TEMP
-	dev_info(dev, "Probing nc4_ili9488 driver\n");
-	pr_err("nc4_ili9488_probe called\n");
+static struct drm_driver ili9488_driver = {
+	.driver_features = DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
+	.fops = &ili9488_fops,
+	DRM_GEM_DMA_DRIVER_OPS_VMAP,
+	.debugfs_init = mipi_dbi_debugfs_init,
+	.name = "ili9488",
+	.desc = "Ilitek ILI9488",
+	.date = "20230414",
+	.major = 1,
+	.minor = 0,
+};
 
-	/* Allocate panel structure */
-	dev_dbg(dev, "Allocating panel structure\n");
-	panel = devm_kzalloc(dev, sizeof(*panel), GFP_KERNEL);
-	if (!panel)
-		return -ENOMEM;
-
-	panel->spi = spi;
-
-	/* DC and RESET lines from device tree */
-	dev_dbg(dev, "Acquiring DC GPIO\n");
-	panel->dc_gpio = devm_gpiod_get(dev, "dc", GPIOD_OUT_LOW);
-	if (IS_ERR(panel->dc_gpio))
-	{
-		dev_err(dev, "Failed to get DC GPIO\n");
-		return PTR_ERR(panel->dc_gpio);
-	}
-
-	dev_dbg(dev, "Acquiring RESET GPIO\n");
-	panel->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-	if (IS_ERR(panel->reset_gpio))
-	{
-		dev_err(dev, "Failed to get RESET GPIO\n");
-		return PTR_ERR(panel->reset_gpio);
-	}
-
-	/* Backlight device from the overlay */
-	dev_dbg(dev, "Acquiring backlight device\n");
-	panel->backlight = devm_of_find_backlight(dev);
-	if (IS_ERR(panel->backlight))
-	{
-		dev_err(dev, "Failed to find backlight\n");
-		return PTR_ERR(panel->backlight);
-	}
-
-	/* SPI configuration */
-	dev_dbg(dev, "Configuring SPI\n");
-	spi->mode = SPI_MODE_0;
-	spi->bits_per_word = 8;
-	if (device_property_read_u32(dev, "spi-max-frequency", &panel->bus_speed_hz))
-		panel->bus_speed_hz = 4000000; // default if not found
-	spi->max_speed_hz = panel->bus_speed_hz;
-
-	ret = spi_setup(spi);
-	if (ret)
-	{
-		dev_err(dev, "Failed to setup SPI\n");
-		return ret;
-	}
-
-	/* Panel dims */
-	panel->width = LCD_WIDTH;
-	panel->height = LCD_HEIGHT;
-
-	/*
-	 * We store 32 bits (4 bytes) per pixel in system memory.
-	 * When sending to the panel, the low bits are effectively discarded
-	 * because the panel is configured for 18-bit (RGB666).
-	 */
-	dev_dbg(dev, "Allocating framebuffer\n");
-	panel->buffer_size = panel->width * panel->height * 4;
-
-	/* Allocate fb_info */
-	info = framebuffer_alloc(0, dev);
-	if (!info)
-		return -ENOMEM;
-
-	panel->info = info;
-	info->screen_size = panel->buffer_size;
-
-	/* Fix: TrueColor, 4 bytes/pixel */
-	info->fix.type = FB_TYPE_PACKED_PIXELS;
-	info->fix.visual = FB_VISUAL_TRUECOLOR;
-	info->fix.line_length = panel->width * 4;
-	strcpy(info->fix.id, "nc4_ili9488");
-
-	/* Var: XRGB8888 layout */
-	info->var.xres = panel->width;
-	info->var.yres = panel->height;
-	info->var.xres_virtual = panel->width;
-	info->var.yres_virtual = panel->height;
-	info->var.bits_per_pixel = 32;
-
-	info->var.red.offset = 16;
-	info->var.red.length = 8;
-	info->var.green.offset = 8;
-	info->var.green.length = 8;
-	info->var.blue.offset = 0;
-	info->var.blue.length = 8;
-	info->var.transp.offset = 24;
-	info->var.transp.length = 8; // optional alpha
-
-	/* Use our fb_ops to handle blanking, read/write, etc. */
-	info->fbops = &nc4_ili9488_fbops;
-	info->par = panel;
-
-	/* Allocate VRAM for the FB */
-	panel->buffer = vmalloc(panel->buffer_size);
-	if (!panel->buffer)
-	{
-		framebuffer_release(info);
-		return -ENOMEM;
-	}
-	memset(panel->buffer, 0xFF, panel->buffer_size);
-	info->screen_base = (char __iomem *)panel->buffer;
-
-	/* Register the framebuffer device with the kernel */
-	ret = register_framebuffer(info);
-	if (ret)
-	{
-		vfree(panel->buffer);
-		framebuffer_release(info);
-		return ret;
-	}
-
-	/* Let SPI device data point to our panel structure */
-	spi_set_drvdata(spi, panel);
-
-	/* Init the panel hardware (ILI9488 init commands) */
-	dev_dbg(dev, "Initializing panel hardware\n");
-	ret = nc4_ili9488_init_panel(panel);
-	if (ret)
-	{
-		unregister_framebuffer(info);
-		vfree(panel->buffer);
-		framebuffer_release(info);
-		return ret;
-	}
-
-	/* Enable backlight & do an initial screen update */
-	nc4_ili9488_blank(FB_BLANK_UNBLANK, info);
-	nc4_ili9488_flush(info);
-
-	dev_info(dev, "nc4_ili9488 panel registered at /dev/fb%d\n", info->node);
-	return 0;
-}
-
-static void nc4_ili9488_remove(struct spi_device *spi)
-{
-	struct nc4_ili9488_panel *panel = spi_get_drvdata(spi);
-	if (panel)
-	{
-		if (panel->info)
-		{
-			unregister_framebuffer(panel->info);
-			vfree(panel->buffer);
-			framebuffer_release(panel->info);
-		}
-	}
-}
-
-/* Device Tree matching table */
-static const struct of_device_id nc4_ili9488_of_match[] = {
-	{
-		.compatible = "nc4,ili9488",
-	},
+static const struct of_device_id ili9488_of_match[] = {
+	{.compatible = "ilitek,ili9488"},
 	{}};
-MODULE_DEVICE_TABLE(of, nc4_ili9488_of_match);
+MODULE_DEVICE_TABLE(of, ili9488_of_match);
 
-/* For non-DT fallback, or alias. If you rely solely on DT matching,
-   you could remove or rename this entry. */
-static const struct spi_device_id nc4_ili9488_id[] = {
+static const struct spi_device_id ili9488_id[] = {
 	{"ili9488", 0},
 	{}};
-MODULE_DEVICE_TABLE(spi, nc4_ili9488_id);
+MODULE_DEVICE_TABLE(spi, ili9488_id);
 
-/* The SPI driver object */
-static struct spi_driver nc4_ili9488_driver = {
+static int ili9488_probe(struct spi_device *spi)
+{
+	struct device *dev = &spi->dev;
+	struct mipi_dbi_dev *dbidev;
+	struct drm_device *drm;
+	struct mipi_dbi *dbi;
+	struct gpio_desc *dc;
+	u32 rotation = 0;
+	int ret;
+
+	dev_info(dev, "Loading ILI9488 driver %s\n", ILI9488_DRIVER_VERSION);
+	dev_info(dev, "ili9488: Probing device (dev=%s cs=%d)\n", dev_name(dev), spi->chip_select);
+
+	dbidev = devm_drm_dev_alloc(dev, &ili9488_driver, struct mipi_dbi_dev, drm);
+	if (IS_ERR(dbidev))
+	{
+		dev_err(dev, "ili9488: Failed to allocate drm device\n");
+		return PTR_ERR(dbidev);
+	}
+
+	dbi = &dbidev->dbi;
+	drm = &dbidev->drm;
+
+	/* Attempt to get optional reset and dc lines */
+	dbi->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+	if (IS_ERR(dbi->reset))
+	{
+		dev_err_probe(dev, PTR_ERR(dbi->reset), "ili9488: Failed to get 'reset' GPIO\n");
+		return PTR_ERR(dbi->reset);
+	}
+	else if (dbi->reset)
+	{
+		dev_info(dev, "ili9488: reset GPIO acquired\n");
+	}
+	else
+	{
+		dev_info(dev, "ili9488: no reset GPIO defined\n");
+	}
+
+	dc = devm_gpiod_get_optional(dev, "dc", GPIOD_OUT_LOW);
+	if (IS_ERR(dc))
+	{
+		dev_err_probe(dev, PTR_ERR(dc), "ili9488: Failed to get 'dc' GPIO\n");
+		return PTR_ERR(dc);
+	}
+	else if (dc)
+	{
+		dev_info(dev, "ili9488: dc GPIO acquired\n");
+	}
+	else
+	{
+		dev_info(dev, "ili9488: no dc GPIO defined\n");
+	}
+
+	dbidev->backlight = devm_of_find_backlight(dev);
+	if (IS_ERR(dbidev->backlight))
+	{
+		dev_err(dev, "ili9488: Failed to find backlight\n");
+		return PTR_ERR(dbidev->backlight);
+	}
+	dev_info(dev, "ili9488: backlight found and initialized\n");
+
+	device_property_read_u32(dev, "rotation", &rotation);
+	dev_info(dev, "ili9488: Rotation property: %u (dev=%s cs=%d)\n",
+			 rotation, dev_name(dev), spi->chip_select);
+
+	ret = mipi_dbi_spi_init(spi, dbi, dc);
+	if (ret)
+	{
+		dev_err(dev, "ili9488: SPI init failed: %d\n", ret);
+		return ret;
+	}
+	dev_info(dev, "ili9488: SPI init successful, mode=0x%X max_speed_hz=%u\n",
+			 spi->mode, spi->max_speed_hz);
+
+	ret = mipi_dbi18_dev_init(dbidev, &ili9488_pipe_funcs, &sx035hv006_mode, rotation);
+	if (ret)
+	{
+		dev_err(dev, "ili9488: mipi_dbi device init failed: %d\n", ret);
+		return ret;
+	}
+	dev_info(dev, "ili9488: mipi_dbi device initialized\n");
+
+	drm_mode_config_reset(drm);
+
+	ret = drm_dev_register(drm, 0);
+	if (ret)
+	{
+		dev_err(dev, "ili9488: DRM device registration failed: %d\n", ret);
+		return ret;
+	}
+	dev_info(dev, "ili9488: DRM device registered\n");
+
+	spi_set_drvdata(spi, drm);
+	drm_fbdev_generic_setup(drm, 0);
+
+	dev_info(dev, "ili9488: Probe successful (dev=%s cs=%d), device ready\n",
+			 dev_name(dev), spi->chip_select);
+
+	return 0;
+}
+
+static void ili9488_remove(struct spi_device *spi)
+{
+	struct drm_device *drm = spi_get_drvdata(spi);
+
+	dev_info(&spi->dev, "ili9488: Removing device (dev=%s cs=%d)\n",
+			 dev_name(&spi->dev), spi->chip_select);
+
+	drm_dev_unplug(drm);
+	drm_atomic_helper_shutdown(drm);
+}
+
+static void ili9488_shutdown(struct spi_device *spi)
+{
+	dev_info(&spi->dev, "ili9488: Shutdown called (dev=%s cs=%d)\n",
+			 dev_name(&spi->dev), spi->chip_select);
+	drm_atomic_helper_shutdown(spi_get_drvdata(spi));
+}
+
+static struct spi_driver ili9488_spi_driver = {
 	.driver = {
-		.name = NC4_ILI9488_NAME,
-		.of_match_table = of_match_ptr(nc4_ili9488_of_match),
+		.name = "ili9488",
+		.of_match_table = ili9488_of_match,
 	},
-	.probe = nc4_ili9488_probe,
-	.remove = nc4_ili9488_remove,
-	.id_table = nc4_ili9488_id,
+	.id_table = ili9488_id,
+	.probe = ili9488_probe,
+	.remove = ili9488_remove,
+	.shutdown = ili9488_shutdown,
 };
+module_spi_driver(ili9488_spi_driver);
 
-// TEMP
-// module_spi_driver(nc4_ili9488_driver);
-static int __init nc4_ili9488_driver_init(void)
-{
-    static int init_count = 0;
-    init_count++;
-    pr_debug("nc4_ili9488: Driver initializing, count = %d\n", init_count);
-    return spi_register_driver(&nc4_ili9488_driver);
-}
-
-static void __exit nc4_ili9488_driver_exit(void)
-{
-    static int exit_count = 0;
-    exit_count++;
-    pr_debug("nc4_ili9488: Driver exiting, count = %d\n", exit_count);
-    spi_unregister_driver(&nc4_ili9488_driver);
-}
-
-module_init(nc4_ili9488_driver_init);
-module_exit(nc4_ili9488_driver_exit);
-
-MODULE_DESCRIPTION("nc4_ili9488 fbdev driver for ILI9488 LCD panels " ILI9488_DRIVER_VERSION);
-MODULE_AUTHOR("YourNameHere");
+MODULE_DESCRIPTION("Ilitek ILI9488 DRM driver with extensive debugging");
+MODULE_AUTHOR("IHOR NEPOMNIASHCHYI <nepomniashchyi.igor@gmail.com>");
 MODULE_LICENSE("GPL");

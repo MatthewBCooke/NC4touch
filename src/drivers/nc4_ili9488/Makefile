@@ -1,9 +1,11 @@
-# Makefile
-obj-m := nc4_ili9488.o
-ccflags-y := -DDEBUG
+KDIR ?= /lib/modules/`uname -r`/build
+#ccflags-y := -DDEBUG
 
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+default:
+	$(MAKE) -C $(KDIR) M=$$PWD
+
+#install:
+#	$(MAKE) -C $(KDIR) M=$$PWD modules_install
 
 clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	$(MAKE) -C $(KDIR) M=$$PWD clean

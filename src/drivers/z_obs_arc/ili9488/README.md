@@ -33,7 +33,7 @@ sudo depmod -a
 ### Set up overlay
 ~~~~
 cd rpi-overlays
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili-9488.dtbo ili-9488.dts
+sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/ili-9488.dtbo ili-9488.dts
 ~~~~
 
 ### /boot/firmware/config.txt

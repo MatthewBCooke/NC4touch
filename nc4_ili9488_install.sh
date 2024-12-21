@@ -4,10 +4,10 @@ DT_OVERLAY_DIR="/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488"
 cd "$DT_OVERLAY_DIR"
 
 # Compile the overlay file with robust warnings
-sudo dtc -@ -f -I dts -O dtb -Wunit_address_vs_reg -Wavoid_unnecessary_addr_size -o /boot/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+sudo dtc -@ -f -I dts -O dtb -Wunit_address_vs_reg -Wavoid_unnecessary_addr_size -o /boot/firmware/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
 
 # Verify the overlay file was created
-if ls /boot/overlays/*ili9488* 1>/dev/null 2>&1; then
+if ls /boot/firmware/overlays/*ili9488* 1>/dev/null 2>&1; then
     echo "Overlay successfully compiled and installed."
 else
     echo "Error: Overlay file not found. Compilation failed." >&2

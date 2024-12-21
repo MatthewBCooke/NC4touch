@@ -42,7 +42,7 @@ fi
 
 # Remove the overlay file
 echo "Removing the overlay file..."
-if sudo rm /boot/overlays/nc4_ili9488.dtbo; then
+if sudo rm /boot/firmware/overlays/nc4_ili9488.dtbo; then
     echo "Overlay file removed successfully."
 else
     echo "Warning: Overlay file not found or already removed." >&2

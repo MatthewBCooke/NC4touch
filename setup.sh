@@ -88,7 +88,7 @@ echo "==== Setting Up Device Tree Overlay ===="
 # Compile and install the device tree overlay
 DT_OVERLAY_DIR="/home/nc4/TouchscreenApparatus/src/drivers/ili9488/rpi-overlays"
 cd /home/nc4/TouchscreenApparatus/src/drivers/ili9488/rpi-overlays
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili9488.dtbo ili9488.dts
+sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/ili9488.dtbo ili9488.dts
 
 # echo "==== Adding Configuration to /boot/firmware/config.txt ===="
 # # Add necessary configuration entries

@@ -42,7 +42,7 @@ If you cannot find the /build directory this means that the headers did not down
 ### Set up overlay
 ~~~~
 cd rpi-overlays
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/generictft-9488-overlay.dtbo generictft-9488-overlay.dts
+sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/generictft-9488-overlay.dtbo generictft-9488-overlay.dts
 ~~~~
 
 ### /boot/firmware/config.txt

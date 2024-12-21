@@ -65,9 +65,9 @@ You should see messages about panels being detected.
 dtc -@ -I dts -O dtb -o nc4_ili9488-overlay.dtbo nc4_ili9488-overlay.dts
 ```
 
-- Compile the overlay file to a .dtbo binary in /boot/overlays/:
+- Compile the overlay file to a .dtbo binary in /boot/firmware/overlays/:
 ```
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/nc4_ili9488.dtbo /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/nc4_ili9488.dts
+sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/nc4_ili9488.dtbo /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/nc4_ili9488.dts
 ```
 
 - In `/boot/firmware/config.txt`, add:

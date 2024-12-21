@@ -24,7 +24,7 @@ If you have a custom overlay for SPI and your panels, ensure it is referenced he
 
 Compile the overlay file to a .dtbo binary:
 ```
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
 ```
 
 Add to /boot/firmware/config.txt:

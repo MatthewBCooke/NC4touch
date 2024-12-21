@@ -1,5 +1,7 @@
 # Instructions to build, install, and test the nc4_ili9488 driver.
 
+
+
 ## Install dependencies
 
 ### Make sure you have installed kernel headers and build tools:
@@ -10,6 +12,8 @@ sudo apt-get update
 sudo apt-get install raspberrypi-kernel-headers build-essential git device-tree-compiler fbi -y
 ```
 The "fbi" tool is used for testing by showing images on the framebuffer.
+
+
 
 ## Set up the device tree overlay
 
@@ -36,15 +40,22 @@ cd /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488
 
 ### Compile the overlay file to a .dtbo binary:
 ```
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
 ```
+More verbose debugging:
 ```
-sudo dtc -@ -f -I dts -O dtb -Wunit_address_vs_reg -Wavoid_unnecessary_addr_size -o /boot/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+sudo dtc -@ -f -I dts -O dtb -Wunit_address_vs_reg -Wavoid_unnecessary_addr_size -o /boot/firmware/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+```
+
+
+### Copy the compiled overlay file to /boot/firmware/overlays/:
+```
+sudo cp nc4_ili9488.dtbo /boot/firmware/overlays/
 ```
 
 ### Check for the nc4_ili9488.dtbo
 ```
-ls /boot/overlays/*ili9488*
+ls /boot/firmware/overlays/*ili9488*
 ```
 
 ### Print the contents o /boot/firmware/config.txt:
@@ -60,9 +71,11 @@ sudo reboot
 ### All commands:
 ```
 cd /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488
-sudo dtc -@ -f -I dts -O dtb -Wunit_address_vs_reg -Wavoid_unnecessary_addr_size -o /boot/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
+sudo dtc -@ -f -I dts -O dtb -Wunit_address_vs_reg -Wavoid_unnecessary_addr_size -o /boot/firmware/overlays/nc4_ili9488.dtbo nc4_ili9488-overlay.dts
 cat /boot/firmware/config.txt
 ```
+
+
 
 ## Build the driver
 
@@ -98,6 +111,8 @@ make clean || true
 make
 ls nc4_ili9488.ko
 ```
+
+
 
 ## Install the driver
 
@@ -135,6 +150,8 @@ sudo depmod -a
 modinfo nc4_ili9488
 ```
 
+
+
 ## Load and install the driver:
 
 ### Load the driver:
@@ -165,7 +182,9 @@ echo nc4_ili9488 | sudo tee /etc/modules-load.d/nc4_ili9488.conf
 sudo reboot
 ```
 
-## Overlay and Driver Validation Commands
+
+
+## Validate Overlay and Driver
 
 ### Increase the console log level (Optional)
 ```
@@ -185,7 +204,7 @@ lsmod | grep nc4_ili9488
 ```
 - Expected outcome: Shows `nc4_ili9488` in the list with usage count.
 
-### Verify the overlay's boot application
+### Verify the overlay's boot application if its loaded
 ```
 dmesg | grep -i 'nc4_ili9488'
 ```
@@ -201,126 +220,11 @@ dmesg | grep -i 'nc4_ili9488'
 
 ### Check for errors in the .dtbo file
 ```
-sudo dtc -I dtb -O dts -o /dev/null /boot/overlays/nc4_ili9488.dtbo
+sudo dtc -I dtb -O dts -o /dev/null /boot/firmware/overlays/nc4_ili9488.dtbo
 ```
 - Expected outcome: Runs without any error messages.
 
 
-
-
-## Debugging
-
-### System checks
-
-### Check driver kernel log:
-```
-dmesg | grep nc4_ili9488
-```
-Check that:
-- SPI wiring and GPIO assignments match your hardware.
-- Your image matches the resolution. fbi will scale or crop as needed.
-
-### Check Kernel Logs for Overlay Errors
-```
-dmesg | grep -i 'overlay'
-```
-
-### Check if overlay was successfully loaded:
-```
-ls /proc/device-tree/overlays/nc4_ili9488
-```
-
-### Check if module is loaded:
-```
-lsmod | grep nc4_ili9488
-```
-
-### Verify the overlay's boot application using:
-```
-dmesg | grep -i 'nc4_ili9488'
-```
-
-### Check active frame buffers
-```
-ls /dev/fb*
-```
-
-### Check for SPI 
-```
-ls /dev/spi*
-```
-
-### Directly Inspect the Alias Mapping: Run:
-```
-cat /sys/firmware/devicetree/base/aliases/gpio
-```
-
-### Manual Commands
-
-### Manually load the module at runtime:
-```
-sudo modprobe nc4_ili9488
-```
-
-### Manually unload the module at runtime:
-```
-sudo rmmod nc4_ili9488
-```
-
-### Manually load the overlay at runtime:
-```
-sudo dtoverlay nc4_ili9488
-```
-```
-dmesg | tail -50
-```
-
-### Turn the backlight on (maximum brightness):
-```
-echo 1 | sudo tee /sys/class/backlight/soc:backlight/brightness
-```
-
-### Turn the backlight off:
-```
-echo 0 | sudo tee /sys/class/backlight/soc:backlight/brightness
-```
-
-### Draw an image to the fb0 buffer:
-```
-sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/data/images/C01.png
-```
-
-### General
-
-### Search for a specific file that matches a string:
-```
-sudo find / -type f -name "*nc4_ili9488*" 2>/dev/null
-```
-
-### Search all files that contain a given string
-```
-sudo grep -rli "nc4_ili9488" / 2>/dev/null
-```
-```
-find / -type f -name "*nc4_ili9488*" -exec dirname {} \; | sort -u
-```
-
-### Search within subfolders for files that contain a given string
-```
-sudo grep -rli "nc4_ili9488" /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/ 2>/dev/null
-```
-
-### Search for folders with a given string
-```
-sudo find / -type d -name "*overlays*"
-```
-
-### Other
-
-Decompile the .dtbo to a .dts
-```
-sudo dtc -I dtb -O dts -o /home/nc4/TouchscreenApparatus/debug/nc4_ili9488.dts /boot/overlays/nc4_ili9488.dtbo
-```
 
 ## Uninstall the nc4_ili9488 Driver
 
@@ -346,7 +250,7 @@ echo "spi0.0" | sudo tee /sys/bus/spi/drivers/nc4_ili9488/unbind
 
 ### Remove the overlay file
 ```
-sudo rm /boot/overlays/nc4_ili9488.dtbo
+sudo rm /boot/firmware/overlays/nc4_ili9488.dtbo
 ```
 
 ###  Update /boot/firmware/config.txt to remove overlay
@@ -371,6 +275,7 @@ lsmod | grep nc4_ili9488
 ```
 dmesg | grep -i ili9488
 ```
+
 
 
 ## Verify Removal
@@ -417,4 +322,124 @@ grep -ril 'nc4_ili9488' /boot/ || echo "No residual files related to nc4_ili9488
 ### Confirm no residual modules in /lib/modules
 ```
 find /lib/modules/$(uname -r)/ -name '*nc4_ili9488*' || echo "No nc4_ili9488 modules found in /lib/modules."
+```
+
+
+=
+## Debugging: System checks
+
+### Check driver kernel log:
+```
+dmesg | grep nc4_ili9488
+```
+Check that:
+- SPI wiring and GPIO assignments match your hardware.
+- Your image matches the resolution. fbi will scale or crop as needed.
+
+### Check Kernel Logs for Overlay Errors
+```
+dmesg | grep -i 'overlay'
+```
+
+### Check if overlay was successfully loaded:
+```
+ls /proc/device-tree/overlays/nc4_ili9488
+```
+
+### Check if module is loaded:
+```
+lsmod | grep nc4_ili9488
+```
+
+### Verify the overlay's boot application using:
+```
+dmesg | grep -i 'nc4_ili9488'
+```
+
+### Check active frame buffers
+```
+ls /dev/fb*
+```
+
+### Check for SPI 
+```
+ls /dev/spi*
+```
+
+### Directly Inspect the Alias Mapping: Run:
+```
+cat /sys/firmware/devicetree/base/aliases/gpio
+```
+
+
+
+## Debugging: Manual Commands
+
+### Manually load the module at runtime:
+```
+sudo modprobe nc4_ili9488
+```
+
+### Manually unload the module at runtime:
+```
+sudo rmmod nc4_ili9488
+```
+
+### Manually load the overlay at runtime:
+```
+sudo dtoverlay nc4_ili9488
+```
+```
+dmesg | tail -50
+```
+
+### Turn the backlight on (maximum brightness):
+```
+echo 1 | sudo tee /sys/class/backlight/soc:backlight/brightness
+```
+
+### Turn the backlight off:
+```
+echo 0 | sudo tee /sys/class/backlight/soc:backlight/brightness
+```
+
+### Draw an image to the fb0 buffer:
+```
+sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/data/images/C01.png
+```
+
+
+
+## Debugging: General
+
+### Search for a specific file that matches a string:
+```
+sudo find / -type f -name "*nc4_ili9488*" 2>/dev/null
+```
+
+### Search all files that contain a given string
+```
+sudo grep -rli "nc4_ili9488" / 2>/dev/null
+```
+```
+find / -type f -name "*nc4_ili9488*" -exec dirname {} \; | sort -u
+```
+
+### Search within subfolders for files that contain a given string
+```
+sudo grep -rli "nc4_ili9488" /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/ 2>/dev/null
+```
+
+### Search for folders with a given string
+```
+sudo find / -type d -name "*overlays*"
+```
+
+
+
+## Debugging: Other
+
+Decompile the .dtbo to a .dts
+```
+sudo dtc -I dtb -O dts -o /home/nc4/TouchscreenApparatus/debug/nc4_ili9488.dts /boot/firmware/overlays/nc4_ili9488.dtbo
 ```

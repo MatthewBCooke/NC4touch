@@ -466,7 +466,7 @@ cd /home/nc4/TouchscreenApparatus/src/drivers/ili9488/rpi-overlays
 
 Compile the overlay file to a .dtbo binary:
 ```
-sudo dtc -@ -I dts -O dtb -o /boot/overlays/ili9488.dtbo ili9488.dts
+sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/ili9488.dtbo ili9488.dts
 ```
 
 Edit the config.txt file to include the overlay and set SPI parameters:
@@ -524,7 +524,7 @@ Expected outcomes: the directory exists and contains files like `status` and `na
 
 Check for errors in the .dtbo
 ```
-sudo dtc -I dtb -O dts -o /dev/null /boot/overlays/ili9488.dtbo
+sudo dtc -I dtb -O dts -o /dev/null /boot/firmware/overlays/ili9488.dtbo
 ```
 
 # Uninstall the ili9488 driver
@@ -655,7 +655,7 @@ dmesg | tail -50
 
 ## Decompile the .dtbo to a .dts
 ```
-sudo dtc -I dtb -O dts -o /home/nc4/TouchscreenApparatus/debug/ili9488.dts /boot/overlays/ili9488.dtbo
+sudo dtc -I dtb -O dts -o /home/nc4/TouchscreenApparatus/debug/ili9488.dts /boot/firmware/overlays/ili9488.dtbo
 ```
 
 ## Turn the backlight on (maximum brightness):

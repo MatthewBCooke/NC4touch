@@ -29,21 +29,22 @@
 #include <linux/backlight.h>
 
 /* Driver version for reference in logs */
-#define ILI9488_DRIVER_VERSION "v3.0.0"
+#define ILI9488_DRIVER_VERSION "v2.0.1"
 
 #define NC4_ILI9488_NAME "nc4_ili9488"
-#define LCD_WIDTH  320
+#define LCD_WIDTH 320
 #define LCD_HEIGHT 480
 
 /* Per-panel context */
-struct nc4_ili9488_panel {
-	struct spi_device       *spi;
-	struct fb_info          *info;
-	u8                      *buffer;       // Framebuffer memory
-	size_t                   buffer_size;
+struct nc4_ili9488_panel
+{
+	struct spi_device *spi;
+	struct fb_info *info;
+	u8 *buffer; // Framebuffer memory
+	size_t buffer_size;
 
-	struct gpio_desc        *reset_gpio;
-	struct gpio_desc        *dc_gpio;
+	struct gpio_desc *reset_gpio;
+	struct gpio_desc *dc_gpio;
 
 	// We now rely on the kernel backlight subsystem
 	struct backlight_device *backlight;
@@ -66,7 +67,7 @@ static int nc4_ili9488_write_cmd(struct nc4_ili9488_panel *panel, u8 cmd)
 
 /* Write data (DC=high) */
 static int nc4_ili9488_write_data(struct nc4_ili9488_panel *panel,
-                                  const u8 *data, size_t len)
+								  const u8 *data, size_t len)
 {
 	gpiod_set_value_cansleep(panel->dc_gpio, 1);
 	return spi_write(panel->spi, data, len);
@@ -88,58 +89,58 @@ static int nc4_ili9488_write_data_byte(struct nc4_ili9488_panel *panel, u8 val)
  */
 static int nc4_ili9488_init_panel(struct nc4_ili9488_panel *panel)
 {
-    int ret;
+	int ret;
 
-    dev_info(&panel->spi->dev, "Starting panel initialization for ILI9488 driver %s\n", ILI9488_DRIVER_VERSION);
+	dev_info(&panel->spi->dev, "Starting panel initialization for ILI9488 driver %s\n", ILI9488_DRIVER_VERSION);
 
-    /* Hardware reset sequence */
-    dev_dbg(&panel->spi->dev, "Performing hardware reset\n");
-    gpiod_set_value_cansleep(panel->reset_gpio, 1);
-    mdelay(5);
-    gpiod_set_value_cansleep(panel->reset_gpio, 0);
-    mdelay(20);
-    gpiod_set_value_cansleep(panel->reset_gpio, 1);
-    mdelay(120);
+	/* Hardware reset sequence */
+	dev_dbg(&panel->spi->dev, "Performing hardware reset\n");
+	gpiod_set_value_cansleep(panel->reset_gpio, 1);
+	mdelay(5);
+	gpiod_set_value_cansleep(panel->reset_gpio, 0);
+	mdelay(20);
+	gpiod_set_value_cansleep(panel->reset_gpio, 1);
+	mdelay(120);
 
-    /* Sleep Out (0x11) */
-    dev_dbg(&panel->spi->dev, "Sending Sleep Out command (0x11)\n");
-    ret = nc4_ili9488_write_cmd(panel, 0x11);
-    if (ret)
-        goto err;
-    mdelay(120);
+	/* Sleep Out (0x11) */
+	dev_dbg(&panel->spi->dev, "Sending Sleep Out command (0x11)\n");
+	ret = nc4_ili9488_write_cmd(panel, 0x11);
+	if (ret)
+		goto err;
+	mdelay(120);
 
-    /* Pixel Format Set (0x3A) */
-    dev_dbg(&panel->spi->dev, "Setting pixel format (18-bit RGB666)\n");
-    ret = nc4_ili9488_write_cmd(panel, 0x3A);
-    if (ret)
-        goto err;
-    ret = nc4_ili9488_write_data_byte(panel, 0x66);
-    if (ret)
-        goto err;
+	/* Pixel Format Set (0x3A) => 0x66 for 18-bit mode */
+	dev_dbg(&panel->spi->dev, "Setting pixel format (18-bit RGB666)\n");
+	ret = nc4_ili9488_write_cmd(panel, 0x3A);
+	if (ret)
+		goto err;
+	ret = nc4_ili9488_write_data_byte(panel, 0x66);
+	if (ret)
+		goto err;
 
-    /* Memory Access Control (0x36) */
-    dev_dbg(&panel->spi->dev, "Configuring memory access control\n");
-    ret = nc4_ili9488_write_cmd(panel, 0x36);
-    if (ret)
-        goto err;
-    ret = nc4_ili9488_write_data_byte(panel, 0x48);
-    if (ret)
-        goto err;
+	/* Memory Access Control (0x36). Example: 0x48 for top->bottom, left->right. */
+	dev_dbg(&panel->spi->dev, "Configuring memory access control\n");
+	ret = nc4_ili9488_write_cmd(panel, 0x36);
+	if (ret)
+		goto err;
+	ret = nc4_ili9488_write_data_byte(panel, 0x48);
+	if (ret)
+		goto err;
 
-    /* Display On (0x29) */
-    dev_dbg(&panel->spi->dev, "Turning on the display (0x29)\n");
-    ret = nc4_ili9488_write_cmd(panel, 0x29);
-    if (ret)
-        goto err;
+	/* Display On (0x29) */
+	dev_dbg(&panel->spi->dev, "Turning on the display (0x29)\n");
+	ret = nc4_ili9488_write_cmd(panel, 0x29);
+	if (ret)
+		goto err;
 
-    mdelay(20);
+	mdelay(20);
 
-    dev_info(&panel->spi->dev, "Panel initialized successfully\n");
-    return 0;
+	dev_info(&panel->spi->dev, "Panel initialized successfully\n");
+	return 0;
 
 err:
-    dev_err(&panel->spi->dev, "Panel initialization failed\n");
-    return ret;
+	dev_err(&panel->spi->dev, "Failed during panel init\n");
+	return ret;
 }
 
 /*
@@ -147,7 +148,7 @@ err:
  * or partial for partial updates if needed.
  */
 static int nc4_ili9488_set_window(struct nc4_ili9488_panel *panel,
-                                  u16 x1, u16 y1, u16 x2, u16 y2)
+								  u16 x1, u16 y1, u16 x2, u16 y2)
 {
 	u8 buf[4];
 	int ret;
@@ -188,9 +189,10 @@ static int nc4_ili9488_update_display(struct nc4_ili9488_panel *panel)
 
 	/* Full window update */
 	ret = nc4_ili9488_set_window(panel, 0, 0,
-	                             panel->width - 1,
-	                             panel->height - 1);
-	if (ret) {
+								 panel->width - 1,
+								 panel->height - 1);
+	if (ret)
+	{
 		dev_err(&panel->spi->dev, "Failed to set window\n");
 		return ret;
 	}
@@ -214,10 +216,13 @@ static int nc4_ili9488_blank(int blank, struct fb_info *info)
 	if (!panel->backlight)
 		return 0;
 
-	if (blank) {
+	if (blank)
+	{
 		backlight_disable(panel->backlight);
 		dev_info(&panel->spi->dev, "Backlight off\n");
-	} else {
+	}
+	else
+	{
 		backlight_enable(panel->backlight);
 		dev_info(&panel->spi->dev, "Backlight on\n");
 	}
@@ -229,13 +234,13 @@ static int nc4_ili9488_blank(int blank, struct fb_info *info)
  * The core fbcon code calls these for read/write, blit, etc.
  */
 static struct fb_ops nc4_ili9488_fbops = {
-	.owner        = THIS_MODULE,
-	.fb_read      = fb_sys_read,
-	.fb_write     = fb_sys_write,
-	.fb_fillrect  = sys_fillrect,
-	.fb_copyarea  = sys_copyarea,
+	.owner = THIS_MODULE,
+	.fb_read = fb_sys_read,
+	.fb_write = fb_sys_write,
+	.fb_fillrect = sys_fillrect,
+	.fb_copyarea = sys_copyarea,
 	.fb_imageblit = sys_imageblit,
-	.fb_blank     = nc4_ili9488_blank,
+	.fb_blank = nc4_ili9488_blank,
 };
 
 /* After any write, do a full display update (simple approach). */
@@ -251,88 +256,156 @@ static void nc4_ili9488_flush(struct fb_info *info)
  */
 static int nc4_ili9488_probe(struct spi_device *spi)
 {
-    struct device *dev = &spi->dev;
-    struct nc4_ili9488_panel *panel;
-    struct fb_info *info;
-    int ret;
+	struct device *dev = &spi->dev;
+	struct nc4_ili9488_panel *panel;
+	struct fb_info *info;
+	int ret;
 
-    dev_info(dev, "Probing nc4_ili9488 panel\n");
+	dev_info(dev, "Probing nc4_ili9488 panel\n");
 
-    /* Allocate panel structure */
-    dev_dbg(dev, "Allocating panel structure\n");
-    panel = devm_kzalloc(dev, sizeof(*panel), GFP_KERNEL);
-    if (!panel) {
-        dev_err(dev, "Failed to allocate panel structure\n");
-        return -ENOMEM;
-    }
+	/* Allocate panel structure */
+	dev_dbg(dev, "Allocating panel structure\n");
+	panel = devm_kzalloc(dev, sizeof(*panel), GFP_KERNEL);
+	if (!panel)
+		return -ENOMEM;
 
-    panel->spi = spi;
+	panel->spi = spi;
 
-    /* GPIOs for DC and RESET */
-    dev_dbg(dev, "Acquiring DC GPIO\n");
-    panel->dc_gpio = devm_gpiod_get(dev, "dc", GPIOD_OUT_LOW);
-    if (IS_ERR(panel->dc_gpio)) {
-        dev_err(dev, "Failed to acquire DC GPIO\n");
-        return PTR_ERR(panel->dc_gpio);
-    }
+	/* DC and RESET lines from device tree */
+	dev_dbg(dev, "Acquiring DC GPIO\n");
+	panel->dc_gpio = devm_gpiod_get(dev, "dc", GPIOD_OUT_LOW);
+	if (IS_ERR(panel->dc_gpio))
+	{
+		dev_err(dev, "Failed to get DC GPIO\n");
+		return PTR_ERR(panel->dc_gpio);
+	}
 
-    dev_dbg(dev, "Acquiring RESET GPIO\n");
-    panel->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-    if (IS_ERR(panel->reset_gpio)) {
-        dev_err(dev, "Failed to acquire RESET GPIO\n");
-        return PTR_ERR(panel->reset_gpio);
-    }
+	dev_dbg(dev, "Acquiring RESET GPIO\n");
+	panel->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+	if (IS_ERR(panel->reset_gpio))
+	{
+		dev_err(dev, "Failed to get RESET GPIO\n");
+		return PTR_ERR(panel->reset_gpio);
+	}
 
-    /* Backlight */
-    dev_dbg(dev, "Acquiring backlight device\n");
-    panel->backlight = devm_of_find_backlight(dev);
-    if (IS_ERR(panel->backlight)) {
-        dev_err(dev, "Failed to acquire backlight device\n");
-        return PTR_ERR(panel->backlight);
-    }
+	/* Backlight device from the overlay */
+	dev_dbg(dev, "Acquiring backlight device\n");
+	panel->backlight = devm_of_find_backlight(dev);
+	if (IS_ERR(panel->backlight))
+	{
+		dev_err(dev, "Failed to find backlight\n");
+		return PTR_ERR(panel->backlight);
+	}
 
-    /* SPI Configuration */
-    dev_dbg(dev, "Configuring SPI\n");
-    spi->mode = SPI_MODE_0;
-    spi->bits_per_word = 8;
-    if (device_property_read_u32(dev, "spi-max-frequency", &panel->bus_speed_hz)) {
-        panel->bus_speed_hz = 4000000; // default
-    }
-    spi->max_speed_hz = panel->bus_speed_hz;
+	/* SPI configuration */
+	dev_dbg(dev, "Configuring SPI\n");
+	spi->mode = SPI_MODE_0;
+	spi->bits_per_word = 8;
+	if (device_property_read_u32(dev, "spi-max-frequency", &panel->bus_speed_hz))
+		panel->bus_speed_hz = 4000000; // default if not found
+	spi->max_speed_hz = panel->bus_speed_hz;
 
-    ret = spi_setup(spi);
-    if (ret) {
-        dev_err(dev, "SPI setup failed\n");
-        return ret;
-    }
+	ret = spi_setup(spi);
+	if (ret)
+	{
+		dev_err(dev, "Failed to setup SPI\n");
+		return ret;
+	}
 
-    /* Framebuffer allocation */
-    dev_dbg(dev, "Allocating framebuffer\n");
-    panel->buffer_size = LCD_WIDTH * LCD_HEIGHT * 4;
-    panel->buffer = vmalloc(panel->buffer_size);
-    if (!panel->buffer) {
-        dev_err(dev, "Framebuffer allocation failed\n");
-        return -ENOMEM;
-    }
-    memset(panel->buffer, 0xFF, panel->buffer_size); // White screen initially
+	/* Panel dims */
+	panel->width = LCD_WIDTH;
+	panel->height = LCD_HEIGHT;
 
-    /* Initialize panel hardware */
-    dev_dbg(dev, "Initializing panel hardware\n");
-    ret = nc4_ili9488_init_panel(panel);
-    if (ret) {
-        vfree(panel->buffer);
-        return ret;
-    }
+	/*
+	 * We store 32 bits (4 bytes) per pixel in system memory.
+	 * When sending to the panel, the low bits are effectively discarded
+	 * because the panel is configured for 18-bit (RGB666).
+	 */
+	dev_dbg(dev, "Allocating framebuffer\n");
+	panel->buffer_size = panel->width * panel->height * 4;
 
-    dev_info(dev, "Panel probed successfully\n");
-    return 0;
+	/* Allocate fb_info */
+	info = framebuffer_alloc(0, dev);
+	if (!info)
+		return -ENOMEM;
+
+	panel->info = info;
+	info->screen_size = panel->buffer_size;
+
+	/* Fix: TrueColor, 4 bytes/pixel */
+	info->fix.type = FB_TYPE_PACKED_PIXELS;
+	info->fix.visual = FB_VISUAL_TRUECOLOR;
+	info->fix.line_length = panel->width * 4;
+	strcpy(info->fix.id, "nc4_ili9488");
+
+	/* Var: XRGB8888 layout */
+	info->var.xres = panel->width;
+	info->var.yres = panel->height;
+	info->var.xres_virtual = panel->width;
+	info->var.yres_virtual = panel->height;
+	info->var.bits_per_pixel = 32;
+
+	info->var.red.offset = 16;
+	info->var.red.length = 8;
+	info->var.green.offset = 8;
+	info->var.green.length = 8;
+	info->var.blue.offset = 0;
+	info->var.blue.length = 8;
+	info->var.transp.offset = 24;
+	info->var.transp.length = 8; // optional alpha
+
+	/* Use our fb_ops to handle blanking, read/write, etc. */
+	info->fbops = &nc4_ili9488_fbops;
+	info->par = panel;
+
+	/* Allocate VRAM for the FB */
+	panel->buffer = vmalloc(panel->buffer_size);
+	if (!panel->buffer)
+	{
+		framebuffer_release(info);
+		return -ENOMEM;
+	}
+	memset(panel->buffer, 0xFF, panel->buffer_size);
+	info->screen_base = (char __iomem *)panel->buffer;
+
+	/* Register the framebuffer device with the kernel */
+	ret = register_framebuffer(info);
+	if (ret)
+	{
+		vfree(panel->buffer);
+		framebuffer_release(info);
+		return ret;
+	}
+
+	/* Let SPI device data point to our panel structure */
+	spi_set_drvdata(spi, panel);
+
+	/* Init the panel hardware (ILI9488 init commands) */
+	dev_dbg(dev, "Initializing panel hardware\n");
+	ret = nc4_ili9488_init_panel(panel);
+	if (ret)
+	{
+		unregister_framebuffer(info);
+		vfree(panel->buffer);
+		framebuffer_release(info);
+		return ret;
+	}
+
+	/* Enable backlight & do an initial screen update */
+	nc4_ili9488_blank(FB_BLANK_UNBLANK, info);
+	nc4_ili9488_flush(info);
+
+	dev_info(dev, "nc4_ili9488 panel registered at /dev/fb%d\n", info->node);
+	return 0;
 }
 
 static void nc4_ili9488_remove(struct spi_device *spi)
 {
 	struct nc4_ili9488_panel *panel = spi_get_drvdata(spi);
-	if (panel) {
-		if (panel->info) {
+	if (panel)
+	{
+		if (panel->info)
+		{
 			unregister_framebuffer(panel->info);
 			vfree(panel->buffer);
 			framebuffer_release(panel->info);
@@ -342,17 +415,17 @@ static void nc4_ili9488_remove(struct spi_device *spi)
 
 /* Device Tree matching table */
 static const struct of_device_id nc4_ili9488_of_match[] = {
-	{ .compatible = "nc4,ili9488", },
-	{ }
-};
+	{
+		.compatible = "nc4,ili9488",
+	},
+	{}};
 MODULE_DEVICE_TABLE(of, nc4_ili9488_of_match);
 
-/* For non-DT fallback, or alias. If you rely solely on DT matching, 
+/* For non-DT fallback, or alias. If you rely solely on DT matching,
    you could remove or rename this entry. */
 static const struct spi_device_id nc4_ili9488_id[] = {
-    { "ili9488", 0 },
-    { }
-};
+	{"ili9488", 0},
+	{}};
 MODULE_DEVICE_TABLE(spi, nc4_ili9488_id);
 
 /* The SPI driver object */
@@ -361,8 +434,8 @@ static struct spi_driver nc4_ili9488_driver = {
 		.name = NC4_ILI9488_NAME,
 		.of_match_table = of_match_ptr(nc4_ili9488_of_match),
 	},
-	.probe    = nc4_ili9488_probe,
-	.remove   = nc4_ili9488_remove,
+	.probe = nc4_ili9488_probe,
+	.remove = nc4_ili9488_remove,
 	.id_table = nc4_ili9488_id,
 };
 

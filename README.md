@@ -757,7 +757,7 @@ nmcli connection show --active
 
 Git BS:
 ```
-cd cd /home/nc4
+cd /home/nc4
 sudo cp -r ~/TouchscreenApparatus ~/TouchscreenApparatus_backup
 diff -r --exclude='.lgd-nfy0' /home/nc4/TouchscreenApparatus /home/nc4/TouchscreenApparatus_backup
 cd /home/nc4/TouchscreenApparatus

@@ -3,6 +3,13 @@
 MODULE_NAME="nc4_ili9488"
 MODULE_FILE="/lib/modules/$(uname -r)/extra/${MODULE_NAME}.ko"
 DRM_DEBUG_LEVEL="0x1f"
+OUTPUT_FILE="/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/logs/install_debug.log"
+
+# Ensure the logs directory exists
+mkdir -p logs
+
+# Redirect all output to the log file
+exec > >(tee -a "$OUTPUT_FILE") 2>&1
 
 sudo modprobe drm
 sudo modprobe drm_kms_helper

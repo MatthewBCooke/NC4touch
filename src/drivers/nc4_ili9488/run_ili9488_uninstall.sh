@@ -116,5 +116,7 @@ fi
 echo "Checking for residual modules in /lib/modules..."
 find /lib/modules/$(uname -r)/ -name '*nc4_ili9488*' || echo "No nc4_ili9488 modules found in /lib/modules."
 
+echo "==== Uninstallation Complete ===="
+
 # echo "==== Uninstallation Rebooting Now ===="
 # sudo reboot

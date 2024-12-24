@@ -66,6 +66,78 @@ Check if the modules are loaded and available.
 lsmod | grep drm
 ```
 
+### Install Raspberry Pi kernel configured for the BCM2711 architecture
+
+Clone the Raspberry Pi kernel source:
+```
+git clone --depth=1 https://github.com/raspberrypi/linux
+```
+```
+cd linux
+```
+
+Configure the kernel for Raspberry Pi:
+```
+make bcm2711_defconfig
+```
+
+Prepared the kernel build environment:
+```
+make modules_prepare
+```
+
+Build the entire kernel environment to ensure all dependencies and metadata:
+```
+make -j$(nproc)
+```
+
+Confirmed `Module.symvers` was created:
+```
+ls ~/linux/Module.symvers
+```
+
+Verify DRM subsystem object files were compiled:
+```
+find ~/linux/drivers/gpu/drm -name '*.o'
+```
+
+Set up kernel source directory:
+```
+cd /home/nc4/linux
+```
+
+Configure the kernel modules installation:
+```
+sudo make modules_install
+```
+
+Check kernel release version:
+```
+cat include/config/kernel.release
+```
+
+Copy new kernel image to boot firmware:
+```
+sudo cp /home/nc4/linux/arch/arm64/boot/Image /boot/firmware/kernel8.img
+```
+
+Reboot into the new kernel:
+```
+sudo reboot
+```
+
+Check the new kernel is loaded
+```
+uname -r
+```
+Should see `6.6.67-v8+`
+
+Loaded the DRM MIPI DBI module:
+```
+sudo modprobe drm_mipi_dbi
+```
+
+
 
 ## Set up the device tree overlay
 

@@ -101,6 +101,10 @@
 ### 3: Configure Wi-Fi for Internet Access
 
 1. Create or edit the `wpa_supplicant.conf` file in the **boot** partition.
+You can do this from your SSH connection using:
+```
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+```
 
 2. Add the following content:
    ```
@@ -111,6 +115,17 @@
    network={
        ssid="NC4_Neurogenesis_Exposure"
        psk="nc4lab1434"
+   }
+   ```
+   Or
+   ```
+   country=CA
+   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+   update_config=1
+
+   network={
+       ssid="poserguru_s24"
+       psk="funkstar"
    }
    ```
 
@@ -746,6 +761,9 @@ sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/
 # Random
 
 Connect to my hotspot:
+```
+iwgetid -r
+```
 ```
 sudo nmcli dev wifi connect "poserguru_s24" password "funkstar"
 ```

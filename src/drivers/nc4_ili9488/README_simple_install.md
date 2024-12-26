@@ -115,3 +115,19 @@ If the overlay does not seemto have loaded applying it manually and checking for
 ```
 sudo dtoverlay -v nc4_ili9488
 ```
+
+
+## Check for SPI 
+```
+ls /dev/spi*
+```
+
+## Check active frame buffers
+```
+ls /dev/fb*
+```
+
+## Draw an image to the fb0 buffer:
+```
+sudo fbi -d /dev/fb0 -T 1 /home/nc4/TouchscreenApparatus/data/images/A01.bmp
+```

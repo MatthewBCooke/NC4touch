@@ -787,10 +787,12 @@ diff -r --exclude='.lgd-nfy0' /home/nc4/TouchscreenApparatus /home/nc4/Touchscre
 cd /home/nc4/TouchscreenApparatus
 git fsck --full | grep -o 'git/objects/[0-9a-f]*/[0-9a-f]*' | xargs rm -f
 find .git/objects -type f -empty -delete
-git status
-git fsck --full
-git status
+git stash
+git fetch --all
+git reset --hard origin/main
+git stash pop
 git add .
+Commit changes
 ```
 
 

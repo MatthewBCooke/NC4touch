@@ -32,10 +32,7 @@
 	fragment@2 {
 		target = <&gpio>;
 		__overlay__ {
-			#address-cells = <1>;
-			#size-cells = <0>;
 			pitft_pins: pitft_pins {
-				reg = <0>;
 				brcm,pins = <24 25 18>;
 				brcm,function = <1 1 1>; /* set as output */
 			};

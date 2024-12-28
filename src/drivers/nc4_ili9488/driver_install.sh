@@ -41,5 +41,5 @@ echo "==== Done Installing nc4_ili9488 ===="
 echo "To enable at boot, add the following line to /boot/firmware/config.txt (if not present):"
 echo "  dtoverlay=nc4_ili9488"
 
-echo "Reboot is recommended for changes to take effect."
+echo "Rebooting..."
 sudo reboot

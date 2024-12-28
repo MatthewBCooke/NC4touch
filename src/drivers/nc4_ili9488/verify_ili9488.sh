@@ -96,6 +96,10 @@ fi
 ## Validate Driver
 echo "==== Validating Driver ===="
 
+# Log and print dmesg output for the driver
+echo "Fetching and logging dmesg output for $DRIVER_NAME..."
+dmesg | grep "$DRIVER_NAME" | tee -a "$LOG_FILE"
+
 # Check if the driver module exists
 if [ -f "$DRIVER_PATH" ]; then
     echo "Driver file found: $DRIVER_PATH"
@@ -118,9 +122,5 @@ else
         exit 1
     fi
 fi
-
-# Final kernel log check
-echo "Final kernel logs:"
-dmesg | grep -i "$DRIVER_NAME"
 
 echo "=== Validation Complete ==="

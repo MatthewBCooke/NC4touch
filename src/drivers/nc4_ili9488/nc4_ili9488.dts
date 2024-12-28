@@ -1,14 +1,18 @@
 /********************************************************************************
- * nc4_ili9488.dts
+ * nc4_ili9488_swcs.dts
+ *
+ * Device Tree Overlay for two ILI9488 panels on Raspberry Pi's SPI0 bus,
+ * with software-based chip select lines:
+ *   - LCD_0 on GPIO 8 (Pin 24)
+ *   - LCD_1 on GPIO 7 (Pin 26)
  * 
- * Device Tree Overlay for two ILI9488 panels on Raspberry Pi's SPI0 bus.
- * - Disables spidev0 (CS0) and spidev1 (CS1).
- * - Creates two SPI child nodes: pitft0@0 (CE0) and pitft1@1 (CE1).
- * - Each panel has its own Reset and DC lines.
- * - Shared backlight on GPIO18.
+ *  => No "reg = <0>/<1>" usage, so the hardware SPI controller won't drive CE0/CE1.
+ *     Instead, each node has "cs-gpios" to handle toggling in software.
+ *
+ * Based on your original nc4_ili9488.dts
  *
  * Compatible usage:
- *   dtoverlay=nc4_ili9488
+ *   dtoverlay=nc4_ili9488_swcs
  ********************************************************************************/
  /dts-v1/;
 /plugin/;
@@ -23,6 +27,8 @@
 		target = <&spi0>;
 		__overlay__ {
 			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;
 		};
 	};
 
@@ -47,53 +53,52 @@
 	};
 
 	/****************************************************************************
-	 * Fragment 3: GPIO pins for the FIRST panel (pitft0)
-	 *   GPIO24 = RESET (out)
-	 *   GPIO25 = DC (out)
-	 *   GPIO18 = Backlight (out, shared)
+	 * Fragment 3: GPIO pins for LCD_0 (RESET/DC/backlight)
+	 *   GPIO24 = RESET,  GPIO25 = DC,  GPIO18 = shared backlight
 	 ****************************************************************************/
 	fragment@3 {
 		target = <&gpio>;
 		__overlay__ {
 			pitft0_pins: pitft0_pins {
 				brcm,pins = <24 25 18>;
-				brcm,function = <1 1 1>; /* Set as output */
+				brcm,function = <1 1 1>; /* all outputs */
 			};
 		};
 	};
 
 	/****************************************************************************
-	 * Fragment 4: GPIO pins for the SECOND panel (pitft1)
-	 *   GPIO23 = RESET (out)
-	 *   GPIO27 = DC (out)
-	 *   GPIO18 = Backlight (out, shared)
+	 * Fragment 4: GPIO pins for LCD_1 (RESET/DC/backlight)
+	 *   GPIO23 = RESET,  GPIO27 = DC,  GPIO18 = shared backlight
 	 ****************************************************************************/
 	fragment@4 {
 		target = <&gpio>;
 		__overlay__ {
 			pitft1_pins: pitft1_pins {
 				brcm,pins = <23 27 18>;
-				brcm,function = <1 1 1>; /* Set as output */
+				brcm,function = <1 1 1>;
 			};
 		};
 	};
 
 	/****************************************************************************
-	 * Fragment 5: FIRST ILI9488 device node on SPI0 CE0
+	 * Fragment 5: FIRST ILI9488 device node => software CS on GPIO8
 	 ****************************************************************************/
 	fragment@5 {
 		target = <&spi0>;
 		__overlay__ {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
 			pitft0: pitft0@0 {
-				compatible = "ili9488"; /* Reusing the original compatible */
+				compatible = "ili9488";
+
+				/* Instead of reg=<0>, we do a software chip select on GPIO8. */
+				cs-gpios = <&gpio 8 0>;  /* "0" => active-low */
+
+				/* Optionally specify SPI mode. 0 => CPOL=0, 0 => CPHA=0 */
+				spi-cpol = <0>;
+				spi-cpha = <0>;
+				spi-max-frequency = <4000000>;
+
 				pinctrl-names = "default";
 				pinctrl-0 = <&pitft0_pins>;
-
-				reg = <0>; /* CE0 line */
-				spi-max-frequency = <4000000>; /* Override as needed */
 
 				rotation = <0>;
 				reset-gpios = <&gpio 24 0>;
@@ -104,18 +109,23 @@
 	};
 
 	/****************************************************************************
-	 * Fragment 6: SECOND ILI9488 device node on SPI0 CE1
+	 * Fragment 6: SECOND ILI9488 device node => software CS on GPIO7
 	 ****************************************************************************/
 	fragment@6 {
 		target = <&spi0>;
 		__overlay__ {
 			pitft1: pitft1@1 {
-				compatible = "ili9488"; /* Same panel type, different CS */
+				compatible = "ili9488";
+
+				/* Instead of reg=<1>, we do software chip select on GPIO7. */
+				cs-gpios = <&gpio 7 0>;
+
+				spi-cpol = <0>;
+				spi-cpha = <0>;
+				spi-max-frequency = <4000000>;
+
 				pinctrl-names = "default";
 				pinctrl-0 = <&pitft1_pins>;
-
-				reg = <1>; /* CE1 line */
-				spi-max-frequency = <4000000>; /* Override as needed */
 
 				rotation = <0>;
 				reset-gpios = <&gpio 23 0>;
@@ -126,7 +136,7 @@
 	};
 
 	/****************************************************************************
-	 * Fragment 7: Shared backlight control for both panels
+	 * Fragment 7: Shared backlight on GPIO18
 	 ****************************************************************************/
 	fragment@7 {
 		target-path = "/soc";

@@ -64,7 +64,7 @@ for NODE in "${EXPECTED_NODES[@]}"; do
     if [ -d "$NODE_PATH" ] || grep -q "$NODE" "$TMP_DTC_RAW"; then
         echo "Node '$NODE' found in the live device tree."
     else
-        echo "Node '$NODE' not found. Check overlay or binding for issues."
+        echo "ERROR!! Node '$NODE' not found. Check overlay or binding for issues."
     fi
 done
 

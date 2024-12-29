@@ -18,6 +18,12 @@ Optional:
 ```
 sudo apt install libdrm-tests kmscube
 ```
+```
+sudo apt-get install drm-info
+```
+```
+sudo apt-get install kms++
+```
 
 
 # Setting up the nc4_ili9488 driver

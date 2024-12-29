@@ -771,7 +771,21 @@ Check what network we are on:
 iwgetid -r
 ```
 
-Connect to my hotspot:
+Disconnect from network:
+```
+sudo nmcli dev disconnect wlan0
+```
+
+Rescan for Networks:
+```
+sudo nmcli dev wifi rescan
+nmcli dev wifi list
+```
+
+Connect to one of the wifi networks:
+```
+sudo nmcli dev wifi connect "NC4_Neurogenesis_Exposure" password "nc4lab1434"
+```
 ```
 sudo nmcli dev wifi connect "poserguru_s24" password "funkstar"
 ```

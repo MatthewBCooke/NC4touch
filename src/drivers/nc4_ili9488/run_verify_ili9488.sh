@@ -146,11 +146,6 @@ else
     fi
 fi
 
-# Log and print relevant dmesg output for debugging
-echo
-echo "==== Fetching and logging dmesg output (nc4_ili9488, SPI, GPIO, and DTB) ==== "
-dmesg | grep -E "nc4_ili9488|spi|gpio|dtb" | tee -a "$LOG_FILE"
-
 # Validate GPIO Pin States
 echo
 echo "==== Validating GPIO Pin States ===="
@@ -159,6 +154,11 @@ for PIN in "${GPIO_PINS[@]}"; do
     echo "Checking GPIO $PIN:"
     raspi-gpio get $PIN
 done
+
+# # Log and print relevant dmesg output for debugging
+# echo
+# echo "==== Fetching and logging dmesg output (nc4_ili9488, SPI, GPIO, and DTB) ==== "
+# dmesg | grep -E "nc4_ili9488|spi|gpio|dtb" | tee -a "$LOG_FILE"
 
 echo
 echo "=== Validation Complete ==="

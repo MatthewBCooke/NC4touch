@@ -8,6 +8,11 @@ LOG_FILE="$LOG_DIR/kms_debug.log"
 # Ensure the log directory exists
 mkdir -p "$LOG_DIR"
 
+# Delete the old log file if it exists
+if [[ -f "$LOG_FILE" ]]; then
+    rm "$LOG_FILE"
+fi
+
 # Enable DRM KMS debug logging
 echo "Enabling DRM_DEBUG_KMS logging..."
 echo 0x1f | sudo tee /sys/module/drm/parameters/debug > /dev/null

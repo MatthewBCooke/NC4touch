@@ -107,6 +107,12 @@ static inline int nc4_ili9488_send_cmd(struct mipi_dbi *dbi,
 	u8 data[16]; /* Sufficient for known sequences */
 	int i, ret;
 
+	/* ADDED FOR DEBUG */
+	DRM_DEBUG_KMS("nc4_ili9488: [send_cmd] SPI dev=%s cs=%d -> cmd=%s(0x%02X), num_args=%d\n",
+				  dev_name(dbi->spi->dev.parent),
+				  to_spi_device(dbi->spi->dev.parent)->chip_select,
+				  cmd_name, cmd_code, num_args);
+
 	if (num_args > 16)
 	{
 		DRM_DEBUG_KMS("nc4_ili9488: Command %s(0x%02X) has too many args: %d\n",
@@ -114,17 +120,17 @@ static inline int nc4_ili9488_send_cmd(struct mipi_dbi *dbi,
 		return -EINVAL;
 	}
 
-	/* Gather parameters */
 	va_start(args, num_args);
 	for (i = 0; i < num_args; i++)
 		data[i] = (u8)va_arg(args, int);
 	va_end(args);
 
 	/* Log debug details */
-	DRM_DEBUG_KMS("nc4_ili9488: CMD:%s(0x%02X), args(%d):",
-				  cmd_name, cmd_code, num_args);
+	DRM_DEBUG_KMS("nc4_ili9488: CMD:%s(0x%02X), args(%d):", cmd_name, cmd_code, num_args);
 	for (i = 0; i < num_args; i++)
-		DRM_DEBUG_KMS(" 0x%02X", data[i]);
+	{
+		DRM_DEBUG_KMS("  0x%02X", data[i]);
+	}
 	DRM_DEBUG_KMS("\n");
 
 	/* Send the command via MIPI-DBI */
@@ -146,8 +152,10 @@ static void nc4_mipi_dbi_set_window_address(struct mipi_dbi_dev *dbidev,
 {
 	struct mipi_dbi *dbi = &dbidev->dbi;
 
-	DRM_DEBUG_KMS("nc4_ili9488: set_window_address dev=%s xs=%u xe=%u ys=%u ye=%u\n",
-				  dev_name(dbi->spi->dev.parent), xs, xe, ys, ye);
+	DRM_DEBUG_KMS("nc4_ili9488: set_window_address dev=%s cs=%d xs=%u xe=%u ys=%u ye=%u\n",
+				  dev_name(dbi->spi->dev.parent),
+				  to_spi_device(dbi->spi->dev.parent)->chip_select,
+				  xs, xe, ys, ye);
 
 	xs += dbidev->left_offset;
 	xe += dbidev->left_offset;
@@ -168,12 +176,6 @@ static void nc4_mipi_dbi_set_window_address(struct mipi_dbi_dev *dbidev,
  *
  * Copies the framebuffer data into an intermediate buffer if needed (e.g.
  * converting XRGB8888 to 18-bit or performing partial updates).
- *
- * Arguments:
- *  - dst: pointer to destination buffer
- *  - fb: DRM framebuffer pointer
- *  - clip: rectangle of pixels to copy
- *  - swap: indicates if byte-swapping is needed for RGB565
  ******************************************************************************/
 static int nc4_mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
 								   struct drm_rect *clip, bool swap)
@@ -203,7 +205,6 @@ static int nc4_mipi_dbi18_buf_copy(void *dst, struct drm_framebuffer *fb,
 		goto out_end_access;
 	}
 
-	/* Branch logic based on format */
 	switch (fb->format->format)
 	{
 	case DRM_FORMAT_RGB565:
@@ -235,10 +236,6 @@ out_end_access:
  * nc4_mipi_dbi18_fb_dirty
  *
  * Performs a partial (or full) update of the panel memory from the fb data.
- *
- * Arguments:
- *  - fb: DRM framebuffer
- *  - rect: Damaged rectangle that requires update
  ******************************************************************************/
 static void nc4_mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rect)
 {
@@ -258,12 +255,15 @@ static void nc4_mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect 
 
 	if (!drm_dev_enter(fb->dev, &idx))
 	{
-		DRM_DEBUG_KMS("nc4_ili9488: drm_dev_enter failed\n");
+		DRM_DEBUG_KMS("nc4_ili9488: FB dirty -> drm_dev_enter failed. dev=%s cs=%d\n",
+					  dev_name(fb->dev->dev),
+					  to_spi_device(fb->dev->dev)->chip_select);
 		return;
 	}
 
 	DRM_DEBUG_KMS("nc4_ili9488: FB dirty -> fb_id=%d dev=%s cs=%d rect=(%d,%d)-(%d,%d)\n",
-				  fb->base.id, dev_name(fb->dev->dev),
+				  fb->base.id,
+				  dev_name(fb->dev->dev),
 				  to_spi_device(fb->dev->dev)->chip_select,
 				  rect->x1, rect->y1, rect->x2, rect->y2);
 
@@ -283,7 +283,6 @@ static void nc4_mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect 
 	if (!dbi->dc || !full || swap ||
 		fb->format->format == DRM_FORMAT_XRGB8888)
 	{
-		/* Use the tx_buf for conversions or partial updates */
 		DRM_DEBUG_KMS("nc4_ili9488: Using tx_buf for this update\n");
 		tr = dbidev->tx_buf;
 		drm_gem_fb_vunmap(fb, map);
@@ -296,13 +295,11 @@ static void nc4_mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect 
 	}
 	else
 	{
-		/* Directly use the mapped fb data */
 		DRM_DEBUG_KMS("nc4_ili9488: Directly using mapped fb data\n");
 		tr = data[0].vaddr;
 		drm_gem_fb_vunmap(fb, map);
 	}
 
-	/* Set the address window (clip region) on the panel */
 	nc4_mipi_dbi_set_window_address(dbidev, rect->x1, rect->x2 - 1,
 									rect->y1, rect->y2 - 1);
 
@@ -319,8 +316,7 @@ err_exit:
 /*******************************************************************************
  * nc4_mipi_dbi18_pipe_update
  *
- * Called by the DRM pipeline when there's damage to the plane state. It merges
- * the damaged areas and calls our dirty update function.
+ * Called by the DRM pipeline when there's damage to the plane state.
  ******************************************************************************/
 void nc4_mipi_dbi18_pipe_update(struct drm_simple_display_pipe *pipe,
 								struct drm_plane_state *old_state)
@@ -336,7 +332,6 @@ void nc4_mipi_dbi18_pipe_update(struct drm_simple_display_pipe *pipe,
 		return;
 	}
 
-	/* Merge damage and update only changed region */
 	if (drm_atomic_helper_damage_merged(old_state, state, &rect))
 	{
 		DRM_DEBUG_KMS("nc4_ili9488: merged damage rect=(" DRM_RECT_FMT ")\n",
@@ -347,6 +342,10 @@ void nc4_mipi_dbi18_pipe_update(struct drm_simple_display_pipe *pipe,
 	{
 		DRM_DEBUG_KMS("nc4_ili9488: no damage to update\n");
 	}
+
+	DRM_DEBUG_KMS("nc4_ili9488: pipe_update done for dev=%s cs=%d\n",
+				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
 }
 
 /*******************************************************************************
@@ -372,11 +371,17 @@ void nc4_mipi_dbi18_enable_flush(struct mipi_dbi_dev *dbidev,
 
 	if (!drm_dev_enter(&dbidev->drm, &idx))
 	{
-		DRM_DEBUG_KMS("nc4_ili9488: enable_flush drm_dev_enter failed\n");
+		DRM_DEBUG_KMS("nc4_ili9488: enable_flush -> drm_dev_enter failed. dev=%s cs=%d\n",
+					  dev_name(dbidev->dbi.spi->dev.parent),
+					  to_spi_device(dbidev->dbi.spi->dev.parent)->chip_select);
 		return;
 	}
 
 	nc4_mipi_dbi18_fb_dirty(fb, &rect);
+
+	DRM_DEBUG_KMS("nc4_ili9488: after fb_dirty in enable_flush dev=%s cs=%d\n",
+				  dev_name(dbidev->dbi.spi->dev.parent),
+				  to_spi_device(dbidev->dbi.spi->dev.parent)->chip_select);
 
 	DRM_DEBUG_KMS("nc4_ili9488: enabling backlight\n");
 	backlight_enable(dbidev->backlight);
@@ -412,7 +417,6 @@ int nc4_mipi_dbi18_dev_init(struct mipi_dbi_dev *dbidev,
  * nc4_ili9488_enable
  *
  * Function that powers on and initializes the ILI9488 panel with known commands.
- * Replaces the original 'sx035hv006_enable' function.
  ******************************************************************************/
 static void nc4_ili9488_enable(struct drm_simple_display_pipe *pipe,
 							   struct drm_crtc_state *crtc_state,
@@ -422,6 +426,10 @@ static void nc4_ili9488_enable(struct drm_simple_display_pipe *pipe,
 	struct mipi_dbi *dbi = &dbidev->dbi;
 	u8 addr_mode;
 	int ret, idx;
+
+	DRM_DEBUG_KMS("nc4_ili9488: ***BEGIN enable*** dev=%s cs=%d\n",
+				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
 
 	DRM_DEBUG_KMS("nc4_ili9488: enable called dev=%s cs=%d\n",
 				  dev_name(pipe->crtc.dev->dev),
@@ -433,16 +441,24 @@ static void nc4_ili9488_enable(struct drm_simple_display_pipe *pipe,
 		return;
 	}
 
-	/* Power on and HW reset if needed */
 	ret = mipi_dbi_poweron_conditional_reset(dbidev);
 	if (ret < 0)
 	{
 		drm_err_once(pipe->crtc.dev, "nc4_ili9488: poweron_reset failed: %d\n", ret);
 		goto out_exit;
 	}
+	else
+	{
+		DRM_DEBUG_KMS("nc4_ili9488: poweron_reset returned=%d (0=ok,1=skip)\n", ret);
+	}
+
 	if (ret == 1)
-		/* Panel was already initialized, skip re-init? */
+	{
+		DRM_DEBUG_KMS("nc4_ili9488: skipping re-init since panel was already on dev=%s cs=%d\n",
+					  dev_name(pipe->crtc.dev->dev),
+					  to_spi_device(pipe->crtc.dev->dev)->chip_select);
 		goto out_enable;
+	}
 
 	/* Explicit hardware reset if reset GPIO is present */
 	if (dbi->reset)
@@ -451,15 +467,18 @@ static void nc4_ili9488_enable(struct drm_simple_display_pipe *pipe,
 		msleep(20); /* Low for 20ms */
 		gpiod_set_value_cansleep(dbi->reset, 1);
 		msleep(120); /* High for 120ms to stabilize */
+		DRM_DEBUG_KMS("nc4_ili9488: explicit hardware reset done dev=%s cs=%d\n",
+					  dev_name(pipe->crtc.dev->dev),
+					  to_spi_device(pipe->crtc.dev->dev)->chip_select);
 	}
 
-	/* Software reset + sleep */
+	DRM_DEBUG_KMS("nc4_ili9488: sending SW_RESET, sleeping 120ms\n");
 	nc4_ili9488_send_cmd(dbi, "SW_RESET", ILI9488_CMD_SOFTWARE_RESET, 0);
 	msleep(120);
 
 	nc4_ili9488_send_cmd(dbi, "DISPLAY_OFF", ILI9488_CMD_DISPLAY_OFF, 0);
 
-	/* Positive/Negative Gamma, Power/VCOM settings, same as original */
+	/* Positive/Negative Gamma, Power/VCOM settings, etc. */
 	nc4_ili9488_send_cmd(dbi, "POS_GAMMA", ILI9488_CMD_POSITIVE_GAMMA_CORRECTION, 15,
 						 0x00, 0x03, 0x09, 0x08, 0x16, 0x0a, 0x3f, 0x78, 0x4c,
 						 0x09, 0x0a, 0x08, 0x16, 0x1a, 0x0f);
@@ -490,7 +509,6 @@ static void nc4_ili9488_enable(struct drm_simple_display_pipe *pipe,
 	msleep(100);
 
 out_enable:
-	/* Final address mode based on 'rotation' (always portrait, but keep code) */
 	switch (dbidev->rotation)
 	{
 	default:
@@ -511,7 +529,11 @@ out_enable:
 				  addr_mode, dbidev->rotation);
 	mipi_dbi_command(dbi, ILI9488_CMD_SET_ADDRESS_MODE, addr_mode);
 
-	/* Flush full screen once and enable backlight */
+	DRM_DEBUG_KMS("nc4_ili9488: address mode set, now calling nc4_mipi_dbi18_enable_flush\n");
+	DRM_DEBUG_KMS("nc4_ili9488: ***END initialization sequence*** dev=%s cs=%d\n",
+				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
+
 	nc4_mipi_dbi18_enable_flush(dbidev, crtc_state, plane_state);
 
 	DRM_DEBUG_KMS("nc4_ili9488: Display enabled dev=%s cs=%d\n",
@@ -601,8 +623,8 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 	dev_info(dev, "nc4_ili9488: Probing device dev=%s cs=%d\n",
 			 dev_name(dev), spi->chip_select);
 
-		dbidev = devm_drm_dev_alloc(dev, &nc4_ili9488_driver,
-									struct mipi_dbi_dev, drm);
+	dbidev = devm_drm_dev_alloc(dev, &nc4_ili9488_driver,
+								struct mipi_dbi_dev, drm);
 	if (IS_ERR(dbidev))
 	{
 		dev_err(dev, "nc4_ili9488: Failed to allocate drm device\n");
@@ -612,7 +634,6 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 	dbi = &dbidev->dbi;
 	drm = &dbidev->drm;
 
-	/* Attempt to get optional reset and DC lines */
 	dbi->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
 	if (IS_ERR(dbi->reset))
 	{
@@ -652,12 +673,10 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 	}
 	dev_info(dev, "nc4_ili9488: backlight found and initialized\n");
 
-	/* Read optional rotation property from DT */
 	device_property_read_u32(dev, "rotation", &rotation);
 	dev_info(dev, "nc4_ili9488: Rotation property=%u dev=%s cs=%d\n",
 			 rotation, dev_name(dev), spi->chip_select);
 
-	/* Initialize the SPI interface for MIPI-DBI */
 	ret = mipi_dbi_spi_init(spi, dbi, dc);
 	if (ret)
 	{
@@ -667,7 +686,6 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 	dev_info(dev, "nc4_ili9488: SPI init success, mode=0x%X max_speed_hz=%u\n",
 			 spi->mode, spi->max_speed_hz);
 
-	/* Initialize the DRM device with a 320x480 mode */
 	ret = nc4_mipi_dbi18_dev_init(dbidev, &nc4_ili9488_pipe_funcs,
 								  &nc4_sx035hv006_mode, rotation);
 	if (ret)

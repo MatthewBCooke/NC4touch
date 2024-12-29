@@ -1,0 +1,821 @@
+[   78.970066] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   78.970097] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   78.970288] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   78.972606] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000aa6f142b
+[   78.973446] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000aa6f142b
+[   79.171863] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000aa6f142b
+[   79.172091] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 00000000aa6f142b
+[   79.172238] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 00000000aa6f142b
+[   79.172379] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 00000000aa6f142b
+[   79.172461] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000aa6f142b
+[   79.172533] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 00000000aa6f142b
+[   79.172617] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   79.172629] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   79.172640] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   79.172651] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   79.172660] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   79.172668] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   79.172681] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   79.172693] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   79.172773] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   79.173690] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000aa6f142b
+[   79.173970] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000aa6f142b
+[   79.375916] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000aa6f142b
+[   79.376218] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 00000000aa6f142b
+[   79.376363] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 00000000aa6f142b
+[   79.376504] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 00000000aa6f142b
+[   79.376590] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000aa6f142b
+[   79.376662] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 00000000aa6f142b
+[   79.376752] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   79.376765] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   79.376776] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   79.376786] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   79.376795] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   79.376803] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   79.376816] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   79.376830] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   79.376919] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   79.377863] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000aa6f142b
+[   79.378146] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000aa6f142b
+[   79.579895] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000aa6f142b
+[   79.580109] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 00000000aa6f142b
+[   79.580257] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 00000000aa6f142b
+[   79.580400] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 00000000aa6f142b
+[   79.580482] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000aa6f142b
+[   79.580555] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 00000000aa6f142b
+[   79.580640] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   79.580652] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   79.580662] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   79.580673] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   79.580682] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   79.580690] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   79.580702] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   79.580715] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   79.580793] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   79.581719] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000aa6f142b
+[   79.582001] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000aa6f142b
+[   79.783906] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000aa6f142b
+[   79.784120] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 00000000aa6f142b
+[   79.784268] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 00000000aa6f142b
+[   79.784411] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 00000000aa6f142b
+[   79.784494] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000aa6f142b
+[   79.784568] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 00000000aa6f142b
+[   79.784656] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   79.784669] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   79.784680] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   79.784691] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   79.784701] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   79.784709] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   79.784721] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   79.784734] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   79.784816] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   79.787935] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000aa6f142b
+[   79.788238] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000aa6f142b
+[   79.987893] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000aa6f142b
+[   79.988091] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 00000000aa6f142b
+[   79.988235] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 00000000aa6f142b
+[   79.988376] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 00000000aa6f142b
+[   79.988458] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000aa6f142b
+[   79.988530] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 00000000aa6f142b
+[   79.988614] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   79.988625] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   79.988635] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   79.988646] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   79.988655] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   79.988663] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   79.988675] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   79.988687] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   79.988765] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   79.989681] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000aa6f142b
+[   79.989961] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000aa6f142b
+[   80.191875] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   80.192090] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   80.192235] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   80.192377] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   80.192459] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   80.192532] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   80.192616] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   80.192628] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   80.192638] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   80.192649] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   80.192658] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   80.192666] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   80.192678] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   80.192690] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   80.192769] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   80.193686] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   80.193967] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   80.395866] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   80.396075] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   80.396219] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   80.396360] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   80.396443] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   80.396515] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   80.396598] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   80.396610] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   80.396620] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   80.396630] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   80.396639] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   80.396647] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   80.396660] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   80.396672] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   80.396750] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   80.397665] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   80.397946] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   80.603921] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   80.604144] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   80.604290] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   80.604432] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   80.604515] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   80.604587] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   80.604670] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   80.604682] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   80.604693] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   80.604703] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   80.604713] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   80.604721] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   80.604733] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   80.604745] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   80.604824] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   80.605740] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   80.606021] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   80.807898] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   80.808137] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   80.808284] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   80.808426] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   80.808509] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   80.808583] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   80.808668] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   80.808680] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   80.808691] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   80.808703] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   80.808712] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   80.808720] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   80.808732] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   80.808745] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   80.808827] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   80.809769] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   80.810056] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   81.011886] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   81.012099] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   81.012245] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   81.012387] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   81.012470] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   81.012541] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   81.012625] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   81.012636] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   81.012647] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   81.012658] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   81.012667] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   81.012675] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   81.012687] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   81.012699] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   81.012778] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   81.013698] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   81.013980] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   81.215885] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   81.216093] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   81.216238] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   81.216378] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   81.216460] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   81.216532] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   81.216616] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   81.216627] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   81.216637] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   81.216648] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   81.216657] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   81.216665] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   81.216677] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   81.216690] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   81.216768] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   81.217685] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   81.217965] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   81.419861] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   81.420051] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   81.420194] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   81.420335] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   81.420416] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   81.420488] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   81.420571] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   81.420582] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   81.420593] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   81.420603] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   81.420612] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   81.420620] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   81.420632] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   81.420644] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   81.420719] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   81.421631] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   81.421911] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   81.627864] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   81.628084] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   81.628229] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   81.628370] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   81.628452] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   81.628524] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   81.628608] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   81.628620] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   81.628630] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   81.628641] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   81.628651] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   81.628659] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   81.628671] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   81.628683] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   81.628761] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   81.629682] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   81.629963] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   81.831866] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   81.832073] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   81.832218] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   81.832358] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   81.832440] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   81.832512] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   81.832595] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   81.832607] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   81.832617] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   81.832628] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   81.832637] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   81.832645] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   81.832657] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   81.832669] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   81.832746] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   81.833661] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   81.833941] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   82.035874] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   82.036079] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   82.036222] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   82.036363] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   82.036444] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   82.036516] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   82.036600] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   82.036612] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   82.036622] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   82.036633] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   82.036642] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   82.036650] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   82.036661] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   82.036674] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   82.036751] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   82.037666] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   82.037946] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   82.239859] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   82.240050] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   82.240192] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   82.240332] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   82.240413] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   82.240484] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   82.240567] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   82.240578] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   82.240588] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   82.240599] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   82.240608] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   82.240616] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   82.240628] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   82.240640] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   82.240714] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   82.241626] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   82.241907] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   82.447866] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   82.448074] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   82.448219] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   82.448360] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   82.448442] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   82.448513] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   82.448597] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   82.448608] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   82.448619] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   82.448630] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   82.448639] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   82.448647] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   82.448659] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   82.448671] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   82.448748] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   82.449665] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   82.449945] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   82.651861] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   82.652045] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   82.652186] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   82.652326] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   82.652407] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   82.652479] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   82.652562] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   82.652573] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   82.652583] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   82.652593] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   82.652602] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   82.652610] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   82.652623] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   82.652634] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   82.652709] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   82.653619] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   82.653898] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   82.855857] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   82.856040] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   82.856182] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   82.856322] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   82.856403] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   82.856474] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   82.856557] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   82.856568] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   82.856578] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   82.856589] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   82.856598] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   82.856605] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   82.856617] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   82.856629] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   82.856703] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   82.857617] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   82.857895] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   83.059868] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   83.060072] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   83.060214] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   83.060354] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   83.060435] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   83.060506] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   83.060590] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   83.060601] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   83.060611] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   83.060622] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   83.060630] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   83.060638] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   83.060650] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   83.060662] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   83.060740] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   83.061653] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   83.061932] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   83.263869] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   83.264102] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   83.264248] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   83.264390] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   83.264472] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   83.264544] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   83.264629] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   83.264640] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   83.264651] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   83.264662] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   83.264671] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   83.264679] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   83.264691] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   83.264704] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   83.264783] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   83.265700] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   83.265981] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   83.467869] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   83.468075] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   83.468218] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   83.468359] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   83.468440] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   83.468512] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   83.468595] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   83.468607] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   83.468617] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   83.468627] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   83.468637] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   83.468645] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   83.468656] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   83.468668] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   83.468746] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   83.469664] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   83.469945] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   83.671863] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   83.672062] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   83.672205] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   83.672345] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   83.672426] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   83.672498] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   83.672581] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   83.672592] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   83.672602] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   83.672613] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   83.672622] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   83.672630] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   83.672641] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   83.672653] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   83.672729] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   83.673643] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   83.673923] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   83.875876] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   83.876083] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   83.876228] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   83.876368] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   83.876450] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   83.876522] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   83.876606] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   83.876617] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   83.876628] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   83.876638] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   83.876647] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   83.876655] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   83.876668] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   83.876680] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   83.876759] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   83.877675] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   83.877956] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   84.079866] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   84.080069] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   84.080212] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   84.080352] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   84.080434] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   84.080506] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   84.080589] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   84.080600] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   84.080611] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   84.080621] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   84.080630] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   84.080638] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   84.080650] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   84.080662] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   84.080738] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   84.081653] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   84.081934] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   84.283421] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   84.283859] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   84.284226] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   84.284588] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   84.284786] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   84.284970] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   84.285172] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   84.285199] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   84.285224] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   84.285250] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   84.285273] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   84.285293] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   84.285321] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   84.285348] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   84.285518] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   84.287577] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   84.288299] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   84.486160] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   84.486644] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   84.487068] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   84.487486] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   84.487716] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   84.487929] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   84.488162] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   84.488192] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   84.488220] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   84.488250] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   84.488277] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   84.488299] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   84.488332] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   84.488362] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   84.488555] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   84.490876] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   84.491720] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   84.688835] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   84.689295] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   84.689718] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   84.690136] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   84.690365] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   84.690578] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   84.690810] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   84.690842] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   84.690870] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   84.690900] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   84.690926] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   84.690949] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   84.690981] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   84.691012] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   84.691204] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   84.693524] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   84.694362] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   84.891449] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   84.891796] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   84.892082] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   84.892362] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   84.892517] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   84.892660] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   84.892819] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   84.892839] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   84.892859] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   84.892879] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   84.892897] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   84.892913] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   84.892935] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   84.892957] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   84.893094] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   84.894943] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   84.895818] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   85.093864] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   85.094267] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   85.094631] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   85.094990] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   85.095187] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   85.095371] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   85.095571] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   85.095596] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   85.095621] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   85.095646] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   85.095669] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   85.095689] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   85.095716] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   85.095743] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   85.095912] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   85.097986] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   85.098708] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   85.296597] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   85.297068] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   85.297493] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   85.297910] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   85.298139] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   85.298352] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   85.298584] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   85.298614] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   85.298642] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   85.298672] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   85.298698] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   85.298721] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   85.298753] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   85.298784] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   85.298973] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   85.301290] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   85.302132] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   85.499639] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   85.500114] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   85.500536] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   85.500955] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   85.501183] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   85.501396] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   85.501629] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   85.501659] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   85.501687] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   85.501717] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   85.501743] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   85.501766] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   85.501798] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   85.501829] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   85.502019] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   85.504344] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   85.505185] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   85.702433] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   85.702905] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   85.703328] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   85.703747] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   85.703976] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   85.704190] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   85.704421] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   85.704451] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   85.704480] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   85.704509] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   85.704536] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   85.704558] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   85.704591] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   85.704622] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   85.704813] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   85.707136] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   85.707977] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   85.905279] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   85.905767] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   85.906190] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   85.906607] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   85.906836] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   85.907050] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   85.907282] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   85.907313] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   85.907340] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   85.907370] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   85.907397] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   85.907420] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   85.907452] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   85.907482] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   85.907676] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   85.910007] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   85.910849] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   86.111747] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   86.112184] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   86.112522] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   86.112851] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   86.113033] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   86.113205] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   86.113392] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   86.113422] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   86.113445] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   86.113470] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   86.113490] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   86.113508] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   86.113535] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   86.113561] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   86.113722] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   86.120012] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   86.120706] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   86.314632] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   86.314902] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   86.315063] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   86.315220] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   86.315310] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   86.315391] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   86.315482] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   86.315496] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   86.315507] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   86.315520] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   86.315529] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   86.315538] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   86.315551] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   86.315566] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   86.315651] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   86.316710] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   86.317012] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   86.517715] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   86.517934] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   86.518080] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   86.518221] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   86.518303] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   86.518376] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   86.518461] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   86.518473] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   86.518483] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   86.518494] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   86.518503] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   86.518512] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   86.518523] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   86.518536] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   86.518614] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   86.519533] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   86.519815] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   86.720852] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   86.721058] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   86.721201] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   86.721341] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   86.721422] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   86.721495] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   86.721578] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   86.721590] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   86.721600] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   86.721610] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   86.721620] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   86.721628] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   86.721639] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   86.721652] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   86.721732] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   86.722646] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   86.722926] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   86.923829] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   86.924095] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   86.924239] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   86.924379] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   86.924463] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   86.924535] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   86.924620] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   86.924633] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   86.924644] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   86.924654] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   86.924663] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   86.924671] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   86.924683] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   86.924697] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   86.924778] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   86.925697] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   86.925978] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   87.126689] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   87.126895] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   87.127038] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   87.127178] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   87.127260] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   87.127332] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   87.127416] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   87.127428] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   87.127438] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   87.127448] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   87.127457] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   87.127465] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   87.127477] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   87.127490] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   87.127566] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   87.128483] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   87.128764] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   87.329427] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   87.329638] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   87.329785] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   87.329927] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   87.330009] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   87.330082] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   87.330166] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   87.330178] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   87.330189] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   87.330200] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   87.330209] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   87.330217] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   87.330229] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   87.330242] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   87.330320] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   87.331236] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   87.331517] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   87.532902] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   87.533109] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   87.533252] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   87.533393] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   87.533475] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   87.533547] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   87.533631] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   87.533642] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   87.533653] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   87.533663] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   87.533672] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   87.533680] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   87.533692] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   87.533704] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   87.533782] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   87.534698] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   87.534978] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   87.736000] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   87.736205] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   87.736347] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   87.736488] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   87.736570] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   87.736641] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   87.736725] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   87.736737] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   87.736747] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   87.736757] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   87.736766] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   87.736774] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   87.736786] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   87.736798] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   87.736875] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   87.737794] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   87.738074] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   87.939077] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   87.939281] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   87.939423] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   87.939563] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   87.939645] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   87.939717] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   87.939800] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   87.939812] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   87.939822] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   87.939833] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   87.939842] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   87.939850] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   87.939862] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   87.939874] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   87.939953] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   87.940868] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   87.941148] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   88.142167] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   88.142374] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   88.142516] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   88.142656] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   88.142737] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   88.142809] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   88.142893] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   88.142904] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   88.142914] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   88.142925] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   88.142934] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   88.142941] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   88.142953] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   88.142965] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   88.143041] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   88.143954] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   88.144233] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   88.344937] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   88.345185] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   88.345332] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   88.345474] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   88.345558] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   88.345631] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   88.345717] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   88.345730] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   88.345740] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   88.345751] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   88.345760] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   88.345769] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   88.345780] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   88.345794] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   88.345872] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   88.347781] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   88.348072] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   88.548624] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   88.548833] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 000000002e874f28 state to 000000000ac7ed04
+[   88.548979] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000837aad76 state to 000000000ac7ed04
+[   88.549121] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   88.549203] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   88.549275] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   88.549358] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   88.549370] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   88.549381] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   88.549391] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   88.549400] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   88.549409] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   88.549420] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   88.549433] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   88.549511] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   88.550428] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   88.550709] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04
+[   88.752073] nc4_ili9488 spi0.1: [drm:drm_atomic_state_init [drm]] Allocated atomic state 000000000ac7ed04
+[   88.752252] nc4_ili9488 spi0.1: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000070fd0f3 state to 000000000ac7ed04
+[   88.752394] nc4_ili9488 spi0.1: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000244af6f4 state to 000000000ac7ed04
+[   88.752535] nc4_ili9488 spi0.1: [drm:drm_atomic_check_only [drm]] checking 000000000ac7ed04
+[   88.752616] nc4_ili9488 spi0.1: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 000000000ac7ed04
+[   88.752687] nc4_ili9488 spi0.1: [drm:drm_atomic_commit [drm]] committing 000000000ac7ed04
+[   88.752770] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: pipe_update called
+[   88.752781] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: merged damage rect=(8x16+160+384)
+[   88.752791] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: FB dirty -> fb_id=36 dev=spi0.1 cs=1 rect=(160,384)-(168,400)
+[   88.752802] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: full_update=0 fb_w=320 fb_h=480 update_w=8 update_h=16
+[   88.752811] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Using tx_buf for this update
+[   88.752819] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: mipi_dbi18_buf_copy format=XR24 little-endian (0x34325258) swap=1 clip=(160,384)-(168,400)
+[   88.752831] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: Converting from XRGB8888 to 18-bit
+[   88.752843] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: set_window_address dev=spi0 xs=160 xe=167 ys=384 ye=399
+[   88.752919] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: Writing memory start for region
+[   88.753831] nc4_ili9488 spi0.1: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 000000000ac7ed04
+[   88.754112] nc4_ili9488 spi0.1: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 000000000ac7ed04

@@ -1,0 +1,98 @@
+Logging script output to /home/nc4/TouchscreenApparatus/src/drivers/ili9488/logs/install_validation.log
+
+
+=== Starting Overlay and Driver Validation ===
+
+==== Validating Overlay ====
+Overlay file found: /boot/firmware/overlays/ili9488.dtbo
+
+---- Filtered dtc Warnings & Errors (non-RPi-specific) ----
+<stdout>: Warning (mboxes_property): /soc/firmware:mboxes: cell 0 is not a phandle reference
+-----------------------------------------------------------
+Note: Full dtc output (including Pi-specific warnings) is in /tmp/dtc_raw_output.txt
+
+---- Checking overlay nodes in the live device tree ----
+Node 'pitft@0' found at path: /proc/device-tree/soc/spi@7e204000/pitft@0
+Node 'pitft_pins' found at path: /proc/device-tree/soc/gpio@7e200000/pitft_pins
+Node 'backlight' found in decompiled Device Tree (TMP_DTC_RAW).
+-----------------------------------------------------------
+
+---- Listing all nodes under /proc/device-tree/soc/spi@7e204000 for verification: ----
+#address-cells
+clocks
+compatible
+cs-gpios
+dma-names
+dmas
+interrupts
+name
+phandle
+pinctrl-0
+pinctrl-names
+pitft@0
+reg
+#size-cells
+spidev@0
+spidev@1
+status
+-----------------------------------------------------------
+
+Checking kernel logs for overlay application:
+Overlay is logged in kernel messages.
+
+Verifying overlay references in config.txt:
+Overlay is referenced in config.txt.
+
+==== Validating Driver ====
+
+Checking if the driver is found:
+Driver file found: /lib/modules/6.6.62+rpt-rpi-v8/extra/ili9488.ko
+
+Checking if the driver module is loaded:
+Driver module is loaded.
+
+==== Fetching and logging dmesg output (ili9488, SPI, GPIO, and DTB) ==== 
+[    1.133748] pinctrl-bcm2835 fe200000.gpio: GPIO_OUT persistence: yes
+[    5.412189] nc4_ili9488: loading out-of-tree module taints kernel.
+[    5.412609] nc4_ili9488 spi0.0: Loading nc4_ili9488 driver v2.3-debug
+[    5.412616] nc4_ili9488 spi0.0: nc4_ili9488: Probing device dev=spi0.0 cs=0
+[    5.412714] nc4_ili9488 spi0.0: nc4_ili9488: reset GPIO acquired
+[    5.412726] nc4_ili9488 spi0.0: nc4_ili9488: dc GPIO acquired
+[    5.412742] nc4_ili9488 spi0.0: nc4_ili9488: backlight found and initialized
+[    5.412746] nc4_ili9488 spi0.0: nc4_ili9488: Rotation property=0 dev=spi0.0 cs=0
+[    5.412752] nc4_ili9488 spi0.0: nc4_ili9488: SPI init success, mode=0x4 max_speed_hz=4000000
+[    5.412813] nc4_ili9488 spi0.0: nc4_ili9488: mipi_dbi device initialized
+[    5.413048] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.0 on minor 0
+[    5.413055] nc4_ili9488 spi0.0: nc4_ili9488: DRM device registered
+[   12.980598] nc4_ili9488 spi0.0: [drm] fb0: nc4_ili9488drmf frame buffer device
+[   12.996004] nc4_ili9488 spi0.0: nc4_ili9488: Probe successful dev=spi0.0 cs=0
+[   19.846833] rpi-gpiomem fe200000.gpiomem: window base 0xfe200000 size 0x00001000
+[   19.855614] rpi-gpiomem fe200000.gpiomem: initialised 1 regions as /dev/gpiomem
+[    1.133748] pinctrl-bcm2835 fe200000.gpio: GPIO_OUT persistence: yes
+[    5.412189] nc4_ili9488: loading out-of-tree module taints kernel.
+[    5.412609] nc4_ili9488 spi0.0: Loading nc4_ili9488 driver v2.3-debug
+[    5.412616] nc4_ili9488 spi0.0: nc4_ili9488: Probing device dev=spi0.0 cs=0
+[    5.412714] nc4_ili9488 spi0.0: nc4_ili9488: reset GPIO acquired
+[    5.412726] nc4_ili9488 spi0.0: nc4_ili9488: dc GPIO acquired
+[    5.412742] nc4_ili9488 spi0.0: nc4_ili9488: backlight found and initialized
+[    5.412746] nc4_ili9488 spi0.0: nc4_ili9488: Rotation property=0 dev=spi0.0 cs=0
+[    5.412752] nc4_ili9488 spi0.0: nc4_ili9488: SPI init success, mode=0x4 max_speed_hz=4000000
+[    5.412813] nc4_ili9488 spi0.0: nc4_ili9488: mipi_dbi device initialized
+[    5.413048] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.0 on minor 0
+[    5.413055] nc4_ili9488 spi0.0: nc4_ili9488: DRM device registered
+[   12.980598] nc4_ili9488 spi0.0: [drm] fb0: nc4_ili9488drmf frame buffer device
+[   12.996004] nc4_ili9488 spi0.0: nc4_ili9488: Probe successful dev=spi0.0 cs=0
+[   19.846833] rpi-gpiomem fe200000.gpiomem: window base 0xfe200000 size 0x00001000
+[   19.855614] rpi-gpiomem fe200000.gpiomem: initialised 1 regions as /dev/gpiomem
+
+==== Validating GPIO Pin States ====
+Checking GPIO 7:
+GPIO 7: level=1 func=OUTPUT pull=UP
+Checking GPIO 18:
+GPIO 18: level=1 func=OUTPUT pull=DOWN
+Checking GPIO 24:
+GPIO 24: level=1 func=OUTPUT pull=DOWN
+Checking GPIO 25:
+GPIO 25: level=1 func=OUTPUT pull=DOWN
+
+=== Validation Complete ===

@@ -1,0 +1,7 @@
+make -C /lib/modules/`uname -r`/build M=$PWD
+make[1]: Entering directory '/home/nc4/linux'
+  CC [M]  /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/nc4_ili9488.o
+  MODPOST /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/Module.symvers
+  CC [M]  /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/nc4_ili9488.mod.o
+  LD [M]  /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/nc4_ili9488.ko
+make[1]: Leaving directory '/home/nc4/linux'

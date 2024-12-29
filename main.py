@@ -11,16 +11,19 @@ import time
 
 if __name__ == "__main__":
     # Initialize the LCD class
-    lcd = LCD(framebuffer_device="/dev/fb0", image_dir="data/images")
+    lcd_0 = LCD(framebuffer_device="/dev/fb0", image_dir="data/images")
+    lcd_1 = LCD(framebuffer_device="/dev/fb1", image_dir="data/images")
 
-    # Load first image
-    lcd.load_image("C01.png")
+    # Load image to fb0 and fb1
+    lcd_0.load_image("C01.png")
+    lcd_1.load_image("B01.bmp")
     time.sleep(2)
 
-    # Load second image
-    lcd.load_image("B01.bmp")
+    # Switch images
+    lcd_0.load_image("B01.bmp")
+    lcd_1.load_image("C01.png")
     time.sleep(2)
 
     # Clear the screen at the end
-    lcd.clear_screen()
+    lcd_0.clear_screen()
     print("Image display test complete.")

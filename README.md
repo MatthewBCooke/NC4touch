@@ -766,6 +766,8 @@ sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/
 
 # Random
 
+## WiFi
+
 Check what network we are on:
 ```
 iwgetid -r
@@ -795,7 +797,7 @@ Varify
 nmcli connection show --active
 ```
 
-Git BS:
+## Git Corrupt:
 ```
 cd /home/nc4
 sudo rm -r TouchscreenApparatus_backup

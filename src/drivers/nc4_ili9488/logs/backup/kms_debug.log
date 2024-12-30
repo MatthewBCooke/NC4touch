@@ -1,0 +1,5 @@
+[    5.438716] nc4_ili9488: loading out-of-tree module taints kernel.
+[    5.439531] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.1 on minor 0
+[   12.852091] nc4_ili9488 spi0.1: [drm] fb0: nc4_ili9488drmf frame buffer device
+[   12.868763] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.0 on minor 1
+[   12.878186] nc4_ili9488 spi0.0: [drm] fb1: nc4_ili9488drmf frame buffer device

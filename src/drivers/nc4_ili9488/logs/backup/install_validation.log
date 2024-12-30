@@ -194,7 +194,7 @@ GPIO 7: level=1 func=OUTPUT pull=UP
 Checking GPIO 8:
 GPIO 8: level=1 func=OUTPUT pull=UP
 Checking GPIO 18:
-GPIO 18: level=1 func=OUTPUT pull=DOWN
+GPIO 18: level=0 func=OUTPUT pull=DOWN
 Checking GPIO 23:
 GPIO 23: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 24:

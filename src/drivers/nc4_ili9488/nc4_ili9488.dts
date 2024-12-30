@@ -58,15 +58,15 @@
 	 *   GPIO23 = RESET (out)
 	 *   GPIO27 = DC (out)
 	 ****************************************************************************/
-	fragment@4 {
-		target = <&gpio>;
-		__overlay__ {
-			pitft1_pins: pitft1_pins {
-				brcm,pins = <23 27>;
-				brcm,function = <1 1>; /* Set as output */
-			};
-		};
-	};
+	// fragment@4 {
+	// 	target = <&gpio>;
+	// 	__overlay__ {
+	// 		pitft1_pins: pitft1_pins {
+	// 			brcm,pins = <23 27>;
+	// 			brcm,function = <1 1>; /* Set as output */
+	// 		};
+	// 	};
+	// };
 
 	/****************************************************************************
 	 * Fragment 5: FIRST ILI9488 device node on SPI0 
@@ -97,25 +97,25 @@
 	/****************************************************************************
 	 * Fragment 6: SECOND ILI9488 device node on SPI0 
 	 ****************************************************************************/
-	fragment@6 {
-		target = <&spi0>;
-		__overlay__ {
-			pitft1: pitft1@1 {
-				compatible = "ili9488";
-				pinctrl-names = "default";
-				pinctrl-0 = <&pitft1_pins>;
+	// fragment@6 {
+	// 	target = <&spi0>;
+	// 	__overlay__ {
+	// 		pitft1: pitft1@1 {
+	// 			compatible = "ili9488";
+	// 			pinctrl-names = "default";
+	// 			pinctrl-0 = <&pitft1_pins>;
 
-				/* Use software CS on GPIO7 (active low). */
-				cs-gpios = <&gpio 7 0>;
-				spi-max-frequency = <20000000>;
+	// 			/* Use software CS on GPIO7 (active low). */
+	// 			cs-gpios = <&gpio 7 0>;
+	// 			spi-max-frequency = <20000000>;
 
-				rotation = <0>;
-				reset-gpios = <&gpio 23 0>;
-				dc-gpios = <&gpio 27 0>;
-				backlight = <&backlight>;
-			};
-		};
-	};
+	// 			rotation = <0>;
+	// 			reset-gpios = <&gpio 23 0>;
+	// 			dc-gpios = <&gpio 27 0>;
+	// 			backlight = <&backlight>;
+	// 		};
+	// 	};
+	// };
 
 	/****************************************************************************
 	 * Fragment 7: Shared backlight control for both panels

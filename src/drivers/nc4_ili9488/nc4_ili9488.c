@@ -547,16 +547,13 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 	u32 rotation = 0;
 	int ret;
 
-	// TEMP
-	DRM_INFO("Custom info log\n");
-
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] Starting probe for device %s on CS=%d\n",
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] Starting probe for device %s on CS=%d\n",
 				  dev_name(dev), spi->chip_select);
 
 	dbidev = devm_drm_dev_alloc(dev, &nc4_ili9488_driver, struct mipi_dbi_dev, drm);
 	if (IS_ERR(dbidev))
 	{
-		DRM_ERROR("nc4_ili9488: [PROBE] Failed to allocate DRM device. Error: %ld\n",
+		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] Failed to allocate DRM device. Error: %ld\n",
 				  PTR_ERR(dbidev));
 		return PTR_ERR(dbidev);
 	}
@@ -564,69 +561,69 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 	dbi = &dbidev->dbi;
 	drm = &dbidev->drm;
 
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] Allocated DRM device successfully.\n");
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] Allocated DRM device successfully.\n");
 
 	dbi->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
 	if (IS_ERR(dbi->reset))
 	{
-		DRM_ERROR("nc4_ili9488: [PROBE] Failed to get RESET GPIO. Error: %ld\n",
+		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] Failed to get RESET GPIO. Error: %ld\n",
 				  PTR_ERR(dbi->reset));
 		return PTR_ERR(dbi->reset);
 	}
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] RESET GPIO: %s\n",
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] RESET GPIO: %s\n",
 				  dbi->reset ? "acquired" : "not defined");
 
 	dc = devm_gpiod_get_optional(dev, "dc", GPIOD_OUT_LOW);
 	if (IS_ERR(dc))
 	{
-		DRM_ERROR("nc4_ili9488: [PROBE] Failed to get DC GPIO. Error: %ld\n",
+		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] Failed to get DC GPIO. Error: %ld\n",
 				  PTR_ERR(dc));
 		return PTR_ERR(dc);
 	}
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] DC GPIO: %s\n", dc ? "acquired" : "not defined");
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] DC GPIO: %s\n", dc ? "acquired" : "not defined");
 
 	dbidev->backlight = devm_of_find_backlight(dev);
 	if (IS_ERR(dbidev->backlight))
 	{
-		DRM_ERROR("nc4_ili9488: [PROBE] Failed to find backlight. Error: %ld\n",
+		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] Failed to find backlight. Error: %ld\n",
 				  PTR_ERR(dbidev->backlight));
 		return PTR_ERR(dbidev->backlight);
 	}
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] Backlight initialized successfully.\n");
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] Backlight initialized successfully.\n");
 
 	device_property_read_u32(dev, "rotation", &rotation);
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] Device rotation property: %u\n", rotation);
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] Device rotation property: %u\n", rotation);
 
 	ret = mipi_dbi_spi_init(spi, dbi, dc);
 	if (ret)
 	{
-		DRM_ERROR("nc4_ili9488: [PROBE] SPI initialization failed. Error: %d\n", ret);
+		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] SPI initialization failed. Error: %d\n", ret);
 		return ret;
 	}
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] SPI initialized successfully.\n");
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] SPI initialized successfully.\n");
 
 	ret = nc4_mipi_dbi18_dev_init(dbidev, &nc4_ili9488_pipe_funcs, &nc4_sx035hv006_mode, rotation);
 	if (ret)
 	{
-		DRM_ERROR("nc4_ili9488: [PROBE] MIPI-DBI device initialization failed. Error: %d\n", ret);
+		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] MIPI-DBI device initialization failed. Error: %d\n", ret);
 		return ret;
 	}
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] MIPI-DBI device initialized successfully.\n");
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] MIPI-DBI device initialized successfully.\n");
 
 	drm_mode_config_reset(drm);
 
 	ret = drm_dev_register(drm, 0);
 	if (ret)
 	{
-		DRM_ERROR("nc4_ili9488: [PROBE] DRM device registration failed. Error: %d\n", ret);
+		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] DRM device registration failed. Error: %d\n", ret);
 		return ret;
 	}
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] DRM device registered successfully.\n");
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] DRM device registered successfully.\n");
 
 	spi_set_drvdata(spi, drm);
 	drm_fbdev_generic_setup(drm, 0);
 
-	DRM_DEBUG_KMS("nc4_ili9488: [PROBE] Probe completed for device %s on CS=%d\n",
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] Probe completed for device %s on CS=%d\n",
 				  dev_name(dev), spi->chip_select);
 
 	return 0;
@@ -639,8 +636,8 @@ static void nc4_ili9488_remove(struct spi_device *spi)
 {
 	struct drm_device *drm = spi_get_drvdata(spi);
 
-	dev_info(&spi->dev, "nc4_ili9488: [nc4_ili9488_remove] Removing dev=%s cs=%d\n",
-			 dev_name(&spi->dev), spi->chip_select);
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_remove] Removing dev=%s cs=%d\n",
+				  dev_name(&spi->dev), spi->chip_select);
 
 	drm_dev_unplug(drm);
 	drm_atomic_helper_shutdown(drm);
@@ -651,8 +648,8 @@ static void nc4_ili9488_remove(struct spi_device *spi)
  ******************************************************************************/
 static void nc4_ili9488_shutdown(struct spi_device *spi)
 {
-	dev_info(&spi->dev, "nc4_ili9488: [nc4_ili9488_shutdown] Shutdown dev=%s cs=%d\n",
-			 dev_name(&spi->dev), spi->chip_select);
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_shutdown] Shutdown dev=%s cs=%d\n",
+				  dev_name(&spi->dev), spi->chip_select);
 	drm_atomic_helper_shutdown(spi_get_drvdata(spi));
 }
 

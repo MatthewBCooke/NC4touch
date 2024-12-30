@@ -300,9 +300,8 @@ void nc4_mipi_dbi18_pipe_update(struct drm_simple_display_pipe *pipe,
 		DRM_DEBUG_KMS("nc4_ili9488: [nc4_mipi_dbi18_pipe_update] no damage to update\n");
 	}
 
-	DRM_DEBUG_KMS("nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=%s cs=%d\n",
-				  dev_name(pipe->crtc.dev->dev),
-				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=%s\n",
+				  dev_name(pipe->crtc.dev->dev));
 }
 
 /*******************************************************************************

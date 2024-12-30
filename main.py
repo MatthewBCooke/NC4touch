@@ -26,4 +26,12 @@ if __name__ == "__main__":
 
     # Clear the screen at the end
     lcd_0.clear_screen()
+    lcd_1.clear_screen()
+
+    # TEMP Turn backlight back on
+    time.sleep(1)
+    lcd_0.set_backlight(1)
+    lcd_1.set_backlight(1)
+
+
     print("Image display test complete.")

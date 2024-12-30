@@ -1,0 +1,2 @@
+crw-rw---- 1 root video 29, 0 Dec 30 01:44 /dev/fb0
+crw-rw---- 1 root video 29, 1 Dec 30 01:44 /dev/fb1

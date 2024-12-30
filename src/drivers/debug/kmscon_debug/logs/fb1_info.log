@@ -1,0 +1,7 @@
+
+mode "320x480"
+    geometry 320 480 320 480 32
+    timings 0 0 0 0 0 0 0
+    rgba 8/16,8/8,8/0,0/0
+endmode
+

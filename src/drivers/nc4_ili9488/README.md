@@ -300,7 +300,7 @@ cat /sys/firmware/devicetree/base/aliases/gpio
 ls /dev/fb*
 ```
 
-## Manually load the overlay at runtime to get immediate feedback:
+## Manually load/apply the overlay at runtime to get immediate feedback:
 ```
 sudo dtoverlay nc4_ili9488
 dmesg | tail -50

@@ -1,0 +1,2 @@
+root         660  0.0  0.1 176388 13556 ?        Ss   04:05   0:00 /usr/libexec/kmscon/kmscon --vt=tty1
+nc4         2720  0.0  0.0   6088  1920 pts/2    S+   04:40   0:00 grep --color=auto kmscon

@@ -101,8 +101,17 @@
    systemd.unit=multi-user.target autologin-user=nc4 nosplash
    ```
 
+4. You can also setup the debugging stuff
+   ```
+   drm.debug=0x1f log_buf_len=16M
+   ```
 
-3. Save the file and close the editor.
+5. Save the file and close the editor.
+
+6. Or just run this:
+```
+echo "your_desired_cmdline_content" | sudo tee /boot/firmware/cmdline.txt > /dev/null
+```
 
 ### 3: Configure Wi-Fi for Internet Access
 

@@ -1,0 +1,200 @@
+Node: /dev/dri/card0
+├───Driver: nc4_ili9488 (nc4 ILI9488) version 1.0.0 (20241227)
+│   ├───DRM_CLIENT_CAP_STEREO_3D supported
+│   ├───DRM_CLIENT_CAP_UNIVERSAL_PLANES supported
+│   ├───DRM_CLIENT_CAP_ATOMIC supported
+│   ├───DRM_CLIENT_CAP_ASPECT_RATIO supported
+│   ├───DRM_CLIENT_CAP_WRITEBACK_CONNECTORS supported
+│   ├───DRM_CAP_DUMB_BUFFER = 1
+│   ├───DRM_CAP_VBLANK_HIGH_CRTC = 1
+│   ├───DRM_CAP_DUMB_PREFERRED_DEPTH = 32
+│   ├───DRM_CAP_DUMB_PREFER_SHADOW = 0
+│   ├───DRM_CAP_PRIME = 3
+│   ├───DRM_CAP_TIMESTAMP_MONOTONIC = 1
+│   ├───DRM_CAP_ASYNC_PAGE_FLIP = 0
+│   ├───DRM_CAP_CURSOR_WIDTH = 64
+│   ├───DRM_CAP_CURSOR_HEIGHT = 64
+│   ├───DRM_CAP_ADDFB2_MODIFIERS = 1
+│   ├───DRM_CAP_PAGE_FLIP_TARGET = 0
+│   ├───DRM_CAP_CRTC_IN_VBLANK_EVENT = 1
+│   ├───DRM_CAP_SYNCOBJ = 0
+│   └───DRM_CAP_SYNCOBJ_TIMELINE = 0
+├───Device: platform ili9488
+│   └───Available nodes: primary
+├───Framebuffer size
+│   ├───Width: [320, 320]
+│   └───Height: [480, 480]
+├───Connectors
+│   └───Connector 0
+│       ├───Object ID: 31
+│       ├───Type: unknown
+│       ├───Status: connected
+│       ├───Physical size: 49x73 mm
+│       ├───Subpixel: unknown
+│       ├───Encoders: {0}
+│       ├───Modes
+│       │   └───320x480@0.01 preferred driver 
+│       └───Properties
+│           ├───"EDID" (immutable): blob = 0
+│           ├───"DPMS": enum {On, Standby, Suspend, Off} = On
+│           ├───"link-status": enum {Good, Bad} = Good
+│           ├───"non-desktop" (immutable): range [0, 1] = 0
+│           ├───"TILE" (immutable): blob = 0
+│           └───"CRTC_ID" (atomic): object CRTC = 34
+├───Encoders
+│   └───Encoder 0
+│       ├───Object ID: 35
+│       ├───Type: none
+│       ├───CRTCS: {0}
+│       └───Clones: {0}
+├───CRTCs
+│   └───CRTC 0
+│       ├───Object ID: 34
+│       ├───Legacy info
+│       │   ├───Mode: 320x480@0.01 preferred driver 
+│       │   └───Gamma size: 0
+│       └───Properties
+│           ├───"ACTIVE" (atomic): range [0, 1] = 1
+│           ├───"MODE_ID" (atomic): blob = 40
+│           │   └───320x480@0.01 preferred driver 
+│           ├───"OUT_FENCE_PTR" (atomic): range [0, UINT64_MAX] = 0
+│           └───"VRR_ENABLED": range [0, 1] = 0
+└───Planes
+    └───Plane 0
+        ├───Object ID: 32
+        ├───CRTCs: {0}
+        ├───Legacy info
+        │   ├───FB ID: 39
+        │   │   ├───Object ID: 39
+        │   │   ├───Size: 320x480
+        │   │   ├───Format: XRGB8888 (0x34325258)
+        │   │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
+        │   │   └───Planes:
+        │   │       └───Plane 0: offset = 0, pitch = 1280 bytes
+        │   └───Formats:
+        │       ├───RGB565 (0x36314752)
+        │       └───XRGB8888 (0x34325258)
+        └───Properties
+            ├───"type" (immutable): enum {Overlay, Primary, Cursor} = Primary
+            ├───"FB_ID" (atomic): object framebuffer = 39
+            │   ├───Object ID: 39
+            │   ├───Size: 320x480
+            │   ├───Format: XRGB8888 (0x34325258)
+            │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
+            │   └───Planes:
+            │       └───Plane 0: offset = 0, pitch = 1280 bytes
+            ├───"IN_FENCE_FD" (atomic): srange [-1, INT32_MAX] = -1
+            ├───"CRTC_ID" (atomic): object CRTC = 34
+            ├───"CRTC_X" (atomic): srange [INT32_MIN, INT32_MAX] = 0
+            ├───"CRTC_Y" (atomic): srange [INT32_MIN, INT32_MAX] = 0
+            ├───"CRTC_W" (atomic): range [0, INT32_MAX] = 320
+            ├───"CRTC_H" (atomic): range [0, INT32_MAX] = 480
+            ├───"SRC_X" (atomic): range [0, UINT32_MAX] = 0
+            ├───"SRC_Y" (atomic): range [0, UINT32_MAX] = 0
+            ├───"SRC_W" (atomic): range [0, UINT32_MAX] = 320
+            ├───"SRC_H" (atomic): range [0, UINT32_MAX] = 480
+            ├───"IN_FORMATS" (immutable): blob = 33
+            │   └───DRM_FORMAT_MOD_LINEAR (0x0)
+            │       ├───RGB565 (0x36314752)
+            │       └───XRGB8888 (0x34325258)
+            └───"FB_DAMAGE_CLIPS" (atomic): blob = 0
+Node: /dev/dri/card1
+├───Driver: nc4_ili9488 (nc4 ILI9488) version 1.0.0 (20241227)
+│   ├───DRM_CLIENT_CAP_STEREO_3D supported
+│   ├───DRM_CLIENT_CAP_UNIVERSAL_PLANES supported
+│   ├───DRM_CLIENT_CAP_ATOMIC supported
+│   ├───DRM_CLIENT_CAP_ASPECT_RATIO supported
+│   ├───DRM_CLIENT_CAP_WRITEBACK_CONNECTORS supported
+│   ├───DRM_CAP_DUMB_BUFFER = 1
+│   ├───DRM_CAP_VBLANK_HIGH_CRTC = 1
+│   ├───DRM_CAP_DUMB_PREFERRED_DEPTH = 32
+│   ├───DRM_CAP_DUMB_PREFER_SHADOW = 0
+│   ├───DRM_CAP_PRIME = 3
+│   ├───DRM_CAP_TIMESTAMP_MONOTONIC = 1
+│   ├───DRM_CAP_ASYNC_PAGE_FLIP = 0
+│   ├───DRM_CAP_CURSOR_WIDTH = 64
+│   ├───DRM_CAP_CURSOR_HEIGHT = 64
+│   ├───DRM_CAP_ADDFB2_MODIFIERS = 1
+│   ├───DRM_CAP_PAGE_FLIP_TARGET = 0
+│   ├───DRM_CAP_CRTC_IN_VBLANK_EVENT = 1
+│   ├───DRM_CAP_SYNCOBJ = 0
+│   └───DRM_CAP_SYNCOBJ_TIMELINE = 0
+├───Device: platform ili9488
+│   └───Available nodes: primary
+├───Framebuffer size
+│   ├───Width: [320, 320]
+│   └───Height: [480, 480]
+├───Connectors
+│   └───Connector 0
+│       ├───Object ID: 31
+│       ├───Type: unknown
+│       ├───Status: connected
+│       ├───Physical size: 49x73 mm
+│       ├───Subpixel: unknown
+│       ├───Encoders: {0}
+│       ├───Modes
+│       │   └───320x480@0.01 preferred driver 
+│       └───Properties
+│           ├───"EDID" (immutable): blob = 0
+│           ├───"DPMS": enum {On, Standby, Suspend, Off} = On
+│           ├───"link-status": enum {Good, Bad} = Good
+│           ├───"non-desktop" (immutable): range [0, 1] = 0
+│           ├───"TILE" (immutable): blob = 0
+│           └───"CRTC_ID" (atomic): object CRTC = 34
+├───Encoders
+│   └───Encoder 0
+│       ├───Object ID: 35
+│       ├───Type: none
+│       ├───CRTCS: {0}
+│       └───Clones: {0}
+├───CRTCs
+│   └───CRTC 0
+│       ├───Object ID: 34
+│       ├───Legacy info
+│       │   ├───Mode: 320x480@0.01 preferred driver 
+│       │   └───Gamma size: 0
+│       └───Properties
+│           ├───"ACTIVE" (atomic): range [0, 1] = 1
+│           ├───"MODE_ID" (atomic): blob = 40
+│           │   └───320x480@0.01 preferred driver 
+│           ├───"OUT_FENCE_PTR" (atomic): range [0, UINT64_MAX] = 0
+│           └───"VRR_ENABLED": range [0, 1] = 0
+└───Planes
+    └───Plane 0
+        ├───Object ID: 32
+        ├───CRTCs: {0}
+        ├───Legacy info
+        │   ├───FB ID: 39
+        │   │   ├───Object ID: 39
+        │   │   ├───Size: 320x480
+        │   │   ├───Format: XRGB8888 (0x34325258)
+        │   │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
+        │   │   └───Planes:
+        │   │       └───Plane 0: offset = 0, pitch = 1280 bytes
+        │   └───Formats:
+        │       ├───RGB565 (0x36314752)
+        │       └───XRGB8888 (0x34325258)
+        └───Properties
+            ├───"type" (immutable): enum {Overlay, Primary, Cursor} = Primary
+            ├───"FB_ID" (atomic): object framebuffer = 39
+            │   ├───Object ID: 39
+            │   ├───Size: 320x480
+            │   ├───Format: XRGB8888 (0x34325258)
+            │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
+            │   └───Planes:
+            │       └───Plane 0: offset = 0, pitch = 1280 bytes
+            ├───"IN_FENCE_FD" (atomic): srange [-1, INT32_MAX] = -1
+            ├───"CRTC_ID" (atomic): object CRTC = 34
+            ├───"CRTC_X" (atomic): srange [INT32_MIN, INT32_MAX] = 0
+            ├───"CRTC_Y" (atomic): srange [INT32_MIN, INT32_MAX] = 0
+            ├───"CRTC_W" (atomic): range [0, INT32_MAX] = 320
+            ├───"CRTC_H" (atomic): range [0, INT32_MAX] = 480
+            ├───"SRC_X" (atomic): range [0, UINT32_MAX] = 0
+            ├───"SRC_Y" (atomic): range [0, UINT32_MAX] = 0
+            ├───"SRC_W" (atomic): range [0, UINT32_MAX] = 320
+            ├───"SRC_H" (atomic): range [0, UINT32_MAX] = 480
+            ├───"IN_FORMATS" (immutable): blob = 33
+            │   └───DRM_FORMAT_MOD_LINEAR (0x0)
+            │       ├───RGB565 (0x36314752)
+            │       └───XRGB8888 (0x34325258)
+            └───"FB_DAMAGE_CLIPS" (atomic): blob = 0

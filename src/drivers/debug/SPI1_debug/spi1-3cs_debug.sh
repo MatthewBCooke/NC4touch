@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the suffix for saved files
-SUFFIX="1p1"
+SUFFIX="1p2"
 
 # Define the output directory and file names with the suffix
 OUTPUT_DIR="/home/nc4/TouchscreenApparatus/src/drivers/debug/SPI1_debug"

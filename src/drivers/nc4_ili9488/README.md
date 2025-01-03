@@ -355,25 +355,74 @@ sudo grep -rli "nc4_ili9488" /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9
 
 
 # Pin Mapping  
+
+## SPI0 Pin Mapping
+
+| **Signal** | **GPIO Pin** | **Physical Pin** |
+|------------|--------------|------------------|
+| MOSI       | GPIO 10      | Pin 19           |
+| MISO       | GPIO 9       | Pin 21           |
+| SCLK       | GPIO 11      | Pin 23           |
+| CE0        | GPIO 8       | Pin 24           |
+| CE1        | GPIO 7       | Pin 26           |
+
+## SPI1 Pin Mapping
+
+| **Signal** | **GPIO Pin** | **Physical Pin** |
+|------------|--------------|------------------|
+| MOSI       | GPIO 20      | Pin 38           |
+| MISO       | GPIO 19      | Pin 35           |
+| SCLK       | GPIO 21      | Pin 40           |
+| CE0        | GPIO 18      | Pin 12           |
+| CE1        | GPIO 17      | Pin 11           |
+| CE2        | GPIO 16      | Pin 36           |
+
+## New Mapping
+
+### SPI1
 | **LCD**      | **LCD Pin**     | **Pi Header Pin** | **Pi BCM GPIO** | **Pi Label**          | **Description**                 |
 |--------------|-----------------|-------------------|-----------------|-----------------------|---------------------------------|
 | **ALL**      | VCC             | Pin 1 or Pin 17   | N/A             | 3V3                   | Shared Power supply for all LCDs |
 |              | GND             | Pin 6 or Pin 9    | N/A             | GND                   | Shared Ground                   |
-|              | MOSI            | Pin 19           | GPIO 10         | MOSI                  | Shared SPI data                 |
-|              | SCLK            | Pin 23           | GPIO 11         | SCLK                  | Shared SPI clock                |
-|              | Backlight       | Pin 12           | GPIO 18         |                       | Shared Backlight control        |
-| **LCD_0**    | CS              | Pin 24           | GPIO 8          | CE0                   | LCD_0 SPI Chip Select           |
+|              | MOSI            | Pin 38           | GPIO 20         | MOSI                  | Shared SPI1 data                 |
+|              | SCLK            | Pin 40           | GPIO 21         | SCLK                  | Shared SPI1 clock                |
+|              | Backlight       | Pin 15           | GPIO 22         |                       | Shared Backlight control        |
+| **LCD_0**    | CS              | Pin 12           | GPIO 18         | CE0                   | LCD_0 SPI1 Chip Select           |
 |              | DC              | Pin 22           | GPIO 25         |                       | LCD_0 Data/Command signal       |
 |              | RES             | Pin 18           | GPIO 24         |                       | LCD_0 Reset signal              |
-|              | SDA             | Pin 3            | GPIO 2          | SDA                   | LCD_0 I2C data for touch        |
-|              | SCL             | Pin 5            | GPIO 3          | SCL                   | LCD_0 I2C clock for touch       |
-| **LCD_1**    | CS              | Pin 26           | GPIO 7          | CE1                   | LCD_1 SPI Chip Select           |
+| **LCD_1**    | CS              | Pin 11           | GPIO 17         | CE1                   | LCD_1 SPI1 Chip Select           |
 |              | DC              | Pin 13           | GPIO 27         |                       | LCD_1 Data/Command signal       |
 |              | RES             | Pin 16           | GPIO 23         |                       | LCD_1 Reset signal              |
-|              | SDA             | Pin 3            | GPIO 2          | SDA                   | LCD_1 I2C data for touch        |
-|              | SCL             | Pin 5            | GPIO 3          | SCL                   | LCD_1 I2C clock for touch       |
-| **LCD_2**    | CS              | Pin 7            | GPIO 4          |                       | LCD_2 SPI Chip Select           |
+| **LCD_2**    | CS              | Pin 36           | GPIO 16         | CE2                   | LCD_2 SPI1 Chip Select           |
 |              | DC              | Pin 29           | GPIO 5          |                       | LCD_2 Data/Command signal       |
 |              | RES             | Pin 31           | GPIO 6          |                       | LCD_2 Reset signal              |
-|              | SDA             | Pin 3            | GPIO 2          | SDA                   | LCD_2 I2C data for touch        |
-|              | SCL             | Pin 5            | GPIO 3          | SCL                   | LCD_2 I2C clock for touch       |
+
+
+## Old Mapping
+
+### SPI0
+| **LCD**      | **LCD Pin**     | **Pi Header Pin** | **Pi BCM GPIO** | **Pi Label**          | **Description**                 |
+|--------------|-----------------|-------------------|-----------------|-----------------------|---------------------------------|
+| **ALL**      | VCC             | Pin 1 or Pin 17   | N/A             | 3V3                   | Shared Power supply for all LCDs |
+|              | GND             | Pin 6 or Pin 9    | N/A             | GND                   | Shared Ground                   |
+|              | MOSI            | Pin 19           | GPIO 10         | MOSI                  | Shared SPI0 data                 |
+|              | SCLK            | Pin 23           | GPIO 11         | SCLK                  | Shared SPI0 clock                |
+|              | Backlight       | Pin 12           | GPIO 18         |                       | Shared Backlight control        |
+| **LCD_0**    | CS              | Pin 24           | GPIO 8          | CE0                   | LCD_0 SPI0 Chip Select           |
+|              | DC              | Pin 22           | GPIO 25         |                       | LCD_0 Data/Command signal       |
+|              | RES             | Pin 18           | GPIO 24         |                       | LCD_0 Reset signal              |
+| **LCD_1**    | CS              | Pin 26           | GPIO 7          | CE1                   | LCD_1 SPI0 Chip Select           |
+|              | DC              | Pin 13           | GPIO 27         |                       | LCD_1 Data/Command signal       |
+| **LCD_2**    | CS              | Pin 7            | GPIO 4          |                       | LCD_2 SPI0 Chip Select           |
+|              | DC              | Pin 29           | GPIO 5          |                       | LCD_2 Data/Command signal       |
+|              | RES             | Pin 31           | GPIO 6          |                       | LCD_2 Reset signal              |
+
+### I2C
+| **LCD**      | **LCD Pin**     | **Pi Header Pin** | **Pi BCM GPIO** | **Pi Label** | **Description**      |
+|--------------|-----------------|-------------------|-----------------|--------------|----------------------|
+| **LCD_0**    | SDA             | undecided         | undecided       | SDA          | LCD_0 I2C data for touch |
+|              | SCL             | undecided         | undecided       | SCL          | LCD_0 I2C clock for touch |
+| **LCD_1**    | SDA             | undecided         | undecided       | SDA          | LCD_1 I2C data for touch |
+|              | SCL             | undecided         | undecided       | SCL          | LCD_1 I2C clock for touch |
+| **LCD_2**    | SDA             | undecided         | undecided       | SDA          | LCD_2 I2C data for touch |
+|              | SCL             | undecided         | undecided       | SCL          | LCD_2 I2C clock for touch |

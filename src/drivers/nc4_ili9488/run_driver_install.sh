@@ -11,15 +11,14 @@
 set -e
 
 echo "==== Building and Installing the nc4_ili9488 Device Tree Overlay ===="
-# Compile the DTS into DTBO
-OVERLAY_TARGET="/boot/firmware/overlays/nc4_ili9488.dtbo"
 
+# Compile the DTS into DTBO
 cd /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488
 
 echo "Compiling nc4_ili9488.dts -> nc4_ili9488.dtbo"
 dtc -@ -I dts -O dtb -o nc4_ili9488.dtbo nc4_ili9488.dts
 # Verbose
-#dtc -@ -I dts -O dtb -o nc4_ili9488.dtbo nc4_ili9488.dts -v
+#dtc -@ -I dts -O dtb -o nc4_ili9488.dtbo nc4_ili9488.dts -f -s
 
 echo "Copying nc4_ili9488.dtbo to /boot/firmware/overlays/nc4_ili9488.dtbo"
 sudo cp nc4_ili9488.dtbo "/boot/firmware/overlays/nc4_ili9488.dtbo"

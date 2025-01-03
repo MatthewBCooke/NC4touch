@@ -94,7 +94,7 @@ done
 echo "-----------------------------------------------------------"
 
 # List all nodes under the SPI bus for detailed inspection
-SPI_BUS_PATH="/proc/device-tree/soc/spi@7e215080"
+SPI_BUS_PATH="/proc/device-tree/soc/spi@7e204000"
 echo
 if [ -d "$SPI_BUS_PATH" ]; then
     echo "---- Listing all nodes under $SPI_BUS_PATH for verification: ----"
@@ -201,41 +201,42 @@ fi
 echo
 echo "==== Checking Driver Probe and Device Binding for SPI Devices ===="
 
-# Check for spi1.0
-if dmesg | grep -q -i "nc4_ili9488.*spi1.0"; then
-    echo "Driver probe for spi1.0 detected in logs."
+# Check for spi0.0
+if dmesg | grep -q -i "nc4_ili9488.*spi0.0"; then
+    echo "Driver probe for spi0.0 detected in logs."
 else
-    echo "!!ERROR!!: No logs found for driver probe on spi1.0."
+    echo "!!ERROR!!: No logs found for driver probe on spi0.0."
 fi
 
-if [ -e /sys/bus/spi/devices/spi1.0/driver ]; then
-    DRIVER_PATH=$(readlink /sys/bus/spi/devices/spi1.0/driver)
+if [ -e /sys/bus/spi/devices/spi0.0/driver ]; then
+    DRIVER_PATH=$(readlink /sys/bus/spi/devices/spi0.0/driver)
     if [[ $DRIVER_PATH == *"nc4_ili9488"* ]]; then
-        echo "spi1.0 is correctly bound to nc4_ili9488 driver."
+        echo "spi0.0 is correctly bound to nc4_ili9488 driver."
     else
-        echo "!!ERROR!!: spi1.0 is not bound to nc4_ili9488 driver."
+        echo "!!ERROR!!: spi0.0 is not bound to nc4_ili9488 driver."
     fi
 else
-    echo "!!ERROR!!: No driver found bound to spi1.0."
+    echo "!!ERROR!!: No driver found bound to spi0.0."
 fi
 
-# Check for spi1.1
-if dmesg | grep -q -i "nc4_ili9488.*spi1.1"; then
-    echo "Driver probe for spi1.1 detected in logs."
+# Check for spi0.1
+if dmesg | grep -q -i "nc4_ili9488.*spi0.1"; then
+    echo "Driver probe for spi0.1 detected in logs."
 else
-    echo "!!ERROR!!: No logs found for driver probe on spi1.1."
+    echo "!!ERROR!!: No logs found for driver probe on spi0.1."
 fi
 
-if [ -e /sys/bus/spi/devices/spi1.1/driver ]; then
-    DRIVER_PATH=$(readlink /sys/bus/spi/devices/spi1.1/driver)
+if [ -e /sys/bus/spi/devices/spi0.1/driver ]; then
+    DRIVER_PATH=$(readlink /sys/bus/spi/devices/spi0.1/driver)
     if [[ $DRIVER_PATH == *"nc4_ili9488"* ]]; then
-        echo "spi1.1 is correctly bound to nc4_ili9488 driver."
+        echo "spi0.1 is correctly bound to nc4_ili9488 driver."
     else
-        echo "!!ERROR!!: spi1.1 is not bound to nc4_ili9488 driver."
+        echo "!!ERROR!!: spi0.1 is not bound to nc4_ili9488 driver."
     fi
 else
-    echo "!!ERROR!!: No driver found bound to spi1.1."
+    echo "!!ERROR!!: No driver found bound to spi0.1."
 fi
+
 
 # Validate GPIO Pin States
 echo

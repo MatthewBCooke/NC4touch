@@ -1,0 +1,88 @@
+DTC(1)																				General Commands Manual																				 DTC(1)
+
+NAME
+       dtc - Device Tree Compiler
+
+SYNOPSIS
+       /usr/bin/dtc [options] <input file>
+
+DESCRIPTION
+       Device Tree Compiler, dtc, takes as input a device-tree in a given format and outputs a device-tree in another format for booting kernels on embedded systems.  Typically, the input format is "dts", a human readable source format, and creates a "dtb", or binary format as output.
+
+OPTIONS
+       -h     Display help text.
+
+       -q     Quiet:
+
+	      -q - Suppress warnings.
+	      -qq - Suppress errors.
+	      -qqq - Suppress all.
+
+       -I <input format>
+
+	      Input formats are:
+
+	      dts - device tree source text
+	      dtb - device tree blob
+	      fs - /proc/device-tree style directory
+
+       -o <output file>
+
+	      Dump the result into a file, instead of stdout.
+
+       -O <output format>
+
+	      Output formats are:
+
+	      dts - device tree source text
+	      dtb - device tree blob
+	      asm - assembler source
+
+       -V <output version>
+
+	      Blob version to produce. The default is 17 (only relevant for dtb and asm output).
+
+       -d <output dependency file>
+
+       -R <number>
+
+	      Make space for <number> reserve map entries (only relevant for dtb and asm output).
+
+       -S <bytes>
+
+	      Make the blob at least <bytes> long (extra space).
+
+       -p <bytes>
+
+	      Add padding to the blob of <bytes> long (extra space)
+
+       -b <number>
+
+	      Set the physical boot CPU.
+
+       -f
+
+	      Force - try to produce output even if the input tree has errors.
+
+       -s
+
+	      Sort nodes and properties before outputting (only useful for comparing trees)
+
+       -v     Print DTC version and exit.
+
+       -H <phandle format>
+
+	      phandle formats are:
+
+	      legacy - "linux,phandle" properties only
+	      epapr - "phandle" properties only
+	      both - Both "linux,phandle" and "phandle" properties
+
+AUTHOR
+       dtc was written by David Gibson <david@gibson.dropbear.id.au>. Since April 1, 2006, Jon Loeliger <jdl@jdl.com> assumes maintainership.
+
+       This manual page was originally written by Aurélien GÉRÔME <ag@roxor.cx>, for the Debian project (but may be used by others).
+
+       This manual page is currently maintained and update it by Héctor Orón <zumbi@debian.org>, for the Debian project.
+
+Linux																				    30 January 2012																				 DTC(1)

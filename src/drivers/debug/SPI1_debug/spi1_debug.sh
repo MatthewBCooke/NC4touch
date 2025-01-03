@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the output directory and file
-OUTPUT_DIR="/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/logs"
+OUTPUT_DIR="/home/nc4/TouchscreenApparatus/src/drivers/debug/SPI1_debug"
 OUTPUT_FILE="$OUTPUT_DIR/spi1_debug.log"
 
 # Ensure the output directory exists

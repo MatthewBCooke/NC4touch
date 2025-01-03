@@ -253,8 +253,9 @@ static void nc4_mipi_dbi18_fb_dirty(struct drm_framebuffer *fb, struct drm_rect 
 		return;
 	}
 
-	DRM_DEBUG_KMS("nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=%s cs=%d rect=(%u,%u)-(%u,%u)\n",
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=%s on SPI%d, CS=%d rect=(%u,%u)-(%u,%u)\n",
 				  dev_name(fb->dev->dev),
+				  to_spi_device(fb->dev->dev)->master->bus_num,
 				  to_spi_device(fb->dev->dev)->chip_select,
 				  rect->x1, rect->y1, rect->x2, rect->y2);
 
@@ -391,8 +392,9 @@ static void nc4_ili9488_enable(struct drm_simple_display_pipe *pipe,
 	u8 addr_mode;
 	int ret, idx;
 
-	DRM_DEBUG_KMS("nc4_ili9488: [ENABLE] Starting enable sequence for device %s on CS=%d\n",
+	DRM_DEBUG_KMS("nc4_ili9488: [ENABLE] Starting enable sequence for device %s on SPI%d, CS=%d\n",
 				  dev_name(pipe->crtc.dev->dev),
+				  to_spi_device(pipe->crtc.dev->dev)->master->bus_num,
 				  to_spi_device(pipe->crtc.dev->dev)->chip_select);
 
 	if (!drm_dev_enter(pipe->crtc.dev, &idx))
@@ -547,8 +549,8 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 	u32 rotation = 0;
 	int ret;
 
-	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] Starting probe for device %s on CS=%d\n",
-				  dev_name(dev), spi->chip_select);
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] Starting probe for device %s on SPI%d, CS=%d\n",
+				  dev_name(dev), spi->master->bus_num, spi->chip_select);
 
 	dbidev = devm_drm_dev_alloc(dev, &nc4_ili9488_driver, struct mipi_dbi_dev, drm);
 	if (IS_ERR(dbidev))
@@ -605,7 +607,9 @@ static int nc4_ili9488_probe(struct spi_device *spi)
 		DRM_ERROR("nc4_ili9488: [nc4_ili9488_probe] SPI initialization failed. Error: %d\n", ret);
 		return ret;
 	}
-	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] SPI initialized successfully.\n");
+
+	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_probe] SPI%d initialized successfully.\n",
+				  spi->master->bus_num);
 
 	ret = nc4_mipi_dbi18_dev_init(dbidev, &nc4_ili9488_pipe_funcs, &nc4_sx035hv006_mode, rotation);
 	if (ret)

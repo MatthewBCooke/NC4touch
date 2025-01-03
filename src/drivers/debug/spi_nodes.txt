@@ -1,0 +1,8 @@
+Checking enabled SPI nodes...
+/proc/device-tree/soc/spi@7e204000/status: okay
+/proc/device-tree/soc/spi@7e204600/status: disabled
+/proc/device-tree/soc/spi@7e204800/status: disabled
+/proc/device-tree/soc/spi@7e204a00/status: disabled
+/proc/device-tree/soc/spi@7e204c00/status: disabled
+/proc/device-tree/soc/spi@7e215080/status: okay
+/proc/device-tree/soc/spi@7e2150c0/status: disabled

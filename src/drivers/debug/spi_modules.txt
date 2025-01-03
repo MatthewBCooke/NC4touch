@@ -1,0 +1,4 @@
+Checking loaded SPI-related kernel modules...
+spidev                 16384  0
+spi_bcm2835aux         12288  0
+spi_bcm2835            20480  0

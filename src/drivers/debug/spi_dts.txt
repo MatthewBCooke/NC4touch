@@ -1,0 +1,14 @@
+Dumping Device Tree related to SPI...
+Searching for spidev references...
+			spidev@2 {
+				compatible = "spidev";
+			spidev@0 {
+				compatible = "spidev";
+			spidev@1 {
+				compatible = "spidev";
+			spidev@0 {
+				compatible = "spidev";
+			spidev@1 {
+				compatible = "spidev";
+		spidev1 = "/soc/spi@7e204000/spidev@1";
+		spidev0 = "/soc/spi@7e204000/spidev@0";

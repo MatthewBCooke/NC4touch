@@ -12,17 +12,17 @@ set -e
 
 echo "==== Building and Installing the nc4_ili9488 Device Tree Overlay ===="
 # Compile the DTS into DTBO
-DTS_FILE="nc4_ili9488.dts"
-DTB_FILE="nc4_ili9488.dtbo"
-OVERLAY_TARGET="/boot/firmware/overlays/${DTB_FILE}"
+OVERLAY_TARGET="/boot/firmware/overlays/nc4_ili9488.dtbo"
 
 cd /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488
 
-echo "Compiling $DTS_FILE -> $DTB_FILE"
-dtc -@ -I dts -O dtb -o "$DTB_FILE" "$DTS_FILE"
+echo "Compiling nc4_ili9488.dts -> nc4_ili9488.dtbo"
+dtc -@ -I dts -O dtb -o nc4_ili9488.dtbo nc4_ili9488.dts
+# Verbose
+#dtc -@ -I dts -O dtb -o nc4_ili9488.dtbo nc4_ili9488.dts -v
 
-echo "Copying $DTB_FILE to $OVERLAY_TARGET"
-sudo cp "$DTB_FILE" "$OVERLAY_TARGET"
+echo "Copying nc4_ili9488.dtbo to $OVERLAY_TARGET"
+sudo cp nc4_ili9488.dtbo "$OVERLAY_TARGET"
 
 echo "==== Building the nc4_ili9488 Kernel Module ===="
 # Build the kernel module

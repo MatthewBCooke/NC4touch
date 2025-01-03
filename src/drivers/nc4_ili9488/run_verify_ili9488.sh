@@ -205,7 +205,6 @@ echo
 echo "==== Checking Driver Probe and Device Binding for SPI Devices ===="
 
 SPI_DEVICES=("spi1.0" "spi1.1" "spi1.2")
-
 echo
 echo "==== Checking Driver Probe and Device Binding for SPI Devices ===="
 for DEVICE in "${SPI_DEVICES[@]}"; do

@@ -990,12 +990,6 @@
 				};
 			};
 
-			pitft2_pins {
-				brcm,function = <0x01 0x01>;
-				phandle = <0xfd>;
-				brcm,pins = <0x0d 0x0c>;
-			};
-
 			spi6-gpio18 {
 				phandle = <0xa9>;
 
@@ -1159,12 +1153,6 @@
 				};
 			};
 
-			pitft1_pins {
-				brcm,function = <0x01 0x01>;
-				phandle = <0xfc>;
-				brcm,pins = <0x17 0x16>;
-			};
-
 			pwm0-1-gpio19 {
 				phandle = <0x9b>;
 
@@ -1302,12 +1290,6 @@
 				brcm,function = <0x02>;
 				phandle = <0x26>;
 				brcm,pins = <0x0c 0x0d>;
-			};
-
-			pitft0_pins {
-				brcm,function = <0x01 0x01>;
-				phandle = <0xfa>;
-				brcm,pins = <0x18 0x19>;
 			};
 
 			pwm0-1-gpio53 {
@@ -1471,12 +1453,6 @@
 			brcm,overclock-50 = <0x00>;
 		};
 
-		backlight {
-			compatible = "gpio-backlight";
-			phandle = <0xfb>;
-			gpios = <0x07 0x1b 0x00>;
-		};
-
 		power {
 			#power-domain-cells = <0x01>;
 			compatible = "raspberrypi,bcm2835-power";
@@ -1611,32 +1587,6 @@
 			phandle = <0xc1>;
 			cs-gpios = <0x07 0x12 0x01 0x07 0x11 0x01 0x07 0x10 0x01>;
 
-			pitft0@0 {
-				pinctrl-names = "default";
-				pinctrl-0 = <0xfa>;
-				backlight = <0xfb>;
-				rotation = <0x00>;
-				spi-max-frequency = <0x1312d00>;
-				reset-gpios = <0x07 0x18 0x00>;
-				compatible = "ili9488";
-				dc-gpios = <0x07 0x19 0x00>;
-				reg = <0x00>;
-				phandle = <0xfe>;
-			};
-
-			pitft1@1 {
-				pinctrl-names = "default";
-				pinctrl-0 = <0xfc>;
-				backlight = <0xfb>;
-				rotation = <0x00>;
-				spi-max-frequency = <0x1312d00>;
-				reset-gpios = <0x07 0x17 0x00>;
-				compatible = "ili9488";
-				dc-gpios = <0x07 0x16 0x00>;
-				reg = <0x01>;
-				phandle = <0xff>;
-			};
-
 			spidev@2 {
 				#address-cells = <0x01>;
 				#size-cells = <0x00>;
@@ -1645,19 +1595,6 @@
 				status = "okay";
 				reg = <0x02>;
 				phandle = <0xf8>;
-			};
-
-			pitft2@2 {
-				pinctrl-names = "default";
-				pinctrl-0 = <0xfd>;
-				backlight = <0xfb>;
-				rotation = <0x00>;
-				spi-max-frequency = <0x1312d00>;
-				reset-gpios = <0x07 0x0d 0x00>;
-				compatible = "ili9488";
-				dc-gpios = <0x07 0x0c 0x00>;
-				reg = <0x02>;
-				phandle = <0x100>;
 			};
 
 			spidev@0 {
@@ -2331,7 +2268,7 @@
 	};
 
 	chosen {
-		user-warnings = <0x64746572 0x726f723a 0x2063616e 0x27742066 0x696e6420 0x73796d62 0x6f6c2027 0x73706964 0x6576315f 0x30270a64 0x74657272 0x6f723a20 0x4661696c 0x65642074 0x6f207265 0x736f6c76 0x65206f76 0x65726c61 0x7920276e 0x63345f69 0x6c693934 0x3838270a>;
+		user-warnings = <0x64746572 0x726f723a 0x2063616e 0x27742066 0x696e6420 0x73796d62 0x6f6c2027 0x73706964 0x6576315f 0x32270a64 0x74657272 0x6f723a20 0x4661696c 0x65642074 0x6f207265 0x736f6c76 0x65206f76 0x65726c61 0x7920276e 0x63345f69 0x6c693934 0x3838270a>;
 		linux,initrd-end = <0x2efff172>;
 		bootargs = "coherent_pool=1M 8250.nr_uarts=0 snd_bcm2835.enable_headphones=0 cgroup_disable=memory numa_policy=interleave snd_bcm2835.enable_headphones=1 snd_bcm2835.enable_hdmi=1 bcm2708_fb.fbwidth=0 bcm2708_fb.fbheight=0 bcm2708_fb.fbswap=1 smsc95xx.macaddr=D8:3A:DD:6F:A3:94 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  console=ttyS0,115200 console=tty1 root=PARTUUID=60ff2e57-02 rootfstype=ext4 fsck.repair=yes rootwait cfg80211.ieee80211_regdom=CA ip=169.254.55.240::0.0.0.0:255.255.0.0::eth0:off systemd.unit=multi-user.target autologin-user=nc4 nosplash logo.nologo vt.global_cursor_default=0 drm.debug=0x1f log_buf_len=16M";
 		os_prefix = [00];
@@ -2347,7 +2284,7 @@
 			capabilities = <0x7f>;
 			build-timestamp = <0x63bef4a4>;
 			tryboot = <0x00>;
-			rsts = <0x1000>;
+			rsts = <0x1020>;
 			update-timestamp = <0x00>;
 			version = "8ba17717fbcedd4c3b6d4bce7e50c7af4155cba9";
 			boot-mode = <0x01>;

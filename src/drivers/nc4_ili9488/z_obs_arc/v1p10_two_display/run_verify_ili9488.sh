@@ -242,7 +242,7 @@ fi
 echo
 echo "==== Validating GPIO Pin States ===="
 echo
-GPIO_PINS=(7 8 18 23 24 25)
+GPIO_PINS=(7 8 11 22 23 24 25 27)
 for PIN in "${GPIO_PINS[@]}"; do
     echo "Checking GPIO $PIN:"
     raspi-gpio get $PIN

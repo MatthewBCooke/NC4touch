@@ -110,7 +110,7 @@ echo "Checking kernel logs for overlay application:"
 if dmesg | grep -qi "$OVERLAY_NAME"; then
     echo "Overlay is logged in kernel messages."
 else
-    echo "Overlay not found in kernel messages. Check the logs for issues."
+    echo "!!ERROR!!: Overlay not found in kernel messages. Check the logs for issues."
 fi
 
 # Verify overlay entries in config.txt
@@ -119,7 +119,7 @@ echo "Verifying overlay references in config.txt:"
 if grep -q "dtoverlay=$OVERLAY_NAME" /boot/firmware/config.txt; then
     echo "Overlay is referenced in config.txt."
 else
-    echo "Overlay not found in config.txt. Ensure it is added correctly."
+    echo "!!ERROR!!: Overlay not found in config.txt. Ensure it is added correctly."
 fi
 
 ## Validate Driver
@@ -198,60 +198,64 @@ else
     echo "!!ERROR!!: Framebuffer path $FB_PATH not found. Check graphics setup."
 fi
 
+# Check SPI devices and driver binding
 echo
-echo "==== Checking Driver Probe and Device Binding for SPI Devices ===="
+echo "==== Checking Driver Probe and Device Binding for SPI0 Devices ===="
 
-# Check for spi0.0
-if dmesg | grep -q -i "nc4_ili9488.*spi0.0"; then
-    echo "Driver probe for spi0.0 detected in logs."
-else
-    echo "!!ERROR!!: No logs found for driver probe on spi0.0."
-fi
+# Update SPI device list to the first two SPI0 devices
+SPI_DEVICES=("spi0.0" "spi0.1")
 
-if [ -e /sys/bus/spi/devices/spi0.0/driver ]; then
-    DRIVER_PATH=$(readlink /sys/bus/spi/devices/spi0.0/driver)
-    if [[ $DRIVER_PATH == *"nc4_ili9488"* ]]; then
-        echo "spi0.0 is correctly bound to nc4_ili9488 driver."
+# Define the driver name
+DRIVER_NAME="nc4_ili9488"
+
+for DEVICE in "${SPI_DEVICES[@]}"; do
+    # Check driver probe in kernel logs
+    if dmesg | grep -q -i "$DRIVER_NAME.*$DEVICE"; then
+        echo "Driver probe for $DEVICE detected in logs."
     else
-        echo "!!ERROR!!: spi0.0 is not bound to nc4_ili9488 driver."
+        echo "!!ERROR!!: No logs found for driver probe on $DEVICE."
     fi
-else
-    echo "!!ERROR!!: No driver found bound to spi0.0."
-fi
 
-# Check for spi0.1
-if dmesg | grep -q -i "nc4_ili9488.*spi0.1"; then
-    echo "Driver probe for spi0.1 detected in logs."
-else
-    echo "!!ERROR!!: No logs found for driver probe on spi0.1."
-fi
-
-if [ -e /sys/bus/spi/devices/spi0.1/driver ]; then
-    DRIVER_PATH=$(readlink /sys/bus/spi/devices/spi0.1/driver)
-    if [[ $DRIVER_PATH == *"nc4_ili9488"* ]]; then
-        echo "spi0.1 is correctly bound to nc4_ili9488 driver."
+    # Check driver binding
+    DEVICE_PATH="/sys/bus/spi/devices/$DEVICE/driver"
+    if [ -e "$DEVICE_PATH" ]; then
+        DRIVER_BOUND=$(readlink "$DEVICE_PATH")
+        if [[ $DRIVER_BOUND == *"$DRIVER_NAME"* ]]; then
+            echo "$DEVICE is correctly bound to $DRIVER_NAME driver."
+        else
+            echo "!!ERROR!!: $DEVICE is not bound to $DRIVER_NAME driver."
+        fi
     else
-        echo "!!ERROR!!: spi0.1 is not bound to nc4_ili9488 driver."
+        echo "!!ERROR!!: No driver found bound to $DEVICE."
     fi
-else
-    echo "!!ERROR!!: No driver found bound to spi0.1."
-fi
+done
 
-
-# Validate GPIO Pin States
+# Check Relevant GPIO Pin States
 echo
 echo "==== Validating GPIO Pin States ===="
 echo
-GPIO_PINS=(7 8 11 22 23 24 25 27)
-for PIN in "${GPIO_PINS[@]}"; do
-    echo "Checking GPIO $PIN:"
+
+# Define GPIO pins with labels
+declare -A GPIO_LABELS=(
+    [10]="MOSI"
+    [11]="SCLK"
+    [7]="LCD_1 CS (CE1)"
+    [8]="LCD_0 CS (CE0)"
+    [22]="LCD_1 DC"
+    [23]="LCD_1 RES"
+    [24]="LCD_0 DC"
+    [25]="LCD_0 RES"
+    [27]="Backlight"
+)
+
+# Iterate through GPIO pins and print states with labels
+for PIN in "${!GPIO_LABELS[@]}"; do
+    LABEL=${GPIO_LABELS[$PIN]}
+    echo "Checking GPIO $PIN ($LABEL):"
     raspi-gpio get $PIN
+    echo
 done
 
-# # Log and print relevant dmesg output for debugging
-# echo
-# echo "==== Fetching and logging dmesg output (nc4_ili9488, SPI, GPIO, and DTB) ==== "
-# dmesg | grep -E "nc4_ili9488|spi|gpio|dtb" | tee -a "$LOG_FILE"
 
 echo
 echo "=== Validation Complete ==="

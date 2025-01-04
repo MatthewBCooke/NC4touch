@@ -229,15 +229,35 @@ for DEVICE in "${SPI_DEVICES[@]}"; do
     fi
 done
 
-# Check Relivant GPIO Pin States
+# Check Relevant GPIO Pin States for SPI1
 echo
-echo "==== Validating GPIO Pin States ===="
+echo "==== Validating GPIO Pin States for SPI1 ===="
 echo
-GPIO_PINS=(18 17 16 12 13 22 23 24 25 27)
-for PIN in "${GPIO_PINS[@]}"; do
-    echo "Checking GPIO $PIN:"
+
+# Define GPIO pins with labels for SPI1
+declare -A GPIO_LABELS=(
+    [20]="MOSI"
+    [21]="SCLK"
+    [27]="Backlight"
+    [18]="LCD_0 CS (CE0)"
+    [25]="LCD_0 RES"
+    [24]="LCD_0 DC"
+    [17]="LCD_1 CS (CE1)"
+    [23]="LCD_1 RES"
+    [22]="LCD_1 DC"
+    [16]="LCD_2 CS (CE2)"
+    [13]="LCD_2 RES"
+    [12]="LCD_2 DC"
+)
+
+# Iterate through GPIO pins and print states with labels
+for PIN in "${!GPIO_LABELS[@]}"; do
+    LABEL=${GPIO_LABELS[$PIN]}
+    echo "Checking GPIO $PIN ($LABEL):"
     raspi-gpio get $PIN
+    echo
 done
+
 
 echo
 echo "=== Validation Complete ==="

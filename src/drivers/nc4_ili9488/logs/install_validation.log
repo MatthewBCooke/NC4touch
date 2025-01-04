@@ -13,24 +13,31 @@ Overlay file found: /boot/firmware/overlays/nc4_ili9488.dtbo
 Note: Full dtc output (including Pi-specific warnings) is in /tmp/dtc_raw_output.txt
 
 ---- Checking overlay nodes in the live device tree ----
-Node 'pitft0@0' found in decompiled Device Tree (TMP_DTC_RAW).
+Node 'pitft0@0' found at path: /proc/device-tree/soc/spi@7e204000/pitft0@0
 Node 'pitft0_pins' found at path: /proc/device-tree/soc/gpio@7e200000/pitft0_pins
-Node 'pitft1@1' found in decompiled Device Tree (TMP_DTC_RAW).
+Node 'pitft1@1' found at path: /proc/device-tree/soc/spi@7e204000/pitft1@1
 Node 'pitft1_pins' found at path: /proc/device-tree/soc/gpio@7e200000/pitft1_pins
-!!ERROR!!: Node 'pitft2@2' not found. Check overlay or binding for issues.
-!!ERROR!!: Node 'pitft2_pins' not found. Check overlay or binding for issues.
 Node 'backlight' found in decompiled Device Tree (TMP_DTC_RAW).
 -----------------------------------------------------------
 
----- Listing all nodes under /proc/device-tree/soc/spi@7e215080 for verification: ----
+---- Listing all nodes under /proc/device-tree/soc/spi@7e204000 for verification: ----
 #address-cells
 clocks
 compatible
+cs-gpios
+dma-names
+dmas
 interrupts
 name
 phandle
+pinctrl-0
+pinctrl-names
+pitft0@0
+pitft1@1
 reg
 #size-cells
+spidev@0
+spidev@1
 status
 -----------------------------------------------------------
 
@@ -174,37 +181,40 @@ uevent
 
 -----------------------------------------------------------
 
-==== Checking Driver Probe and Device Binding for SPI Devices ====
-
-==== Checking Driver Probe and Device Binding for SPI Devices ====
-!!ERROR!!: No logs found for driver probe on spi1.0.
-!!ERROR!!: No driver found bound to spi1.0.
-!!ERROR!!: No logs found for driver probe on spi1.1.
-!!ERROR!!: No driver found bound to spi1.1.
-!!ERROR!!: No logs found for driver probe on spi1.2.
-!!ERROR!!: No driver found bound to spi1.2.
+==== Checking Driver Probe and Device Binding for SPI0 Devices ====
+Driver probe for spi0.0 detected in logs.
+spi0.0 is correctly bound to nc4_ili9488 driver.
+Driver probe for spi0.1 detected in logs.
+spi0.1 is correctly bound to nc4_ili9488 driver.
 
 ==== Validating GPIO Pin States ====
 
-Checking GPIO 18:
-GPIO 18: level=0 func=INPUT pull=DOWN
-Checking GPIO 17:
-GPIO 17: level=0 func=INPUT pull=DOWN
-Checking GPIO 16:
-GPIO 16: level=0 func=INPUT pull=DOWN
-Checking GPIO 12:
-GPIO 12: level=0 func=INPUT pull=DOWN
-Checking GPIO 13:
-GPIO 13: level=0 func=INPUT pull=DOWN
-Checking GPIO 22:
-GPIO 22: level=1 func=OUTPUT pull=DOWN
-Checking GPIO 23:
-GPIO 23: level=1 func=OUTPUT pull=DOWN
-Checking GPIO 24:
-GPIO 24: level=0 func=OUTPUT pull=DOWN
-Checking GPIO 25:
-GPIO 25: level=1 func=OUTPUT pull=DOWN
-Checking GPIO 27:
+Checking GPIO 8 (LCD_0 CS (CE0)):
+GPIO 8: level=1 func=OUTPUT pull=UP
+
+Checking GPIO 7 (LCD_1 CS (CE1)):
+GPIO 7: level=1 func=OUTPUT pull=UP
+
+Checking GPIO 27 (Backlight):
 GPIO 27: level=1 func=OUTPUT pull=DOWN
+
+Checking GPIO 25 (LCD_0 RES):
+GPIO 25: level=1 func=OUTPUT pull=DOWN
+
+Checking GPIO 24 (LCD_0 DC):
+GPIO 24: level=0 func=OUTPUT pull=DOWN
+
+Checking GPIO 23 (LCD_1 RES):
+GPIO 23: level=1 func=OUTPUT pull=DOWN
+
+Checking GPIO 22 (LCD_1 DC):
+GPIO 22: level=1 func=OUTPUT pull=DOWN
+
+Checking GPIO 10 (MOSI):
+GPIO 10: level=0 alt=0 func=SPI0_MOSI pull=DOWN
+
+Checking GPIO 11 (SCLK):
+GPIO 11: level=0 alt=0 func=SPI0_SCLK pull=DOWN
+
 
 === Validation Complete ===

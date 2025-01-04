@@ -61,8 +61,6 @@ EXPECTED_NODES=(
     "pitft0_pins"
     "pitft1@1"
     "pitft1_pins"
-    "pitft2@2"
-    "pitft2_pins"
     "backlight"
 )
 
@@ -71,7 +69,7 @@ echo
 echo "---- Checking overlay nodes in the live device tree ----"
 for NODE in "${EXPECTED_NODES[@]}"; do
     NODE_PATHS=(
-        "/proc/device-tree/soc/spi@7e215080/$NODE"
+        "/proc/device-tree/soc/spi@7e204000/$NODE"
         "/proc/device-tree/soc/gpio@7e200000/$NODE"
     )
     
@@ -96,14 +94,14 @@ done
 echo "-----------------------------------------------------------"
 
 # List all nodes under the SPI bus for detailed inspection
-SPI_BUS_PATH="/proc/device-tree/soc/spi@7e215080"
+SPI_BUS_PATH="/proc/device-tree/soc/spi@7e204000"
 echo
 if [ -d "$SPI_BUS_PATH" ]; then
     echo "---- Listing all nodes under $SPI_BUS_PATH for verification: ----"
     ls "$SPI_BUS_PATH"
     echo "-----------------------------------------------------------"
 else
-    echo "!!ERROR!!: SPI bus path $SPI_BUS_PATH not found. Check overlay or hardware configuration."
+    echo "SPI bus path $SPI_BUS_PATH not found. Check overlay or hardware configuration."
 fi
 
 # Check kernel logs for overlay application
@@ -202,11 +200,14 @@ fi
 
 # Check SPI devices and driver binding
 echo
-echo "==== Checking Driver Probe and Device Binding for SPI Devices ===="
+echo "==== Checking Driver Probe and Device Binding for SPI0 Devices ===="
 
-SPI_DEVICES=("spi1.0" "spi1.1" "spi1.2")
-echo
-echo "==== Checking Driver Probe and Device Binding for SPI Devices ===="
+# Update SPI device list to the first two SPI0 devices
+SPI_DEVICES=("spi0.0" "spi0.1")
+
+# Define the driver name
+DRIVER_NAME="nc4_ili9488"
+
 for DEVICE in "${SPI_DEVICES[@]}"; do
     # Check driver probe in kernel logs
     if dmesg | grep -q -i "$DRIVER_NAME.*$DEVICE"; then
@@ -229,15 +230,32 @@ for DEVICE in "${SPI_DEVICES[@]}"; do
     fi
 done
 
-# Check Relivant GPIO Pin States
+# Check Relevant GPIO Pin States
 echo
 echo "==== Validating GPIO Pin States ===="
 echo
-GPIO_PINS=(18 17 16 12 13 22 23 24 25 27)
-for PIN in "${GPIO_PINS[@]}"; do
-    echo "Checking GPIO $PIN:"
+
+# Define GPIO pins with labels
+declare -A GPIO_LABELS=(
+    [10]="MOSI"
+    [11]="SCLK"
+    [7]="LCD_1 CS (CE1)"
+    [8]="LCD_0 CS (CE0)"
+    [22]="LCD_1 DC"
+    [23]="LCD_1 RES"
+    [24]="LCD_0 DC"
+    [25]="LCD_0 RES"
+    [27]="Backlight"
+)
+
+# Iterate through GPIO pins and print states with labels
+for PIN in "${!GPIO_LABELS[@]}"; do
+    LABEL=${GPIO_LABELS[$PIN]}
+    echo "Checking GPIO $PIN ($LABEL):"
     raspi-gpio get $PIN
+    echo
 done
+
 
 echo
 echo "=== Validation Complete ==="

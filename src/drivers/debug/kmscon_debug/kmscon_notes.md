@@ -1,4 +1,4 @@
-# kmscon Behavior:
+# kmscon Summary:
 
 kmscon configures the DRM/KMS pipeline during boot, enabling both displays (LCD_0 and LCD_1) and resolving initialization issues.
 However, it locks the framebuffers (fb0 and fb1), preventing other applications (e.g., fbi) from rendering images.
@@ -98,4 +98,7 @@ cd /home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_test_code
 gcc -v -o drm_test drm_test.c
 sudo systemctl stop kmsconvt@tty1
 sudo ./drm_test
-'''
+```
+
+
+# Findings Notes

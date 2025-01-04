@@ -1,1 +1,80 @@
-[    5.082559] nc4_ili9488: loading out-of-tree module taints kernel.
+Jan 04 05:30:25 raspberrypi sudo[5984]:      nc4 : TTY=pts/5 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 05:57:31 raspberrypi sudo[7219]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 06:01:35 raspberrypi sudo[7568]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 06:15:49 raspberrypi sudo[8291]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 06:38:38 raspberrypi sudo[9216]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 06:40:54 raspberrypi sudo[9408]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 06:44:08 raspberrypi sudo[9728]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 06:45:28 raspberrypi sudo[9981]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 07:02:34 raspberrypi sudo[1402]:      nc4 : TTY=pts/1 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 07:02:34 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 07:02:34 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 07:02:34 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 07:02:34 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 07:02:34 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=37
+Jan 04 07:02:34 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 07:02:34 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 07:02:35 raspberrypi drm_init_utility[1404]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31
+Jan 04 07:50:43 raspberrypi sudo[4225]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=38
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 07:50:43 raspberrypi drm_init_utility[4227]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31
+Jan 04 07:59:45 raspberrypi sudo[4773]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=38
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 07:59:45 raspberrypi drm_init_utility[4775]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31
+Jan 04 08:03:41 raspberrypi sudo[4938]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=38
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 08:03:41 raspberrypi drm_init_utility[4940]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31
+Jan 04 08:04:06 raspberrypi sudo[5044]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 08:04:06 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 08:04:06 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 08:04:06 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 08:04:06 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 08:04:06 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=38
+Jan 04 08:04:06 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 08:04:06 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 08:04:07 raspberrypi drm_init_utility[5046]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31
+Jan 04 08:05:48 raspberrypi sudo[5207]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=38
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 08:05:48 raspberrypi drm_init_utility[5209]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31
+Jan 04 08:23:55 raspberrypi sudo[5613]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=38
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 08:23:55 raspberrypi drm_init_utility[5615]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31
+Jan 04 08:26:19 raspberrypi sudo[5860]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility/drm_init_utility
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] Opened DRM device successfully
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] Fetched DRM resources successfully
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] Connector 31 is connected with mode 320x480
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] Framebuffer added with ID=38
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] Dumb buffer mapped at offset=4295581696
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] Framebuffer filled with white color
+Jan 04 08:26:19 raspberrypi drm_init_utility[5862]: nc4_ili9488: [drm_init_utility] CRTC set successfully for mode 320x480 on connector 31

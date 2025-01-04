@@ -11,17 +11,27 @@
 set -e
 
 # Paths
-PROJECT_ROOT="/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug"
-UTILITY_SOURCE="$PROJECT_ROOT/drm_init_utility/drm_init_utility.c"
-UTILITY_BINARY="$PROJECT_ROOT/drm_init_utility/drm_init_utility"
-DEBUG_LOG="$PROJECT_ROOT/logs/drm_debug.log"
+UTILITY_DIR="/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/drm_init_utility"
+LOG_DIR="/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/logs"
+LOG_FILE="$LOG_DIR/drm_debug.log"
+UTILITY_SOURCE="$UTILITY_DIR/drm_init_utility.c"
+UTILITY_BINARY="$UTILITY_DIR/drm_init_utility"
 
 # Error trap
 trap 'echo "!!ERROR!!: Script failed at line $LINENO."; exit 1;' ERR
 
-# Ensure log directory is writable
-if [[ ! -w "$PROJECT_ROOT/logs" ]]; then
-    echo "!!ERROR!!: Cannot write to log directory: $PROJECT_ROOT/logs"
+# Ensure the log directory exists
+mkdir -p "$LOG_DIR"
+
+# Delete the old log file if it exists
+if [[ -f "$LOG_FILE" ]]; then
+    echo "Removing old log file: $LOG_FILE"
+    rm "$LOG_FILE"
+fi
+
+# Ensure the log directory is writable
+if [[ ! -w "$LOG_DIR" ]]; then
+    echo "!!ERROR!!: Cannot write to log directory: $LOG_DIR"
     exit 1
 fi
 
@@ -49,13 +59,12 @@ fi
 echo
 echo "==== Validating DRM Initialization ===="
 
-# Check for relevant debug messages in dmesg
+# Check for relevant debug messages in journalctl
 echo "Searching kernel logs for drm_init_utility debug messages..."
-sudo journalctl | grep "nc4_ili9488: [drm_init_utility]" > "$DEBUG_LOG"
-if [[ -s "$DEBUG_LOG" ]]; then
-    echo "Logs saved to $DEBUG_LOG"
-    echo "Captured debug messages:"
-    cat "$DEBUG_LOG"
+sudo journalctl | grep "drm_init_utility" > "$LOG_FILE"
+if [[ -s "$LOG_FILE" ]]; then
+    echo "Logs saved to $LOG_FILE"
+    echo "Number of matching log entries: $(wc -l < "$LOG_FILE")"
 else
     echo "No debug messages found for drm_init_utility."
 fi

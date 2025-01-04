@@ -1,8 +1,8 @@
 # Store or edit in:
-# sudo nano /etc/systemd/system/nc4_overlay.service
+# code --reuse-window /etc/systemd/system/nc4_overlay.service
 #
 # Overwrite file:
-# sudo cp /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/reference_configs/nc4_overlay_v2.service /etc/systemd/system/nc4_overlay.service
+# sudo cp /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/reference_configs/nc4_overlay.service /etc/systemd/system/nc4_overlay.service
 #
 # Enable:
 # sudo systemctl enable nc4_overlay.service
@@ -19,7 +19,7 @@
 # Create this file at /etc/systemd/system/nc4_overlay.service
 [Unit]
 # Description of the service
-Description=Load spi1-3cs and nc4_ili9488 Overlays
+Description=Load nc4_ili9488 Overlay
 
 # Ensure this service runs only after the system reaches the multi-user target (normal boot level without a graphical interface).
 After=multi-user.target
@@ -28,14 +28,12 @@ After=multi-user.target
 # This is a one-time task, so we use "oneshot"
 Type=oneshot
 
-# Commands to load the overlays
-ExecStart=/usr/bin/dtoverlay spi1-3cs
+# Command to load the overlay
 ExecStart=/usr/bin/dtoverlay nc4_ili9488
 
-# Ensures the service is considered active even after it has executed the commands
+# Ensures the service is considered active even after it has executed the command
 RemainAfterExit=yes
 
 [Install]
 # Start this service when the system reaches the multi-user target
 WantedBy=multi-user.target
-

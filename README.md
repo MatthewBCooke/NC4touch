@@ -118,7 +118,7 @@ echo "your_desired_cmdline_content" | sudo tee /boot/firmware/cmdline.txt > /dev
 1. Create or edit the `wpa_supplicant.conf` file in the **boot** partition.
 You can do this from your SSH connection using:
 ```
-sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
 2. Add the following content:
@@ -398,7 +398,7 @@ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 
 1. Edit the Configuration File: Open the config.txt file:
    ```
-   sudo nano /boot/firmware/config.txt
+   sudo micro /boot/firmware/config.txt
    ```
 
 2. Add the Following Lines to enable additional buses 3 and 4 after `dtparam=i2c_arm=on`:
@@ -501,7 +501,7 @@ sudo dtc -@ -I dts -O dtb -o /boot/firmware/overlays/ili9488.dtbo ili9488.dts
 
 Edit the config.txt file to include the overlay and set SPI parameters:
 ```
-sudo nano /boot/firmware/config.txt
+sudo micro /boot/firmware/config.txt
 ```
 
 Add the following lines to the end:
@@ -598,7 +598,7 @@ sudo rm /boot/firmware/overlays/ili9488.dtbo
 
 ## Comment out lines in config.txt:
 ```
-sudo nano /boot/firmware/config.txt
+sudo micro /boot/firmware/config.txt
 ```
 ```
 # ili9488 overlay and SPI parameters
@@ -774,6 +774,18 @@ sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/
    Rerun the 'Create' command when libraries are modified.
 
 # Random
+
+## Log Housekeeping
+
+Retain only 10 MB of log data:
+```
+sudo journalctl --vacuum-size=10M
+```
+
+Remove logs older than 1 hour (h, d, w):
+```
+sudo journalctl --vacuum-time=6h
+```
 
 ## WiFi
 

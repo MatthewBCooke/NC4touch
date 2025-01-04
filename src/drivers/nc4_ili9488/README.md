@@ -26,6 +26,13 @@ sudo apt install libdrm-tests kmscube
 ```
 sudo apt-get install drm-info
 ```
+```
+sudo apt install micro
+```
+Edit settings as needed:
+```
+micro ~/.config/micro/settings.json
+```
 
 # KMS
 

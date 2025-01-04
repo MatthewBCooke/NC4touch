@@ -428,6 +428,21 @@ https://pinout.xyz/pinout/
 |              | SCL             | Pin 32            | GPIO7           | SCL          | LCD_2 I²C clock for touch (I²C4)   |
 
 
+### SPI0
+| **LCD**      | **LCD Pin**     | **Pi Header Pin** | **Pi BCM GPIO** | **Pi Label**          | **Description**                 |
+|--------------|-----------------|-------------------|-----------------|-----------------------|---------------------------------|
+| **ALL**      | VCC             | Pin 1 or Pin 17   | N/A             | 3V3                   | Shared Power supply for all LCDs |
+|              | GND             | Pin 6 or Pin 9    | N/A             | GND                   | Shared Ground                   |
+|              | MOSI            | Pin 19           | GPIO 10         | MOSI                  | Shared SPI0 data                 |
+|              | SCLK            | Pin 23           | GPIO 11         | SCLK                  | Shared SPI0 clock                |
+|              | Backlight       | Pin 13           | GPIO 27         |                       | Shared Backlight control         |
+| **LCD_0**    | CS              | Pin 24           | GPIO 8          | CE0                   | LCD_0 SPI0 Chip Select           |
+|              | RES             | Pin 22           | GPIO 25         |                       | LCD_0 Reset signal               |
+|              | DC              | Pin 18           | GPIO 24         |                       | LCD_0 Data/Command signal        |
+| **LCD_1**    | CS              | Pin 26           | GPIO 7          | CE1                   | LCD_1 SPI0 Chip Select           |
+|              | RES             | Pin 16           | GPIO 23         |                       | LCD_1 Reset signal               |
+|              | DC              | Pin 15           | GPIO 22         |                       | LCD_1 Data/Command signal        |
+
 
 
 
@@ -447,17 +462,15 @@ https://pinout.xyz/pinout/
 |--------------|-----------------|-------------------|-----------------|-----------------------|---------------------------------|
 | **ALL**      | VCC             | Pin 1 or Pin 17   | N/A             | 3V3                   | Shared Power supply for all LCDs |
 |              | GND             | Pin 6 or Pin 9    | N/A             | GND                   | Shared Ground                   |
-|              | MOSI            | Pin 19           | GPIO 10         | MOSI                  | Shared SPI0 data                 |
-|              | SCLK            | Pin 23           | GPIO 11         | SCLK                  | Shared SPI0 clock                |
-|              | Backlight       | Pin 12           | GPIO 18         |                       | Shared Backlight control        |
-| **LCD_0**    | CS              | Pin 24           | GPIO 8          | CE0                   | LCD_0 SPI0 Chip Select           |
-|              | DC              | Pin 22           | GPIO 25         |                       | LCD_0 Data/Command signal       |
-|              | RES             | Pin 18           | GPIO 24         |                       | LCD_0 Reset signal              |
-| **LCD_1**    | CS              | Pin 26           | GPIO 7          | CE1                   | LCD_1 SPI0 Chip Select           |
-|              | DC              | Pin 13           | GPIO 27         |                       | LCD_1 Data/Command signal       |
-| **LCD_2**    | CS              | Pin 7            | GPIO 4          |                       | LCD_2 SPI0 Chip Select           |
-|              | DC              | Pin 29           | GPIO 5          |                       | LCD_2 Data/Command signal       |
-|              | RES             | Pin 31           | GPIO 6          |                       | LCD_2 Reset signal              |
+|              | MOSI            | Pin 19           | GPIO 10           | MOSI                  | Shared SPI0 data                 |
+|              | SCLK            | Pin 23           | GPIO 11           | SCLK                  | Shared SPI0 clock                |
+|              | Backlight       | Pin 12           | GPIO 18           |                       | Shared Backlight control        |
+| **LCD_0**    | CS              | Pin 24           | GPIO 8            | CE0                   | LCD_0 SPI0 Chip Select           |
+|              | DC              | Pin 22           | GPIO 25           |                       | LCD_0 Data/Command signal       |
+|              | RES             | Pin 18           | GPIO 24           |                       | LCD_0 Reset signal              |
+| **LCD_1**    | CS              | Pin 26           | GPIO 7            | CE1                   | LCD_1 SPI0 Chip Select           |
+|              | DC              | Pin 13           | GPIO 27           |                       | LCD_1 Data/Command signal       |
+|              | RES             | Pin 16           | GPIO 23           |                       | LCD_1 Reset signal              |
 
 
 

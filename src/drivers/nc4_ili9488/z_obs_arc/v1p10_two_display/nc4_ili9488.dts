@@ -5,7 +5,7 @@
  * - Disables spidev0 (CS0) and spidev1 (CS1).
  * - Creates two SPI child nodes: pitft0@0 (CE0) and pitft1@1 (CE1).
  * - Each panel has its own Reset and DC lines.
- * - Shared backlight on GPIO18.
+ * - Shared backlight on GPIO27.
  *
  * Compatible usage:
  *   dtoverlay=nc4_ili9488
@@ -17,7 +17,7 @@
 	compatible = "brcm,bcm2835";
 
 	/****************************************************************************
-	 * Fragment 0: Enable SPI0 hardware
+	 * Enable SPI0 hardware
 	 ****************************************************************************/
 	fragment@0 {
 		target = <&spi0>;
@@ -27,7 +27,7 @@
 	};
 
 	/****************************************************************************
-	 * Fragment 1: Disable spidev0
+	 * Disable spidev0
 	 ****************************************************************************/
 	fragment@1 {
 		target = <&spidev0>;
@@ -37,7 +37,7 @@
 	};
 
 	/****************************************************************************
-	 * Fragment 2: Disable spidev1
+	 * Disable spidev1
 	 ****************************************************************************/
 	fragment@2 {
 		target = <&spidev1>;
@@ -47,10 +47,10 @@
 	};
 
 	/****************************************************************************
-	 * Fragment 3: GPIO pins for the FIRST panel (pitft0)
-	 *   GPIO24 = RESET (out)
-	 *   GPIO25 = DC (out)
-	 *   GPIO18 = Backlight (out, shared)
+	 * GPIO pins for the LCD_0 panel (pitft0)
+	 *   GPIO24 = DC (out)
+	 *   GPIO25 = RESET (out)
+	 *   GPIO27 = Backlight (out, shared)
 	 ****************************************************************************/
 	fragment@3 {
 		target = <&gpio>;
@@ -63,23 +63,23 @@
 	};
 
 	/****************************************************************************
-	 * Fragment 4: GPIO pins for the SECOND panel (pitft1)
+	 * GPIO pins for the LCD_1 panel (pitft1)
+	 *   GPIO22 = DC (out)
 	 *   GPIO23 = RESET (out)
-	 *   GPIO27 = DC (out)
-	 *   GPIO18 = Backlight (out, shared)
+	 *   GPIO27 = Backlight (out, shared)
 	 ****************************************************************************/
 	fragment@4 {
 		target = <&gpio>;
 		__overlay__ {
 			pitft1_pins: pitft1_pins {
-				brcm,pins = <23 27>;
+				brcm,pins = <22 23>;
 				brcm,function = <1 1>; /* Set as output */
 			};
 		};
 	};
 
 	/****************************************************************************
-	 * Fragment 5: FIRST ILI9488 device node on SPI0 CE0
+	 * LCD_0 ILI9488 device node on SPI0 CE0
 	 ****************************************************************************/
 	fragment@5 {
 		target = <&spi0>;
@@ -93,18 +93,18 @@
 				pinctrl-0 = <&pitft0_pins>;
 
 				reg = <0>; /* CE0 line */
-				spi-max-frequency = <20000000>; // Defualt: 128000000, 4000000
+				spi-max-frequency = <20000000>;
 
 				rotation = <0>;
-				reset-gpios = <&gpio 24 0>;
-				dc-gpios = <&gpio 25 0>;
+				reset-gpios = <&gpio 25 0>;
+				dc-gpios = <&gpio 24 0>;
 				backlight = <&backlight>;
 			};
 		};
 	};
 
 	/****************************************************************************
-	 * Fragment 6: SECOND ILI9488 device node on SPI0 CE1
+	 * LCD_1 ILI9488 device node on SPI0 CE1
 	 ****************************************************************************/
 	fragment@6 {
 		target = <&spi0>;
@@ -115,25 +115,25 @@
 				pinctrl-0 = <&pitft1_pins>;
 
 				reg = <1>; /* CE1 line */
-				spi-max-frequency = <20000000>; 
+				spi-max-frequency = <20000000>;
 
 				rotation = <0>;
 				reset-gpios = <&gpio 23 0>;
-				dc-gpios = <&gpio 27 0>;
+				dc-gpios = <&gpio 22 0>;
 				backlight = <&backlight>;
 			};
 		};
 	};
 
 	/****************************************************************************
-	 * Fragment 7: Shared backlight control for both panels
+	 * Shared backlight control for both panels
 	 ****************************************************************************/
 	fragment@7 {
 		target-path = "/soc";
 		__overlay__ {
 			backlight: backlight {
 				compatible = "gpio-backlight";
-				gpios = <&gpio 18 0>;
+				gpios = <&gpio 27 0>;
 			};
 		};
 	};

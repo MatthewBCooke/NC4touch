@@ -9,8 +9,9 @@
 #include <drm/drm_mode.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
+#include <syslog.h>
 
-#define DRM_DEBUG_KMS(fmt, ...) fprintf(stderr, "nc4_ili9488: [drm_init_utility] " fmt, ##__VA_ARGS__)
+#define DRM_DEBUG_KMS(fmt, ...) syslog(LOG_INFO, "nc4_ili9488: [drm_init_utility] " fmt, ##__VA_ARGS__)
 
 int main()
 {

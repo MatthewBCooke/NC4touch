@@ -51,7 +51,7 @@ echo "==== Validating DRM Initialization ===="
 
 # Check for relevant debug messages in dmesg
 echo "Searching kernel logs for drm_init_utility debug messages..."
-dmesg | grep "nc4_ili9488: [drm_init_utility]" > "$DEBUG_LOG"
+sudo journalctl | grep "nc4_ili9488: [drm_init_utility]" > "$DEBUG_LOG"
 if [[ -s "$DEBUG_LOG" ]]; then
     echo "Logs saved to $DEBUG_LOG"
     echo "Captured debug messages:"

@@ -1,0 +1,1851 @@
+KMSCON Debug Logs - Fri  3 Jan 21:16:51 PST 2025
+
+=== dmesg DRM Logs ===
+[    0.000000] Kernel command line: coherent_pool=1M 8250.nr_uarts=0 snd_bcm2835.enable_headphones=0 cgroup_disable=memory numa_policy=interleave snd_bcm2835.enable_headphones=1 snd_bcm2835.enable_hdmi=1 bcm2708_fb.fbwidth=0 bcm2708_fb.fbheight=0 bcm2708_fb.fbswap=1 smsc95xx.macaddr=D8:3A:DD:6F:A3:94 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  console=ttyS0,115200 console=tty1 root=PARTUUID=60ff2e57-02 rootfstype=ext4 fsck.repair=yes rootwait cfg80211.ieee80211_regdom=CA ip=169.254.55.240::0.0.0.0:255.255.0.0::eth0:off systemd.unit=multi-user.target autologin-user=nc4 nosplash logo.nologo vt.global_cursor_default=0 drm.debug=0x1f log_buf_len=16M
+[    6.982049] systemd[1]: Starting modprobe@drm.service - Load Kernel Module drm...
+[    7.096160] [drm:drm_core_init [drm]] Initialized
+[    7.102649] systemd[1]: modprobe@drm.service: Deactivated successfully.
+[    7.104334] systemd[1]: Finished modprobe@drm.service - Load Kernel Module drm.
+[   18.662855] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Starting probe for device spi0.0 on SPI0, CS=0
+[   18.662954] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Allocated DRM device successfully.
+[   18.662965] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Driver Name: nc4_ili9488
+[   18.662974] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Description: nc4 ILI9488
+[   18.662983] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Date: 20241227
+[   18.663014] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] RESET GPIO: acquired
+[   18.663031] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DC GPIO: acquired
+[   18.663075] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Backlight initialized successfully.
+[   18.663085] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Device rotation property: 0
+[   18.663096] [drm:mipi_dbi_spi_init [drm_mipi_dbi]] SPI speed: 20MHz
+[   18.663109] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] SPI0 initialized successfully.
+[   18.663118] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_dev_init] dev_init mode=320x480 rotation=0
+[   18.663179] [drm:mipi_dbi_dev_init_with_formats [drm_mipi_dbi]] rotation = 0
+[   18.663191] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] MIPI-DBI device initialized successfully.
+[   18.663206] [drm:drm_minor_register [drm]] 
+[   18.663398] [drm:drm_minor_register [drm]] 
+[   18.663875] [drm:drm_minor_register [drm]] new minor registered 0
+[   18.663964] [drm:drm_minor_register [drm]] 
+[   18.664059] [drm:drm_sysfs_connector_add [drm]] adding "SPI-1" to sysfs
+[   18.664289] nc4_ili9488 spi0.0: [drm:drm_sysfs_connector_hotplug_event [drm]] [CONNECTOR:31:SPI-1] generating connector hotplug event
+[   18.664453] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.0 on minor 0
+[   18.664459] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DRM device registered successfully.
+[   18.664480] [drm:drm_client_modeset_probe [drm]] 
+[   18.664555] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   18.664629] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-1]
+[   18.664684] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-1] status updated from unknown to connected
+[   18.664739] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-1] probed modes :
+[   18.664773] [drm:drm_mode_debug_printmodeline [drm]] Modeline "320x480": 0 1 320 320 320 320 480 480 480 480 0x48 0x0
+[   18.664849] [drm:drm_client_modeset_probe [drm]] connector 31 enabled? yes
+[   18.664923] [drm:drm_client_modeset_probe [drm]] Not using firmware configuration
+[   18.664998] [drm:drm_client_modeset_probe [drm]] looking for cmdline mode on connector 31
+[   18.665075] [drm:drm_client_modeset_probe [drm]] looking for preferred mode on connector 31 0
+[   18.665147] [drm:drm_client_modeset_probe [drm]] found mode 320x480
+[   18.665219] [drm:drm_client_modeset_probe [drm]] picking CRTCs for 320x480 config
+[   18.665292] [drm:drm_client_modeset_probe [drm]] desired mode 320x480 set on crtc 34 (0,0)
+[   18.665364] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   18.665436] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (3)
+[   18.665510] nc4_ili9488 spi0.0: [drm:__drm_fb_helper_initial_config_and_unlock [drm_kms_helper]] test CRTC 0 primary plane
+[   18.665559] nc4_ili9488 spi0.0: [drm:drm_fbdev_generic_helper_fb_probe [drm_kms_helper]] surface width(320), height(480) and bpp(32)
+[   18.666033] nc4_ili9488 spi0.0: [drm:drm_mode_addfb2 [drm]] [FB:36]
+[   18.666126] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (2)
+[   18.666953] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000b16e2361
+[   18.667077] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000363ac999 state to 00000000b16e2361
+[   18.667152] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000ac5b6fe5 state to 00000000b16e2361
+[   18.667229] nc4_ili9488 spi0.0: [drm:drm_atomic_set_mode_for_crtc [drm]] Set [MODE:320x480] for [CRTC:34:crtc-0] state 00000000ac5b6fe5
+[   18.668793] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_plane [drm]] Link [PLANE:32:plane-0] state 00000000363ac999 to [CRTC:34:crtc-0]
+[   18.668947] nc4_ili9488 spi0.0: [drm:drm_atomic_set_fb_for_plane [drm]] Set [FB:36] for [PLANE:32:plane-0] state 00000000363ac999
+[   18.669028] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (1)
+[   18.669108] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_connectors [drm]] Adding all current connectors for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.669189] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   18.669260] nc4_ili9488 spi0.0: [drm:drm_atomic_get_connector_state [drm]] Added [CONNECTOR:31:SPI-1] 000000003f47e34b state to 00000000b16e2361
+[   18.669332] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (3)
+[   18.669428] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_connector [drm]] Link [CONNECTOR:31:SPI-1] state 000000003f47e34b to [CRTC:34:crtc-0]
+[   18.669504] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 00000000b16e2361
+[   18.669578] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] mode changed
+[   18.669638] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] enable changed
+[   18.669671] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] active changed
+[   18.669706] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] Updating routing for [CONNECTOR:31:SPI-1]
+[   18.669740] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CONNECTOR:31:SPI-1] using [ENCODER:35:None-35] on [CRTC:34:crtc-0]
+[   18.669774] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] needs all connectors, enable: y, active: y
+[   18.669809] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_connectors [drm]] Adding all current connectors for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.669890] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.669961] nc4_ili9488 spi0.0: [drm:drm_atomic_add_encoder_bridges [drm]] Adding all bridges for [encoder:35:None-35] to 00000000b16e2361
+[   18.670043] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.670114] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 00000000b16e2361
+[   18.670200] nc4_ili9488 spi0.0: [drm:crtc_set_mode [drm_kms_helper]] modeset on [ENCODER:35:None-35]
+[   18.670241] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   18.670255] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x480+0+0)
+[   18.670266] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   18.670277] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   18.670286] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   18.670300] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   18.671883] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   18.671918] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   18.671953] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   18.671972] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   18.671981] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   18.864748] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   18.864782] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_commit_modeset_enables [drm_kms_helper]] enabling [CRTC:34:crtc-0]
+[   18.864837] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Starting enable sequence for device spi0.0 on SPI0, CS=0
+[   18.864869] [drm:mipi_dbi_typec3_command_read [drm_mipi_dbi]] cmd=0a, par=00
+[   18.991299] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=01
+[   19.003299] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Power-on reset completed for device spi0.0 on CS=0
+[   19.159262] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Explicit hardware reset completed for spi0.0 on CS=0
+[   19.159293] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Initializing panel commands for device spi0.0 on CS=0
+[   19.159303] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=SW_RESET(0x01), num_args=0
+[   19.159314] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:SW_RESET(0x01), args(0):
+[   19.159323] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.159334] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=01, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.287257] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=DISPLAY_OFF(0x28), num_args=0
+[   19.287275] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:DISPLAY_OFF(0x28), args(0):
+[   19.287284] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.287292] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=28, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.287328] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=SLEEP_OUT(0x11), num_args=0
+[   19.287337] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:SLEEP_OUT(0x11), args(0):
+[   19.287346] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.287353] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=11, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.415256] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=DISPLAY_ON(0x29), num_args=0
+[   19.415268] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:DISPLAY_ON(0x29), args(0):
+[   19.415277] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.415286] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=29, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.415318] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Address mode configuration.
+[   19.415326] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=36, par=40
+[   19.415341] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Address mode set to 0x40 for rotation 0
+[   19.415350] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Flushing framebuffer to panel.
+[   19.415358] [drm:nc4_mipi_dbi18_enable_flush [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_enable_flush] enable_flush - full screen
+[   19.415368] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   19.415379] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   19.415387] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   19.415401] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   19.416621] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   19.416632] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   19.416650] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   19.416668] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   19.416676] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   19.608977] [drm:nc4_mipi_dbi18_enable_flush [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_enable_flush] after fb_dirty in enable_flush dev=spi0 cs=0
+[   19.608998] [drm:nc4_mipi_dbi18_enable_flush [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_enable_flush] enabling backlight
+[   19.609008] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Backlight enabled for device spi0.0 on CS=0
+[   19.609017] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Enable sequence completed for device spi0.0 on CS=0
+[   19.609028] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_commit_modeset_enables [drm_kms_helper]] enabling [ENCODER:35:None-35]
+[   19.609091] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000b16e2361
+[   19.609206] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (4)
+[   19.609281] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000b16e2361
+[   19.609410] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 0000000096e9a93b
+[   19.609485] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (2)
+[   19.609556] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000a2542d9a state to 0000000096e9a93b
+[   19.609630] [drm:drm_mode_object_get [drm]] OBJ ID: 37 (1)
+[   19.609701] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 0000000061eff2aa state to 0000000096e9a93b
+[   19.609777] nc4_ili9488 spi0.0: [drm:drm_atomic_set_fb_for_plane [drm]] Set [FB:36] for [PLANE:32:plane-0] state 00000000a2542d9a
+[   19.609848] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (3)
+[   19.609918] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (4)
+[   19.609990] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_connectors [drm]] Adding all current connectors for [CRTC:34:crtc-0] to 0000000096e9a93b
+[   19.610064] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (4)
+[   19.610135] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (5)
+[   19.610205] nc4_ili9488 spi0.0: [drm:drm_atomic_get_connector_state [drm]] Added [CONNECTOR:31:SPI-1] 00000000a169be87 state to 0000000096e9a93b
+[   19.610278] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (5)
+[   19.610348] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_connector [drm]] Link [CONNECTOR:31:SPI-1] state 00000000a169be87 to [NOCRTC]
+[   19.610421] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (4)
+[   19.610491] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_connector [drm]] Link [CONNECTOR:31:SPI-1] state 00000000a169be87 to [CRTC:34:crtc-0]
+[   19.610564] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 0000000096e9a93b
+[   19.610641] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] Updating routing for [CONNECTOR:31:SPI-1]
+[   19.610678] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CONNECTOR:31:SPI-1] keeps [ENCODER:35:None-35], now on [CRTC:34:crtc-0]
+[   19.610713] nc4_ili9488 spi0.0: [drm:drm_atomic_add_encoder_bridges [drm]] Adding all bridges for [encoder:35:None-35] to 0000000096e9a93b
+[   19.610786] nc4_ili9488 spi0.0: [drm:drm_atomic_add_encoder_bridges [drm]] Adding all bridges for [encoder:35:None-35] to 0000000096e9a93b
+[   19.610862] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 0000000096e9a93b
+[   19.610935] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 0000000096e9a93b
+[   19.611019] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   19.611032] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x480+0+0)
+[   19.611042] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   19.611052] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   19.611060] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   19.611073] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   19.612322] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   19.612336] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   19.612364] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   19.612382] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   19.612390] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   19.804631] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   19.804674] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 0000000096e9a93b
+[   19.804807] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (5)
+[   19.804880] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (4)
+[   19.804952] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 37 (2)
+[   19.805024] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (3)
+[   19.805095] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 0000000096e9a93b
+[   19.805482] nc4_ili9488 spi0.0: [drm] fb0: nc4_ili9488drmf frame buffer device
+[   19.805871] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 0000000096e9a93b
+[   19.805998] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (2)
+[   19.806074] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000f3f9ee18 state to 0000000096e9a93b
+[   19.806151] [drm:drm_mode_object_get [drm]] OBJ ID: 37 (1)
+[   19.806225] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 000000004e21b5c8 state to 0000000096e9a93b
+[   19.806300] [drm:drm_mode_object_get [drm]] OBJ ID: 38 (1)
+[   19.806378] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 0000000096e9a93b
+[   19.806480] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 0000000096e9a93b
+[   19.806566] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 0000000096e9a93b
+[   19.806687] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   19.806715] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x480+0+0)
+[   19.806729] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   19.806742] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   19.806752] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   19.806776] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   19.808988] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   19.809022] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   19.809063] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   19.809082] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   19.809091] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   19.829460] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Probe completed for device spi0.0 on CS=0
+[   19.829650] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Starting probe for device spi0.1 on SPI0, CS=1
+[   19.829771] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Allocated DRM device successfully.
+[   19.829783] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Driver Name: nc4_ili9488
+[   19.829795] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Description: nc4 ILI9488
+[   19.829804] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Date: 20241227
+[   19.829844] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] RESET GPIO: acquired
+[   19.829862] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DC GPIO: acquired
+[   19.829887] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Backlight initialized successfully.
+[   19.829900] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Device rotation property: 0
+[   19.829911] [drm:mipi_dbi_spi_init [drm_mipi_dbi]] SPI speed: 20MHz
+[   19.829926] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] SPI0 initialized successfully.
+[   19.829935] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_dev_init] dev_init mode=320x480 rotation=0
+[   19.830014] [drm:mipi_dbi_dev_init_with_formats [drm_mipi_dbi]] rotation = 0
+[   19.830029] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] MIPI-DBI device initialized successfully.
+[   19.830048] [drm:drm_minor_register [drm]] 
+[   19.830197] [drm:drm_minor_register [drm]] 
+[   19.830530] [drm:drm_minor_register [drm]] new minor registered 1
+[   19.830640] [drm:drm_minor_register [drm]] 
+[   19.830763] [drm:drm_sysfs_connector_add [drm]] adding "SPI-2" to sysfs
+[   19.831031] nc4_ili9488 spi0.1: [drm:drm_sysfs_connector_hotplug_event [drm]] [CONNECTOR:31:SPI-2] generating connector hotplug event
+[   19.831163] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.1 on minor 1
+[   19.831168] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DRM device registered successfully.
+[   19.831192] [drm:drm_client_modeset_probe [drm]] 
+[   19.831380] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   19.831470] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-2]
+[   19.831535] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-2] status updated from unknown to connected
+[   19.831593] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-2] probed modes :
+[   19.831742] [drm:drm_mode_debug_printmodeline [drm]] Modeline "320x480": 0 1 320 320 320 320 480 480 480 480 0x48 0x0
+[   19.831893] [drm:drm_client_modeset_probe [drm]] connector 31 enabled? yes
+[   19.831984] [drm:drm_client_modeset_probe [drm]] Not using firmware configuration
+[   19.832072] [drm:drm_client_modeset_probe [drm]] looking for cmdline mode on connector 31
+[   19.832154] [drm:drm_client_modeset_probe [drm]] looking for preferred mode on connector 31 0
+[   19.832232] [drm:drm_client_modeset_probe [drm]] found mode 320x480
+[   19.832315] [drm:drm_client_modeset_probe [drm]] picking CRTCs for 320x480 config
+[   19.832399] [drm:drm_client_modeset_probe [drm]] desired mode 320x480 set on crtc 34 (0,0)
+[   19.832482] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   19.832564] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (3)
+[   19.832644] nc4_ili9488 spi0.1: [drm:__drm_fb_helper_initial_config_and_unlock [drm_kms_helper]] test CRTC 0 primary plane
+[   19.832711] nc4_ili9488 spi0.1: [drm:drm_fbdev_generic_helper_fb_probe [drm_kms_helper]] surface width(320), height(480) and bpp(32)
+[   19.833786] nc4_ili9488 spi0.1: [drm:drm_mode_addfb2 [drm]] [FB:36]
+[   19.833954] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (2)
+[   19.834611] nc4_ili9488 spi0.1: [drm] fb1: nc4_ili9488drmf frame buffer device
+[   19.834621] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Probe completed for device spi0.1 on CS=1
+[   20.003793] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   20.003837] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 38 (2)
+[   20.003979] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 0000000096e9a93b
+[   20.004054] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 37 (2)
+[   20.004126] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (3)
+[   20.004197] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 0000000096e9a93b
+[   20.004290] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000325fd64d
+[   20.004367] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (2)
+[   20.004438] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000f01376d1 state to 00000000325fd64d
+[   20.004511] [drm:drm_mode_object_get [drm]] OBJ ID: 37 (1)
+[   20.004581] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 0000000061eff2aa state to 00000000325fd64d
+[   20.004652] [drm:drm_mode_object_get [drm]] OBJ ID: 39 (1)
+[   20.004721] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 00000000325fd64d
+[   20.004804] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000325fd64d
+[   20.004876] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 00000000325fd64d
+[   20.004959] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   20.004971] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x16+0+272)
+[   20.004981] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,272)-(320,288)
+[   20.004992] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,272)-(320,288)
+[   20.005004] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   20.005056] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=272 ye=287
+[   20.005068] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   20.005098] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=01 10 01 1f
+[   20.005117] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   20.005125] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=15360
+[   20.011590] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   20.011622] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 39 (2)
+[   20.011731] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000325fd64d
+[   20.011806] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 37 (2)
+[   20.011877] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (3)
+[   20.011948] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 38 (1)
+[   20.012019] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000325fd64d
+
+=== kmscon Systemd Logs ===
+Dec 29 13:46:47 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 13:46:50 raspberrypi kmscon[807]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 13:46:53 raspberrypi kmscon[807]: [0002.450529] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 13:47:01 raspberrypi kmscon[807]: [0011.209334] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 13:47:01 raspberrypi kmscon[807]: [0011.210939] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 13:52:22 raspberrypi kmscon[807]: [0331.563177] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 13:52:25 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+-- Boot 56b3d09c34d04310ba4fe5926137f9a9 --
+Dec 29 14:29:06 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 14:29:10 raspberrypi kmscon[802]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 14:29:12 raspberrypi kmscon[802]: [0001.912871] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 14:29:28 raspberrypi kmscon[802]: [0017.421943] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 14:29:28 raspberrypi kmscon[802]: [0017.425536] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:09:23 raspberrypi kmscon[802]: [6012.360184] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 16:09:23 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 16:09:27 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 16:09:27 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 6fde333eee1e435bae019fde241a1646 --
+Dec 29 16:10:01 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 16:10:04 raspberrypi kmscon[805]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 16:10:07 raspberrypi kmscon[805]: [0002.617822] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 16:10:48 raspberrypi kmscon[805]: [0044.099870] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:10:48 raspberrypi kmscon[805]: [0044.101345] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:31:48 raspberrypi kmscon[805]: [1303.950082] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 16:31:48 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 16:31:52 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 16:31:52 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 79861b0aa2264eac89bd603085f75dee --
+Dec 29 16:32:16 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 16:32:19 raspberrypi kmscon[803]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 16:32:23 raspberrypi kmscon[803]: [0003.475727] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 16:32:33 raspberrypi kmscon[803]: [0014.187719] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:32:33 raspberrypi kmscon[803]: [0014.192547] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:53:33 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 16:53:41 raspberrypi kmscon[803]: [1281.583321] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 16:53:48 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 16:53:48 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 631393b347e74e529213a121592ef0bb --
+Dec 29 16:54:08 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 16:54:12 raspberrypi kmscon[801]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 16:54:15 raspberrypi kmscon[801]: [0003.204279] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 16:55:02 raspberrypi kmscon[801]: [0050.190383] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:55:02 raspberrypi kmscon[801]: [0050.191933] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:55:37 raspberrypi login[830]: pam_unix(login:auth): check pass; user unknown
+Dec 29 16:55:37 raspberrypi login[830]: pam_unix(login:auth): authentication failure; logname=LOGIN uid=0 euid=0 tty=/dev/pts/0 ruser= rhost=
+Dec 29 16:55:41 raspberrypi login[830]: FAILED LOGIN (1) on '/dev/pts/0' FOR 'UNKNOWN', Authentication failure
+Dec 29 16:55:59 raspberrypi login[830]: pam_unix(login:session): session opened for user nc4(uid=1000) by LOGIN(uid=0)
+Dec 29 16:58:07 raspberrypi kmscon[801]: [0235.456996] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 16:58:07 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 16:58:13 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 16:58:13 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 16:58:13 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 1.011s CPU time.
+-- Boot 72dc201519134263896061121cc99ce5 --
+Dec 29 16:58:39 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 16:58:43 raspberrypi kmscon[804]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 16:58:46 raspberrypi kmscon[804]: [0003.315339] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 16:58:54 raspberrypi kmscon[804]: [0011.536307] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 16:58:54 raspberrypi kmscon[804]: [0011.537676] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:00:33 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:00:42 raspberrypi kmscon[804]: [0119.556465] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:00:49 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:00:49 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot e2ea9e9591de49b0a4c310a67ffa1dfe --
+Dec 29 17:01:10 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:01:11 raspberrypi kmscon[801]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:01:11 raspberrypi kmscon[801]: [0000.136438] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+-- Boot d08851c827d74a41b52897244a93233a --
+Dec 29 17:02:31 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:02:36 raspberrypi kmscon[799]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:02:36 raspberrypi kmscon[799]: [0000.477400] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:04:35 raspberrypi kmscon[799]: [0119.268148] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:04:46 raspberrypi kmscon[799]: [0130.122379] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:14:01 raspberrypi kmscon[799]: [0685.076758] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:14:01 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:14:01 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:14:01 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot ac530a7604c443fcb06fe5f619e16ee5 --
+Dec 29 17:14:26 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:14:26 raspberrypi kmscon[796]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:14:27 raspberrypi kmscon[796]: [0000.136091] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:15:27 raspberrypi kmscon[796]: [0060.431510] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:15:27 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+-- Boot 624e5d7d45dc478ebd58e4427636e43c --
+Dec 29 17:17:16 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:17:17 raspberrypi kmscon[795]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:17:17 raspberrypi kmscon[795]: [0000.136198] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:20:08 raspberrypi kmscon[795]: [0171.622609] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:20:13 raspberrypi kmscon[795]: [0176.784335] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+-- Boot f8d8a1f749ff4479b4518206e143e914 --
+Dec 29 17:20:21 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:20:21 raspberrypi kmscon[805]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:20:21 raspberrypi kmscon[805]: [0000.136985] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:22:16 raspberrypi kmscon[805]: [0114.595074] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:22:16 raspberrypi kmscon[805]: [0114.727537] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:23:41 raspberrypi kmscon[805]: [0200.275082] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:23:41 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:23:41 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:23:41 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot ec4a052c213d4447a6fbd991c5bb4717 --
+Dec 29 17:24:02 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:24:02 raspberrypi kmscon[807]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:24:03 raspberrypi kmscon[807]: [0000.138063] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:25:08 raspberrypi kmscon[807]: [0065.682530] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:25:09 raspberrypi kmscon[807]: [0066.459851] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:30:33 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:30:33 raspberrypi kmscon[807]: [0390.321352] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:30:33 raspberrypi kmscon[807]: [0390.322516] ERROR: vt: cannot reset VT KBMODE to 3 (5): Input/output error (real_close() in ../src/uterm_vt.c:433)
+Dec 29 17:30:33 raspberrypi kmscon[807]: [0390.322559] WARNING: vt: cannot reset VT 1 to VT_AUTO mode (5): Input/output error (real_close() in ../src/uterm_vt.c:440)
+Dec 29 17:30:33 raspberrypi kmscon[807]: [0390.322572] WARNING: vt: cannot reset VT 1 to text-mode (5): Input/output error (real_close() in ../src/uterm_vt.c:445)
+Dec 29 17:30:33 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:30:33 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 73a6eb72e4e54d6fb8a2ad088b6cf670 --
+Dec 29 17:30:54 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:30:55 raspberrypi kmscon[801]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:30:56 raspberrypi kmscon[801]: [0000.608587] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:30:58 raspberrypi kmscon[801]: [0002.752980] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:30:58 raspberrypi kmscon[801]: [0002.754455] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:42:46 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:42:47 raspberrypi kmscon[801]: [0712.169798] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:42:48 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:42:48 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 53561419d54a4f12a44322781b401cc6 --
+Dec 29 17:43:08 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:43:09 raspberrypi kmscon[803]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:43:09 raspberrypi kmscon[803]: [0000.608507] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:43:12 raspberrypi kmscon[803]: [0002.942789] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:43:12 raspberrypi kmscon[803]: [0002.944123] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:45:50 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:45:52 raspberrypi kmscon[803]: [0163.701457] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:45:54 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:45:54 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot da3e53acc3744361b9b3e97b7b6b95bb --
+Dec 29 17:46:21 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:46:22 raspberrypi kmscon[802]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:46:23 raspberrypi kmscon[802]: [0000.331263] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:46:25 raspberrypi kmscon[802]: [0002.470784] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:46:25 raspberrypi kmscon[802]: [0002.472120] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:49:14 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:49:15 raspberrypi kmscon[802]: [0172.886218] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:49:16 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:49:16 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 16690cbf308549faaebd41e7ef1677f5 --
+Dec 29 17:49:33 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:49:33 raspberrypi kmscon[802]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:49:34 raspberrypi kmscon[802]: [0000.333940] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:49:36 raspberrypi kmscon[802]: [0002.913623] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:49:36 raspberrypi kmscon[802]: [0002.915345] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:56:40 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 17:56:41 raspberrypi kmscon[802]: [0427.631990] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 17:56:42 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 17:56:42 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot d043a886a8f84d53b06a8998aef50c20 --
+Dec 29 17:57:02 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 17:57:03 raspberrypi kmscon[803]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 17:57:04 raspberrypi kmscon[803]: [0000.588008] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 17:57:08 raspberrypi kmscon[803]: [0004.581384] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 17:57:08 raspberrypi kmscon[803]: [0004.584815] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 18:10:42 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 18:10:44 raspberrypi kmscon[803]: [0820.305380] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 18:10:44 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 18:10:44 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 7092d5a374ae4489a280dcef6a66cd57 --
+Dec 29 18:11:01 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 18:11:01 raspberrypi kmscon[801]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 18:11:02 raspberrypi kmscon[801]: [0000.333814] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 18:11:04 raspberrypi kmscon[801]: [0002.484984] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 18:11:04 raspberrypi kmscon[801]: [0002.486363] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 18:47:56 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 18:47:57 raspberrypi kmscon[801]: [2215.410833] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 18:47:57 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 18:47:57 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 3a6965550fca4db3b2e7e8e6f0a52ba3 --
+Dec 29 18:48:14 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 18:48:15 raspberrypi kmscon[796]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 18:48:16 raspberrypi kmscon[796]: [0000.334352] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 18:48:18 raspberrypi kmscon[796]: [0002.496670] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 18:48:18 raspberrypi kmscon[796]: [0002.498159] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 19:00:19 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 19:00:20 raspberrypi kmscon[796]: [0724.858690] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 19:00:21 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 19:00:21 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot bbf82b8dc48f458b8b7acdff4f342810 --
+Dec 29 19:00:37 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 19:00:38 raspberrypi kmscon[796]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 19:00:39 raspberrypi kmscon[796]: [0000.336176] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 19:00:41 raspberrypi kmscon[796]: [0002.509462] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 19:00:41 raspberrypi kmscon[796]: [0002.510842] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 19:50:13 raspberrypi kmscon[796]: [2974.344635] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 19:50:13 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 19:50:14 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 19:50:14 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 020d60df84b74402b8a8a3170788e02d --
+Dec 29 19:51:47 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 19:51:53 raspberrypi kmscon[679]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 19:51:53 raspberrypi kmscon[679]: [0000.342463] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 19:51:56 raspberrypi kmscon[679]: [0002.544690] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 19:51:56 raspberrypi kmscon[679]: [0002.546040] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:15:30 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 20:15:31 raspberrypi kmscon[679]: [1417.917768] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 20:15:32 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 20:15:32 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot a89a969add644aec8048d6ae712d78c5 --
+Dec 29 20:15:37 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 20:15:43 raspberrypi kmscon[665]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 20:15:43 raspberrypi kmscon[665]: [0000.343393] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 20:15:46 raspberrypi kmscon[665]: [0002.548749] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:15:46 raspberrypi kmscon[665]: [0002.550146] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:20:08 raspberrypi kmscon[665]: [0264.813509] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 20:20:08 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 20:20:09 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 20:20:09 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 92ae6ce8aa7d455aa123b0ed892b5e70 --
+Dec 29 20:20:14 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 20:20:19 raspberrypi kmscon[667]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 20:20:19 raspberrypi kmscon[667]: [0000.143249] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 20:24:02 raspberrypi kmscon[667]: [0223.005305] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:24:03 raspberrypi kmscon[667]: [0223.980920] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:38:22 raspberrypi kmscon[667]: [1082.675116] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 20:38:23 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 20:38:23 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 20:38:23 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot a628fc6d13414e838a046e8d7bd371cf --
+Dec 29 20:38:29 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 20:38:35 raspberrypi kmscon[667]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 20:38:35 raspberrypi kmscon[667]: [0000.343415] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 20:38:37 raspberrypi kmscon[667]: [0002.548369] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:38:37 raspberrypi kmscon[667]: [0002.549939] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:41:27 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 20:41:28 raspberrypi kmscon[667]: [0173.256475] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 20:41:29 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 20:41:29 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 244361453281452e8a419a122a28a0c8 --
+Dec 29 20:41:34 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 20:41:40 raspberrypi kmscon[666]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 20:41:40 raspberrypi kmscon[666]: [0000.343088] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 20:41:42 raspberrypi kmscon[666]: [0002.525365] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:41:42 raspberrypi kmscon[666]: [0002.527056] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:47:01 raspberrypi kmscon[666]: [0321.446371] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 20:47:01 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 20:47:02 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 20:47:02 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 2c10378ce8a044538693c29fbd69fcb6 --
+Dec 29 20:47:08 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 20:47:14 raspberrypi kmscon[668]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 20:47:14 raspberrypi kmscon[668]: [0000.348198] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 20:47:17 raspberrypi kmscon[668]: [0002.555933] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 20:47:17 raspberrypi kmscon[668]: [0002.557768] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:00:50 raspberrypi kmscon[668]: [0816.308153] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 21:00:51 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 21:00:51 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 21:00:51 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 37b3e9ba88874e699d292aa99b9130f2 --
+Dec 29 21:00:58 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 21:01:07 raspberrypi kmscon[676]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 21:01:08 raspberrypi kmscon[676]: [0001.248371] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 21:01:13 raspberrypi kmscon[676]: [0005.767099] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:16:24 raspberrypi kmscon[676]: [0917.495711] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 21:16:24 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 21:16:26 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 21:16:26 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot ff1ff870dd0a41b98f341a5e20550bf3 --
+Dec 29 21:16:36 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 21:16:42 raspberrypi kmscon[666]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 21:16:42 raspberrypi kmscon[666]: [0000.345310] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 21:16:44 raspberrypi kmscon[666]: [0002.510153] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:16:44 raspberrypi kmscon[666]: [0002.511761] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+-- Boot 3b6ff36db54947d8bb5bbb370b51a606 --
+Dec 29 21:20:05 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 21:20:11 raspberrypi kmscon[667]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 21:20:11 raspberrypi kmscon[667]: [0000.341531] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 21:20:13 raspberrypi kmscon[667]: [0002.523858] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:20:13 raspberrypi kmscon[667]: [0002.525625] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:38:36 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 21:38:38 raspberrypi kmscon[667]: [1107.117627] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 21:38:38 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 21:38:38 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 1ed2deed6b054e618262130d3b6c682c --
+Dec 29 21:38:43 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 21:38:49 raspberrypi kmscon[664]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 21:38:49 raspberrypi kmscon[664]: [0000.342058] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 21:38:51 raspberrypi kmscon[664]: [0002.517407] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:38:51 raspberrypi kmscon[664]: [0002.518775] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:48:36 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 21:48:37 raspberrypi kmscon[664]: [0588.464318] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 21:48:38 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 21:48:38 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 34ef78e98b0b4446aa5fb3c5dc6591e1 --
+Dec 29 21:48:43 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 21:48:49 raspberrypi kmscon[668]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 21:48:49 raspberrypi kmscon[668]: [0000.347708] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 21:48:51 raspberrypi kmscon[668]: [0002.539822] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 21:48:51 raspberrypi kmscon[668]: [0002.541191] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:11:08 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 22:11:09 raspberrypi kmscon[668]: [1340.388916] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 22:11:10 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 22:11:10 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 7b8839f1084745e89bc10ce0594fe802 --
+Dec 29 22:11:16 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 22:11:22 raspberrypi kmscon[665]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 22:11:22 raspberrypi kmscon[665]: [0000.342567] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 22:11:24 raspberrypi kmscon[665]: [0002.523783] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:11:24 raspberrypi kmscon[665]: [0002.525482] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:37:34 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 22:37:35 raspberrypi kmscon[665]: [1573.288749] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 22:37:36 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 22:37:36 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 5a5059143bdc4d009bdd412bd3c9c485 --
+Dec 29 22:37:41 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 22:37:47 raspberrypi kmscon[661]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 22:37:47 raspberrypi kmscon[661]: [0000.406696] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 22:37:50 raspberrypi kmscon[661]: [0002.606441] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:37:50 raspberrypi kmscon[661]: [0002.607785] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:39:45 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 22:39:46 raspberrypi kmscon[661]: [0118.846673] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 22:39:47 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 22:39:47 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot f6ae3ed44dda42b2a692c81120dc10a8 --
+Dec 29 22:39:53 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 22:39:59 raspberrypi kmscon[663]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 22:39:59 raspberrypi kmscon[663]: [0000.340933] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 22:40:01 raspberrypi kmscon[663]: [0002.532520] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:40:01 raspberrypi kmscon[663]: [0002.533836] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:52:29 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 22:52:30 raspberrypi kmscon[663]: [0751.171897] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 22:52:31 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 22:52:31 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot fb699afd04114576941f8aa2bc55e195 --
+Dec 29 22:52:36 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 22:52:42 raspberrypi kmscon[667]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 22:52:42 raspberrypi kmscon[667]: [0000.341157] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 22:52:45 raspberrypi kmscon[667]: [0002.561017] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:52:45 raspberrypi kmscon[667]: [0002.562505] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 22:57:21 raspberrypi kmscon[667]: [0278.969004] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 22:57:22 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+-- Boot d33453e0eaf84acea755d64a928841ee --
+Dec 29 23:12:18 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 23:12:24 raspberrypi kmscon[660]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 23:12:24 raspberrypi kmscon[660]: [0000.340729] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 23:12:26 raspberrypi kmscon[660]: [0002.526132] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:12:26 raspberrypi kmscon[660]: [0002.527508] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+-- Boot 08dfcd757798430cb4655bf0f81ea00d --
+Dec 29 23:15:16 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 23:15:22 raspberrypi kmscon[668]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 23:15:23 raspberrypi kmscon[668]: [0000.353526] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 23:15:25 raspberrypi kmscon[668]: [0002.523887] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:15:25 raspberrypi kmscon[668]: [0002.525522] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:41:25 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 23:41:26 raspberrypi kmscon[668]: [1563.913250] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 23:41:27 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 23:41:27 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 167483fdb474460a80a56dc4013e9c64 --
+Dec 29 23:41:32 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 23:41:37 raspberrypi kmscon[663]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 23:41:38 raspberrypi kmscon[663]: [0000.152050] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 23:41:42 raspberrypi kmscon[663]: [0004.212144] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:41:43 raspberrypi kmscon[663]: [0005.649042] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:46:47 raspberrypi kmscon[663]: [0309.541409] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 23:46:47 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 23:46:47 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 23:46:47 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 37268ff1bc9749ddabd2f2f29852ee19 --
+Dec 29 23:46:53 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 23:46:58 raspberrypi kmscon[663]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 23:46:59 raspberrypi kmscon[663]: [0000.152372] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 23:47:02 raspberrypi kmscon[663]: [0003.944877] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:47:03 raspberrypi kmscon[663]: [0005.027462] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:48:58 raspberrypi kmscon[663]: [0119.591711] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 23:48:58 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 23:48:58 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 23:48:58 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot a9f7ca00e3024a89a021690c2d9fa01b --
+Dec 29 23:49:05 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 23:49:10 raspberrypi kmscon[659]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 23:49:11 raspberrypi kmscon[659]: [0000.152295] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 23:53:57 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 23:53:57 raspberrypi kmscon[659]: [0286.681581] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 23:53:57 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 23:53:57 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 2c7c8e8e158f48549da52c522e48dbf5 --
+Dec 29 23:54:02 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 29 23:54:08 raspberrypi kmscon[665]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 29 23:54:08 raspberrypi kmscon[665]: [0000.354173] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 29 23:54:10 raspberrypi kmscon[665]: [0002.557946] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:54:10 raspberrypi kmscon[665]: [0002.559252] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 29 23:57:08 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 29 23:57:09 raspberrypi kmscon[665]: [0181.099364] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 29 23:57:10 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 29 23:57:10 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot b254833368434acdaebe5dffaddd47ea --
+Dec 30 00:02:31 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:02:37 raspberrypi kmscon[661]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 00:02:37 raspberrypi kmscon[661]: [0000.354465] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 00:02:39 raspberrypi kmscon[661]: [0002.549209] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:02:39 raspberrypi kmscon[661]: [0002.550587] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:03:55 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 00:03:57 raspberrypi kmscon[661]: [0080.051357] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 00:03:58 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 00:03:58 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot d0f40e9533ea4617808fdfcad4627772 --
+Dec 30 00:04:19 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:04:25 raspberrypi kmscon[666]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 00:04:25 raspberrypi kmscon[666]: [0000.365512] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 00:04:28 raspberrypi kmscon[666]: [0002.556610] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:04:28 raspberrypi kmscon[666]: [0002.557972] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:05:46 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 00:05:47 raspberrypi kmscon[666]: [0082.071431] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 00:05:48 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 00:05:48 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:20:43 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:20:45 raspberrypi kmscon[1960]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 00:20:45 raspberrypi kmscon[1960]: [0000.221635] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 00:20:46 raspberrypi kmscon[1960]: [0001.525366] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:20:46 raspberrypi kmscon[1960]: [0001.526681] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:28:02 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 00:28:03 raspberrypi kmscon[1960]: [0438.585303] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 00:28:04 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 00:28:04 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot f8f3a1e6896242cfb6a844a7c29d1299 --
+Dec 30 00:47:28 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:47:30 raspberrypi kmscon[1920]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 00:47:30 raspberrypi kmscon[1920]: [0000.279677] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 00:47:32 raspberrypi kmscon[1920]: [0002.372021] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:47:32 raspberrypi kmscon[1920]: [0002.373343] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 00:53:10 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 00:53:11 raspberrypi kmscon[1920]: [0341.789512] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 00:53:12 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 00:53:12 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:53:12 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:53:13 raspberrypi kmscon[2724]: Unknown argument: --log-level=debug
+Dec 30 00:53:13 raspberrypi kmscon[2724]: [0000.000000] ERROR: cannot load configuration: -14 (main() in ../src/kmscon_main.c:607)
+Dec 30 00:53:13 raspberrypi kmscon[2724]: [0000.000033] ERROR: cannot initialize kmscon, errno -14: Bad address (main() in ../src/kmscon_main.c:665)
+Dec 30 00:53:13 raspberrypi systemd[1]: kmsconvt@tty1.service: Main process exited, code=exited, status=14/n/a
+Dec 30 00:53:13 raspberrypi systemd[1]: kmsconvt@tty1.service: Failed with result 'exit-code'.
+Dec 30 00:53:13 raspberrypi systemd[1]: kmsconvt@tty1.service: Triggering OnFailure= dependencies.
+Dec 30 00:58:57 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 00:58:59 raspberrypi kmscon[3243]: Unknown argument: --log-level=debug
+Dec 30 00:58:59 raspberrypi kmscon[3243]: [0000.000000] ERROR: cannot load configuration: -14 (main() in ../src/kmscon_main.c:607)
+Dec 30 00:58:59 raspberrypi kmscon[3243]: [0000.000050] ERROR: cannot initialize kmscon, errno -14: Bad address (main() in ../src/kmscon_main.c:665)
+Dec 30 00:58:59 raspberrypi systemd[1]: kmsconvt@tty1.service: Main process exited, code=exited, status=14/n/a
+Dec 30 00:58:59 raspberrypi systemd[1]: kmsconvt@tty1.service: Failed with result 'exit-code'.
+Dec 30 00:58:59 raspberrypi systemd[1]: kmsconvt@tty1.service: Triggering OnFailure= dependencies.
+-- Boot 3696eafbfcf249e4ad092b6054340249 --
+Dec 30 01:01:07 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:01:11 raspberrypi kmscon[1381]: Unknown argument: --log-level=debug
+Dec 30 01:01:11 raspberrypi kmscon[1381]: [0000.000000] ERROR: cannot load configuration: -14 (main() in ../src/kmscon_main.c:607)
+Dec 30 01:01:11 raspberrypi kmscon[1381]: [0000.000036] ERROR: cannot initialize kmscon, errno -14: Bad address (main() in ../src/kmscon_main.c:665)
+Dec 30 01:01:11 raspberrypi systemd[1]: kmsconvt@tty1.service: Main process exited, code=exited, status=14/n/a
+Dec 30 01:01:11 raspberrypi systemd[1]: kmsconvt@tty1.service: Failed with result 'exit-code'.
+Dec 30 01:01:11 raspberrypi systemd[1]: kmsconvt@tty1.service: Triggering OnFailure= dependencies.
+Dec 30 01:02:22 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:02:23 raspberrypi kmscon[1510]: Unknown argument: --log-level=debug
+Dec 30 01:02:23 raspberrypi kmscon[1510]: [0000.000000] ERROR: cannot load configuration: -14 (main() in ../src/kmscon_main.c:607)
+Dec 30 01:02:23 raspberrypi kmscon[1510]: [0000.000036] ERROR: cannot initialize kmscon, errno -14: Bad address (main() in ../src/kmscon_main.c:665)
+Dec 30 01:02:23 raspberrypi systemd[1]: kmsconvt@tty1.service: Main process exited, code=exited, status=14/n/a
+Dec 30 01:02:23 raspberrypi systemd[1]: kmsconvt@tty1.service: Failed with result 'exit-code'.
+Dec 30 01:02:23 raspberrypi systemd[1]: kmsconvt@tty1.service: Triggering OnFailure= dependencies.
+Dec 30 01:03:55 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:03:56 raspberrypi kmscon[1583]: Unknown argument: --log-level=debug
+Dec 30 01:03:56 raspberrypi kmscon[1583]: [0000.000000] ERROR: cannot load configuration: -14 (main() in ../src/kmscon_main.c:607)
+Dec 30 01:03:56 raspberrypi kmscon[1583]: [0000.000035] ERROR: cannot initialize kmscon, errno -14: Bad address (main() in ../src/kmscon_main.c:665)
+Dec 30 01:03:56 raspberrypi systemd[1]: kmsconvt@tty1.service: Main process exited, code=exited, status=14/n/a
+Dec 30 01:03:56 raspberrypi systemd[1]: kmsconvt@tty1.service: Failed with result 'exit-code'.
+Dec 30 01:03:56 raspberrypi systemd[1]: kmsconvt@tty1.service: Triggering OnFailure= dependencies.
+Dec 30 01:06:38 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:06:38 raspberrypi kmscon[1714]: Unknown argument: --log-level=debug
+Dec 30 01:06:38 raspberrypi kmscon[1714]: [0000.000000] ERROR: cannot load configuration: -14 (main() in ../src/kmscon_main.c:607)
+Dec 30 01:06:38 raspberrypi kmscon[1714]: [0000.000039] ERROR: cannot initialize kmscon, errno -14: Bad address (main() in ../src/kmscon_main.c:665)
+Dec 30 01:06:38 raspberrypi systemd[1]: kmsconvt@tty1.service: Main process exited, code=exited, status=14/n/a
+Dec 30 01:06:38 raspberrypi systemd[1]: kmsconvt@tty1.service: Failed with result 'exit-code'.
+Dec 30 01:06:38 raspberrypi systemd[1]: kmsconvt@tty1.service: Triggering OnFailure= dependencies.
+Dec 30 01:08:38 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:08:39 raspberrypi kmscon[2139]: Unknown argument: --drm-debug
+Dec 30 01:08:39 raspberrypi kmscon[2139]: [0000.000000] ERROR: cannot load configuration: -14 (main() in ../src/kmscon_main.c:607)
+Dec 30 01:08:39 raspberrypi kmscon[2139]: [0000.000034] ERROR: cannot initialize kmscon, errno -14: Bad address (main() in ../src/kmscon_main.c:665)
+Dec 30 01:08:39 raspberrypi systemd[1]: kmsconvt@tty1.service: Main process exited, code=exited, status=14/n/a
+Dec 30 01:08:39 raspberrypi systemd[1]: kmsconvt@tty1.service: Failed with result 'exit-code'.
+Dec 30 01:08:39 raspberrypi systemd[1]: kmsconvt@tty1.service: Triggering OnFailure= dependencies.
+Dec 30 01:11:07 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:11:07 raspberrypi kmscon[2413]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 01:11:08 raspberrypi kmscon[2413]: [0000.447788] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 01:11:10 raspberrypi kmscon[2413]: [0002.540973] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 01:11:10 raspberrypi kmscon[2413]: [0002.542471] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 01:12:07 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 01:12:10 raspberrypi kmscon[2413]: [0062.317908] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 01:12:12 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 01:12:12 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 2c6955bb5bd646b2bea0b0e1ec3ed542 --
+Dec 30 01:16:32 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:16:38 raspberrypi kmscon[661]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 01:16:38 raspberrypi kmscon[661]: [0000.353835] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 01:16:41 raspberrypi kmscon[661]: [0002.556298] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 01:16:41 raspberrypi kmscon[661]: [0002.559402] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 01:45:14 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 01:45:15 raspberrypi kmscon[661]: [1717.041539] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 01:45:16 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 01:45:16 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:45:16 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 1.621s CPU time.
+-- Boot 8cfb282fc67244bb936e86b36657dd79 --
+Dec 30 01:45:22 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 01:45:28 raspberrypi kmscon[662]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 01:45:28 raspberrypi kmscon[662]: [0000.354113] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 01:45:31 raspberrypi kmscon[662]: [0002.569467] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 01:45:31 raspberrypi kmscon[662]: [0002.570854] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 03:49:45 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 03:49:47 raspberrypi kmscon[662]: [7458.770090] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 03:49:47 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 03:49:47 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 03:49:47 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 6.714s CPU time.
+-- Boot c526bfcb105e417289c9814628d6dcf1 --
+Dec 30 03:49:52 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 03:49:57 raspberrypi kmscon[663]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 03:49:58 raspberrypi kmscon[663]: [0000.319181] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 04:00:17 raspberrypi kmscon[663]: [0619.298792] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 04:00:18 raspberrypi kmscon[663]: [0620.961444] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 04:04:38 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 04:04:38 raspberrypi kmscon[663]: [0880.251142] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 04:04:38 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 04:04:38 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot ca81807c79514c51989e659bf1b2618f --
+Dec 30 04:04:43 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 04:04:48 raspberrypi kmscon[660]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 04:04:49 raspberrypi kmscon[660]: [0000.151953] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 04:05:53 raspberrypi kmscon[660]: [0064.465530] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 04:05:55 raspberrypi kmscon[660]: [0066.641730] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 05:32:02 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 05:32:02 raspberrypi kmscon[660]: [5233.952456] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 05:32:03 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 05:32:03 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 05:32:03 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 2.972s CPU time.
+-- Boot 39ff75397a2446699bf8d209453f8e7b --
+Dec 30 05:32:09 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 05:32:14 raspberrypi kmscon[663]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 05:32:15 raspberrypi kmscon[663]: [0000.153831] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 05:33:28 raspberrypi kmscon[663]: [0073.190514] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 05:33:29 raspberrypi kmscon[663]: [0074.166607] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 06:00:50 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 06:00:50 raspberrypi kmscon[663]: [1715.800852] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 06:00:51 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 06:00:51 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 06:00:51 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 1.215s CPU time.
+-- Boot 8a949b3a5dd04557a73dd8389ec46594 --
+Dec 30 06:07:21 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 06:07:27 raspberrypi kmscon[664]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 06:07:27 raspberrypi kmscon[664]: [0000.353888] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 06:07:29 raspberrypi kmscon[664]: [0002.533751] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 06:07:29 raspberrypi kmscon[664]: [0002.535175] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 06:09:02 raspberrypi kmscon[664]: [0094.751699] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 06:09:02 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 06:09:03 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 06:09:03 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 2e9d09455588463b899bd9f8b0a42b49 --
+Dec 30 06:09:08 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 06:09:13 raspberrypi kmscon[664]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 06:09:13 raspberrypi kmscon[664]: [0000.153465] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 06:09:16 raspberrypi kmscon[664]: [0002.823230] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 06:09:18 raspberrypi kmscon[664]: [0004.555185] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Dec 30 07:33:25 raspberrypi kmscon[664]: [5051.712312] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 07:33:25 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 07:33:25 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 07:33:25 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 07:33:25 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 2.652s CPU time.
+-- Boot 866727d53e48406da9f8cf5e84e3532b --
+Dec 30 07:33:31 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Dec 30 07:33:36 raspberrypi kmscon[660]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Dec 30 07:33:36 raspberrypi kmscon[660]: [0000.152442] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Dec 30 07:37:45 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Dec 30 07:37:46 raspberrypi kmscon[660]: [0249.203342] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Dec 30 07:37:46 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Dec 30 07:37:46 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot aab848f1120c4047868417d3a18051ff --
+Jan 02 15:02:25 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 15:02:30 raspberrypi kmscon[663]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 15:02:30 raspberrypi kmscon[663]: [0000.152615] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 02 15:03:29 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 02 15:03:29 raspberrypi kmscon[663]: [0058.964304] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 02 15:03:29 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 02 15:03:29 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 83db406702c943b0b5f2d5cc00f0f3b2 --
+Jan 02 15:03:35 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 15:03:40 raspberrypi kmscon[661]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 15:03:40 raspberrypi kmscon[661]: [0000.152464] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 02 15:03:47 raspberrypi kmscon[661]: [0006.299461] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 02 15:03:49 raspberrypi kmscon[661]: [0008.427461] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 02 15:12:18 raspberrypi kmscon[661]: [0517.940869] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 02 15:12:19 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 02 15:12:19 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 02 15:12:19 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 6a9168d2ee134bde916c06dbee9f572f --
+Jan 02 15:12:25 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 15:12:30 raspberrypi kmscon[703]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 15:12:31 raspberrypi kmscon[703]: [0000.152494] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 02 15:16:30 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 02 15:16:30 raspberrypi kmscon[703]: [0239.180056] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 02 15:16:30 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 02 15:16:30 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot b9a38674b82f40df80fc87cc481c5506 --
+Jan 02 15:16:35 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 15:16:40 raspberrypi kmscon[666]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 15:16:40 raspberrypi kmscon[666]: [0000.152676] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 02 15:16:47 raspberrypi kmscon[666]: [0006.293851] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 02 15:16:49 raspberrypi kmscon[666]: [0008.414093] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 02 16:08:56 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 02 16:08:56 raspberrypi kmscon[666]: [3135.926395] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 02 16:08:57 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 02 16:08:57 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 16:08:57 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 1.871s CPU time.
+-- Boot a2b8afed4b614fd38b4c427fa1c0687a --
+Jan 02 16:09:02 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 16:09:07 raspberrypi kmscon[666]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 16:09:07 raspberrypi kmscon[666]: [0000.153076] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 02 16:09:16 raspberrypi kmscon[666]: [0008.554126] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 02 16:09:17 raspberrypi kmscon[666]: [0009.526102] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 02 16:29:33 raspberrypi kmscon[666]: [1225.316725] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 02 16:29:33 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 02 16:29:33 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 02 16:29:33 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 4a090a3586b44da286635b2aa3b702ac --
+Jan 02 16:29:39 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 16:29:44 raspberrypi kmscon[701]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 16:29:44 raspberrypi kmscon[701]: [0000.152447] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 02 16:47:27 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 02 16:47:27 raspberrypi kmscon[701]: [1062.458148] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 02 16:47:27 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 02 16:47:27 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot db8ddf60c5004073823eaba3e51c85cd --
+Jan 02 16:47:32 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 16:47:37 raspberrypi kmscon[702]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 16:47:38 raspberrypi kmscon[702]: [0000.152463] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 02 16:50:41 raspberrypi kmscon[702]: [0183.952311] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 02 16:50:41 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+-- Boot 491b0b93a862410ca7e442ad7dbea041 --
+Jan 02 16:49:56 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 16:50:02 raspberrypi kmscon[713]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 16:50:02 raspberrypi kmscon[713]: [0000.152274] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+-- Boot b14ea909c5704136a27de61b46f1913e --
+Jan 02 21:00:37 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 02 21:00:43 raspberrypi kmscon[705]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 02 21:00:43 raspberrypi kmscon[705]: [0000.152032] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 03 08:46:05 raspberrypi kmscon[705]: [42322.349932] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 03 08:46:05 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 03 08:46:05 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 03 08:46:05 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 08:46:05 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 9.793s CPU time.
+-- Boot 0f77dfc859c8460e9e6691f3985d366a --
+Jan 03 08:46:10 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 08:46:15 raspberrypi kmscon[709]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 03 08:46:15 raspberrypi kmscon[709]: [0000.153417] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 03 09:27:00 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 03 09:27:00 raspberrypi kmscon[709]: [2444.664904] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 03 09:27:00 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 03 09:27:00 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 58131f495d0449108dc8f6a4b5b7e74c --
+Jan 03 15:48:00 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 15:48:05 raspberrypi kmscon[676]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 03 15:48:06 raspberrypi kmscon[676]: [0000.152722] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 03 15:52:13 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 03 15:52:13 raspberrypi kmscon[676]: [0247.200292] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 03 15:52:13 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 03 15:52:13 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot 36cf970b610847ee97c3fc65cf53b492 --
+Jan 03 15:52:18 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 15:52:23 raspberrypi kmscon[708]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 03 15:52:23 raspberrypi kmscon[708]: [0000.152739] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 03 16:22:38 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 03 16:22:38 raspberrypi kmscon[708]: [1814.782941] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 03 16:22:38 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 03 16:22:38 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+-- Boot fb32ce5ee5ed4f889a471be0f59126c3 --
+Jan 03 16:22:43 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 16:22:48 raspberrypi kmscon[634]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 03 16:22:48 raspberrypi kmscon[634]: [0000.152474] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 03 18:50:42 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 03 18:50:42 raspberrypi kmscon[634]: [8873.668500] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 03 18:50:42 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 03 18:50:42 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 18:50:42 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 3.150s CPU time.
+-- Boot 665ac86a19784c679888826f91a9974b --
+Jan 03 18:50:47 raspberrypi systemd[1]: Started kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 18:50:52 raspberrypi kmscon[663]: [0000.000000] NOTICE: kmscon Revision v9.0.0 Jan 29 2023 19:19:17 (log_print_init() in ../src/shl_log.c:509)
+Jan 03 18:50:53 raspberrypi kmscon[663]: [0000.152913] NOTICE: vt: using tty /dev/tty1 (open_tty() in ../src/uterm_vt.c:285)
+Jan 03 18:51:02 raspberrypi kmscon[663]: [0009.768418] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 03 18:51:04 raspberrypi kmscon[663]: [0011.884891] WARNING: video_fbdev: cannot read monitor refresh rate, forcing 60 Hz (display_activate_force() in ../src/uterm_fbdev_video.c:285)
+Jan 03 21:01:17 raspberrypi kmscon[663]: [7824.721320] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 03 21:01:18 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 03 21:01:18 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 03 21:01:18 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 21:01:18 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 4.569s CPU time.
+
+=== DRM State (Card 0) ===
+plane[32]: plane-0
+	crtc=crtc-0
+	fb=36
+		allocated by = [fbcon]
+		refcount=2
+		format=XR24 little-endian (0x34325258)
+		modifier=0x0
+		size=320x480
+		layers:
+			size[0]=320x480
+			pitch[0]=1280
+			offset[0]=0
+			obj[0]:
+				name=0
+				refcount=2
+				start=00100000
+				size=614400
+				imported=no
+				dma_addr=0x000000002a700000
+				vaddr=00000000639dd1ec
+	crtc-pos=320x480+0+0
+	src-pos=320.000000x480.000000+0.000000+0.000000
+	rotation=1
+	normalized-zpos=0
+	color-encoding=ITU-R BT.601 YCbCr
+	color-range=YCbCr limited range
+crtc[34]: crtc-0
+	enable=1
+	active=1
+	self_refresh_active=0
+	planes_changed=1
+	mode_changed=0
+	active_changed=0
+	connectors_changed=0
+	color_mgmt_changed=0
+	plane_mask=1
+	connector_mask=1
+	encoder_mask=1
+	mode: "320x480": 0 1 320 320 320 320 480 480 480 480 0x48 0x0
+connector[31]: SPI-1
+	crtc=crtc-0
+	self_refresh_aware=0
+	max_requested_bpc=0
+	colorspace=Default
+
+=== DRM State (Card 1) ===
+plane[32]: plane-0
+	crtc=(null)
+	fb=0
+	crtc-pos=0x0+0+0
+	src-pos=0.000000x0.000000+0.000000+0.000000
+	rotation=1
+	normalized-zpos=0
+	color-encoding=ITU-R BT.601 YCbCr
+	color-range=YCbCr limited range
+crtc[34]: crtc-0
+	enable=0
+	active=0
+	self_refresh_active=0
+	planes_changed=0
+	mode_changed=0
+	active_changed=0
+	connectors_changed=0
+	color_mgmt_changed=0
+	plane_mask=0
+	connector_mask=0
+	encoder_mask=0
+	mode: "": 0 0 0 0 0 0 0 0 0 0 0x0 0x0
+connector[31]: SPI-2
+	crtc=(null)
+	self_refresh_aware=0
+	max_requested_bpc=0
+	colorspace=Default
+
+=== DRM Devices List ===
+total 0
+lrwxrwxrwx 1 root root    0 Jan  3 21:15 card0 -> ../../devices/platform/soc/fe204000.spi/spi_master/spi0/spi0.0/drm/card0
+lrwxrwxrwx 1 root root    0 Jan  3 21:15 card0-SPI-1 -> ../../devices/platform/soc/fe204000.spi/spi_master/spi0/spi0.0/drm/card0/card0-SPI-1
+lrwxrwxrwx 1 root root    0 Jan  3 21:15 card1 -> ../../devices/platform/soc/fe204000.spi/spi_master/spi0/spi0.1/drm/card1
+lrwxrwxrwx 1 root root    0 Jan  3 21:15 card1-SPI-2 -> ../../devices/platform/soc/fe204000.spi/spi_master/spi0/spi0.1/drm/card1/card1-SPI-2
+-r--r--r-- 1 root root 4096 Jan  3 21:15 version
+
+=== Card 0 Info ===
+lrwxrwxrwx 1 root root 0 Jan  3 21:15 /sys/class/drm/card0 -> ../../devices/platform/soc/fe204000.spi/spi_master/spi0/spi0.0/drm/card0
+
+=== Card 1 Info ===
+lrwxrwxrwx 1 root root 0 Jan  3 21:15 /sys/class/drm/card1 -> ../../devices/platform/soc/fe204000.spi/spi_master/spi0/spi0.1/drm/card1
+
+=== Framebuffer Devices ===
+crw-rw---- 1 root video 29, 0 Jan  3 21:01 /dev/fb0
+crw-rw---- 1 root video 29, 1 Jan  3 21:01 /dev/fb1
+
+=== Framebuffer Info (fb0) ===
+
+mode "320x480"
+    geometry 320 480 320 480 32
+    timings 0 0 0 0 0 0 0
+    rgba 8/16,8/8,8/0,0/0
+endmode
+
+
+=== Framebuffer Info (fb1) ===
+
+mode "320x480"
+    geometry 320 480 320 480 32
+    timings 0 0 0 0 0 0 0
+    rgba 8/16,8/8,8/0,0/0
+endmode
+
+
+=== Framebuffer Users ===
+
+=== Connector Card 0 Status ===
+connected
+
+=== Connector Card 1 Status ===
+connected
+
+=== Full dmesg Log ===
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd083]
+[    0.000000] Linux version 6.6.62+rpt-rpi-v8 (serge@raspberrypi.com) (gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT Debian 1:6.6.62-1+rpt1 (2024-11-25)
+[    0.000000] KASLR enabled
+[    0.000000] random: crng init done
+[    0.000000] Machine model: Raspberry Pi 4 Model B Rev 1.5
+[    0.000000] efi: UEFI not found.
+[    0.000000] Reserved memory: created CMA memory pool at 0x000000002a000000, size 64 MiB
+[    0.000000] OF: reserved mem: initialized node linux,cma, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x000000002a000000..0x000000002dffffff (65536 KiB) map reusable linux,cma
+[    0.000000] OF: reserved mem: 0x000000003ef652a0..0x000000003ef6569f (1 KiB) nomap non-reusable nvram@1
+[    0.000000] OF: reserved mem: 0x000000003ef656e0..0x000000003ef65715 (0 KiB) nomap non-reusable nvram@0
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem 0x0000000000000000-0x00000001ffffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x1fefef3c0-0x1feff1fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000000000000-0x000000003fffffff]
+[    0.000000]   DMA32    [mem 0x0000000040000000-0x00000000ffffffff]
+[    0.000000]   Normal   [mem 0x0000000100000000-0x00000001ffffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000000000-0x000000003b3fffff]
+[    0.000000]   node   0: [mem 0x0000000040000000-0x00000000fbffffff]
+[    0.000000]   node   0: [mem 0x0000000100000000-0x00000001ffffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x00000001ffffffff]
+[    0.000000] On node 0, zone DMA32: 19456 pages in unavailable ranges
+[    0.000000] On node 0, zone Normal: 16384 pages in unavailable ranges
+[    0.000000] percpu: Embedded 30 pages/cpu s85928 r8192 d28760 u122880
+[    0.000000] pcpu-alloc: s85928 r8192 d28760 u122880 alloc=30*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+[    0.000000] Detected PIPT I-cache on CPU0
+[    0.000000] CPU features: detected: Spectre-v2
+[    0.000000] CPU features: detected: Spectre-v3a
+[    0.000000] CPU features: detected: Spectre-v4
+[    0.000000] CPU features: detected: Spectre-BHB
+[    0.000000] CPU features: kernel page table isolation forced ON by KASLR
+[    0.000000] CPU features: detected: Kernel page table isolation (KPTI)
+[    0.000000] CPU features: detected: ARM erratum 1742098
+[    0.000000] CPU features: detected: ARM errata 1165522, 1319367, or 1530923
+[    0.000000] alternatives: applying boot alternatives
+[    0.000000] Kernel command line: coherent_pool=1M 8250.nr_uarts=0 snd_bcm2835.enable_headphones=0 cgroup_disable=memory numa_policy=interleave snd_bcm2835.enable_headphones=1 snd_bcm2835.enable_hdmi=1 bcm2708_fb.fbwidth=0 bcm2708_fb.fbheight=0 bcm2708_fb.fbswap=1 smsc95xx.macaddr=D8:3A:DD:6F:A3:94 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  console=ttyS0,115200 console=tty1 root=PARTUUID=60ff2e57-02 rootfstype=ext4 fsck.repair=yes rootwait cfg80211.ieee80211_regdom=CA ip=169.254.55.240::0.0.0.0:255.255.0.0::eth0:off systemd.unit=multi-user.target autologin-user=nc4 nosplash logo.nologo vt.global_cursor_default=0 drm.debug=0x1f log_buf_len=16M
+[    0.000000] cgroup: Disabling memory control group subsystem
+[    0.000000] mempolicy: NUMA default policy overridden to 'interleave:0'
+[    0.000000] Unknown kernel command line parameters "nosplash autologin-user=nc4", will be passed to user space.
+[    0.000000] printk: log_buf_len: 16777216 bytes
+[    0.000000] printk: early log buf free: 127672(97%)
+[    0.000000] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.000000] Fallback order for Node 0: 0 
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 2028848
+[    0.000000] Policy zone: Normal
+[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.000000] software IO TLB: area num 4.
+[    0.000000] software IO TLB: mapped [mem 0x0000000037400000-0x000000003b400000] (64MB)
+[    0.000000] Memory: 7840596K/8245248K available (13504K kernel code, 2206K rwdata, 4292K rodata, 4864K init, 1086K bss, 339116K reserved, 65536K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] ftrace: allocating 43495 entries in 170 pages
+[    0.000000] ftrace: allocated 170 pages with 4 groups
+[    0.000000] trace event string verifier disabled
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU event tracing is enabled.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=4.
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000] 	Rude variant of Tasks RCU enabled.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GIC: Using split EOI/Deactivate mode
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] arch_timer: cp15 timer(s) running at 54.00MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0xc743ce346, max_idle_ns: 440795203123 ns
+[    0.000000] sched_clock: 56 bits at 54MHz, resolution 18ns, wraps every 4398046511102ns
+[    0.000336] Console: colour dummy device 80x25
+[    0.000351] printk: console [tty1] enabled
+[    0.001140] Calibrating delay loop (skipped), value calculated using timer frequency.. 108.00 BogoMIPS (lpj=216000)
+[    0.001175] pid_max: default: 32768 minimum: 301
+[    0.001258] LSM: initializing lsm=capability,integrity
+[    0.001522] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.001646] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.003788] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.003970] RCU Tasks Rude: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.004118] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.004389] rcu: Hierarchical SRCU implementation.
+[    0.004408] rcu: 	Max phase no-delay instances is 1000.
+[    0.006330] EFI services will not be available.
+[    0.006656] smp: Bringing up secondary CPUs ...
+[    0.007294] Detected PIPT I-cache on CPU1
+[    0.007417] CPU1: Booted secondary processor 0x0000000001 [0x410fd083]
+[    0.008151] Detected PIPT I-cache on CPU2
+[    0.008241] CPU2: Booted secondary processor 0x0000000002 [0x410fd083]
+[    0.008898] Detected PIPT I-cache on CPU3
+[    0.008990] CPU3: Booted secondary processor 0x0000000003 [0x410fd083]
+[    0.009090] smp: Brought up 1 node, 4 CPUs
+[    0.009169] SMP: Total of 4 processors activated.
+[    0.009185] CPU features: detected: 32-bit EL0 Support
+[    0.009200] CPU features: detected: 32-bit EL1 Support
+[    0.009216] CPU features: detected: CRC32 instructions
+[    0.009328] CPU: All CPU(s) started at EL2
+[    0.009352] alternatives: applying system-wide alternatives
+[    0.011999] devtmpfs: initialized
+[    0.022195] Enabled cp15_barrier support
+[    0.022249] Enabled setend support
+[    0.022419] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.022459] futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+[    0.024251] pinctrl core: initialized pinctrl subsystem
+[    0.025277] DMI not present or invalid.
+[    0.025782] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.027302] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+[    0.027585] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    0.028070] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.028153] audit: initializing netlink subsys (disabled)
+[    0.028374] audit: type=2000 audit(0.028:1): state=initialized audit_enabled=0 res=1
+[    0.028924] thermal_sys: Registered thermal governor 'step_wise'
+[    0.028975] cpuidle: using governor menu
+[    0.029262] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.029395] ASID allocator initialised with 32768 entries
+[    0.030374] Serial: AMBA PL011 UART driver
+[    0.036603] bcm2835-mbox fe00b880.mailbox: mailbox enabled
+[    0.044108] raspberrypi-firmware soc:firmware: Attached to firmware from 2024-11-26T12:52:28, variant start
+[    0.048135] raspberrypi-firmware soc:firmware: Firmware hash is 2ae30f53898ae2f1ba77ff570a92991bedfb0398
+[    0.058278] Modules: 2G module region forced by RANDOMIZE_MODULE_REGION_FULL
+[    0.058310] Modules: 0 pages in range for non-PLT usage
+[    0.058316] Modules: 517760 pages in range for PLT usage
+[    0.061495] bcm2835-dma fe007000.dma-controller: DMA legacy API manager, dmachans=0x1
+[    0.063217] iommu: Default domain type: Translated
+[    0.063240] iommu: DMA domain TLB invalidation policy: strict mode
+[    0.064951] SCSI subsystem initialized
+[    0.065149] usbcore: registered new interface driver usbfs
+[    0.065196] usbcore: registered new interface driver hub
+[    0.065251] usbcore: registered new device driver usb
+[    0.065617] pps_core: LinuxPPS API ver. 1 registered
+[    0.065635] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.065666] PTP clock support registered
+[    0.066733] vgaarb: loaded
+[    0.067259] clocksource: Switched to clocksource arch_sys_counter
+[    1.104624] VFS: Disk quotas dquot_6.6.0
+[    1.104702] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    1.104825] FS-Cache: Loaded
+[    1.105079] CacheFiles: Loaded
+[    1.113448] NET: Registered PF_INET protocol family
+[    1.114443] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    1.123200] tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, linear)
+[    1.123352] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    1.123393] TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    1.123886] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+[    1.126340] TCP: Hash tables configured (established 65536 bind 65536)
+[    1.126954] MPTCP token hash table entries: 8192 (order: 5, 196608 bytes, linear)
+[    1.127387] UDP hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    1.127522] UDP-Lite hash table entries: 4096 (order: 5, 131072 bytes, linear)
+[    1.127835] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    1.128459] RPC: Registered named UNIX socket transport module.
+[    1.128484] RPC: Registered udp transport module.
+[    1.128498] RPC: Registered tcp transport module.
+[    1.128512] RPC: Registered tcp-with-tls transport module.
+[    1.128526] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    1.128565] PCI: CLS 0 bytes, default 64
+[    1.129289] Trying to unpack rootfs image as initramfs...
+[    1.131417] kvm [1]: IPA Size Limit: 44 bits
+[    1.132683] kvm [1]: vgic interrupt IRQ9
+[    1.132748] kvm [1]: Hyp mode initialized successfully
+[    1.134428] Initialise system trusted keyrings
+[    1.134726] workingset: timestamp_bits=42 max_order=21 bucket_order=0
+[    1.134800] zbud: loaded
+[    1.135654] NFS: Registering the id_resolver key type
+[    1.135705] Key type id_resolver registered
+[    1.135720] Key type id_legacy registered
+[    1.135757] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    1.135778] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    1.136503] Key type asymmetric registered
+[    1.136537] Asymmetric key parser 'x509' registered
+[    1.136608] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 247)
+[    1.136845] io scheduler mq-deadline registered
+[    1.136869] io scheduler kyber registered
+[    1.136922] io scheduler bfq registered
+[    1.140022] pinctrl-bcm2835 fe200000.gpio: GPIO_OUT persistence: yes
+[    1.145436] brcm-pcie fd500000.pcie: host bridge /scb/pcie@7d500000 ranges:
+[    1.145499] brcm-pcie fd500000.pcie:   No bus range found for /scb/pcie@7d500000, using [bus 00-ff]
+[    1.145556] brcm-pcie fd500000.pcie:      MEM 0x0600000000..0x067fffffff -> 0x0080000000
+[    1.145606] brcm-pcie fd500000.pcie:   IB MEM 0x0000000000..0x01ffffffff -> 0x0400000000
+[    1.146826] brcm-pcie fd500000.pcie: PCI host bridge to bus 0000:00
+[    1.146871] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.146895] pci_bus 0000:00: root bus resource [mem 0x600000000-0x67fffffff] (bus address [0x80000000-0xffffffff])
+[    1.146957] pci 0000:00:00.0: [14e4:2711] type 01 class 0x060400
+[    1.147060] pci 0000:00:00.0: PME# supported from D0 D3hot
+[    1.150902] pci 0000:00:00.0: bridge configuration invalid ([bus 00-00]), reconfiguring
+[    1.151143] pci_bus 0000:01: supply vpcie3v3 not found, using dummy regulator
+[    1.151407] pci_bus 0000:01: supply vpcie3v3aux not found, using dummy regulator
+[    1.151481] pci_bus 0000:01: supply vpcie12v not found, using dummy regulator
+[    1.261404] brcm-pcie fd500000.pcie: link up, 5.0 GT/s PCIe x1 (SSC)
+[    1.261598] pci 0000:01:00.0: [1106:3483] type 00 class 0x0c0330
+[    1.261703] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00000fff 64bit]
+[    1.262083] pci 0000:01:00.0: PME# supported from D0 D3hot
+[    1.271432] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 01
+[    1.271516] pci 0000:00:00.0: BAR 8: assigned [mem 0x600000000-0x6000fffff]
+[    1.271545] pci 0000:01:00.0: BAR 0: assigned [mem 0x600000000-0x600000fff 64bit]
+[    1.271622] pci 0000:00:00.0: PCI bridge to [bus 01]
+[    1.271644] pci 0000:00:00.0:   bridge window [mem 0x600000000-0x6000fffff]
+[    1.272046] pcieport 0000:00:00.0: enabling device (0000 -> 0002)
+[    1.272261] pcieport 0000:00:00.0: PME: Signaling with IRQ 26
+[    1.272680] pcieport 0000:00:00.0: AER: enabled with IRQ 26
+[    1.273183] brcm-pcie fd500000.pcie: clkreq control enabled
+[    1.273732] bcm2708_fb soc:fb: Unable to determine number of FBs. Disabling driver.
+[    1.273766] bcm2708_fb: probe of soc:fb failed with error -2
+[    1.282934] iproc-rng200 fe104000.rng: hwrng registered
+[    1.283232] vc-mem: phys_addr:0x00000000 mem_base=0x3ec00000 mem_size:0x40000000(1024 MiB)
+[    1.296082] brd: module loaded
+[    1.303219] loop: module loaded
+[    1.303949] Loading iSCSI transport class v2.0-870.
+[    1.308376] bcmgenet fd580000.ethernet: GENET 5.0 EPHY: 0x0000
+[    1.667989] Freeing initrd memory: 12608K
+[    1.839341] unimac-mdio unimac-mdio.-19: Broadcom UniMAC MDIO bus
+[    1.840402] usbcore: registered new device driver r8152-cfgselector
+[    1.840456] usbcore: registered new interface driver r8152
+[    1.840499] usbcore: registered new interface driver lan78xx
+[    1.840547] usbcore: registered new interface driver smsc95xx
+[    1.888056] xhci_hcd 0000:01:00.0: xHCI Host Controller
+[    1.888098] xhci_hcd 0000:01:00.0: new USB bus registered, assigned bus number 1
+[    1.889877] xhci_hcd 0000:01:00.0: hcc params 0x002841eb hci version 0x100 quirks 0x0300240000000890
+[    1.890644] xhci_hcd 0000:01:00.0: xHCI Host Controller
+[    1.890673] xhci_hcd 0000:01:00.0: new USB bus registered, assigned bus number 2
+[    1.890702] xhci_hcd 0000:01:00.0: Host supports USB 3.0 SuperSpeed
+[    1.890961] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+[    1.890990] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.891012] usb usb1: Product: xHCI Host Controller
+[    1.891029] usb usb1: Manufacturer: Linux 6.6.62+rpt-rpi-v8 xhci-hcd
+[    1.891048] usb usb1: SerialNumber: 0000:01:00.0
+[    1.891681] hub 1-0:1.0: USB hub found
+[    1.891733] hub 1-0:1.0: 1 port detected
+[    1.892289] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.06
+[    1.892319] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.892340] usb usb2: Product: xHCI Host Controller
+[    1.892357] usb usb2: Manufacturer: Linux 6.6.62+rpt-rpi-v8 xhci-hcd
+[    1.892375] usb usb2: SerialNumber: 0000:01:00.0
+[    1.892848] hub 2-0:1.0: USB hub found
+[    1.892900] hub 2-0:1.0: 4 ports detected
+[    1.893778] dwc_otg: version 3.00a 10-AUG-2012 (platform bus)
+[    1.893886] dwc_otg: FIQ enabled
+[    1.893893] dwc_otg: NAK holdoff enabled
+[    1.893899] dwc_otg: FIQ split-transaction FSM enabled
+[    1.893909] Module dwc_common_port init
+[    1.894558] usbcore: registered new interface driver uas
+[    1.894625] usbcore: registered new interface driver usb-storage
+[    1.895044] mousedev: PS/2 mouse device common for all mice
+[    1.898389] sdhci: Secure Digital Host Controller Interface driver
+[    1.898419] sdhci: Copyright(c) Pierre Ossman
+[    1.898619] sdhci-pltfm: SDHCI platform and OF driver helper
+[    1.905832] ledtrig-cpu: registered to indicate activity on CPUs
+[    1.905966] hid: raw HID events driver (C) Jiri Kosina
+[    1.906012] usbcore: registered new interface driver usbhid
+[    1.906018] usbhid: USB HID core driver
+[    1.908544] hw perfevents: enabled with armv8_cortex_a72 PMU driver, 7 counters available
+[    1.909085] NET: Registered PF_PACKET protocol family
+[    1.909129] Key type dns_resolver registered
+[    1.923273] registered taskstats version 1
+[    1.923464] Loading compiled-in X.509 certificates
+[    1.929163] Key type .fscrypt registered
+[    1.929190] Key type fscrypt-provisioning registered
+[    1.932089] uart-pl011 fe201000.serial: there is not valid maps for state default
+[    1.932287] uart-pl011 fe201000.serial: cts_event_workaround enabled
+[    1.932457] fe201000.serial: ttyAMA1 at MMIO 0xfe201000 (irq = 35, base_baud = 0) is a PL011 rev2
+[    1.932563] serial serial0: tty port ttyAMA1 registered
+[    1.933636] bcm2835-wdt bcm2835-wdt: Broadcom BCM2835 watchdog timer
+[    1.933749] bcm2835-power bcm2835-power: Broadcom BCM2835 power domains driver
+[    1.934264] mmc-bcm2835 fe300000.mmcnr: mmc_debug:0 mmc_debug2:0
+[    1.934277] mmc-bcm2835 fe300000.mmcnr: DMA channel allocated
+[    1.963757] of_cfs_init
+[    1.963876] of_cfs_init: OK
+[    2.000348] mmc0: SDHCI controller on fe340000.mmc [fe340000.mmc] using ADMA
+[    2.003277] bcmgenet fd580000.ethernet: configuring instance for external RGMII (RX delay)
+[    2.004312] bcmgenet fd580000.ethernet eth0: Link is Down
+[    2.041644] mmc1: new high speed SDIO card at address 0001
+[    2.095154] mmc0: new ultra high speed DDR50 SDXC card at address 5048
+[    2.095589] mmcblk0: mmc0:5048 SD128 119 GiB
+[    2.097308]  mmcblk0: p1 p2
+[    2.097500] mmcblk0: mmc0:5048 SD128 119 GiB (quirks 0x00004000)
+[    2.147282] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+[    2.297839] usb 1-1: New USB device found, idVendor=2109, idProduct=3431, bcdDevice= 4.21
+[    2.297871] usb 1-1: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+[    2.297893] usb 1-1: Product: USB2.0 Hub
+[    2.299659] hub 1-1:1.0: USB hub found
+[    2.299997] hub 1-1:1.0: 4 ports detected
+[    2.595270] usb 1-1.3: new low-speed USB device number 3 using xhci_hcd
+[    2.703016] usb 1-1.3: New USB device found, idVendor=046d, idProduct=c077, bcdDevice=72.00
+[    2.703048] usb 1-1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    2.703071] usb 1-1.3: Product: USB Optical Mouse
+[    2.703089] usb 1-1.3: Manufacturer: Logitech
+[    2.711517] input: Logitech USB Optical Mouse as /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.3/1-1.3:1.0/0003:046D:C077.0001/input/input0
+[    2.711967] hid-generic 0003:046D:C077.0001: input,hidraw0: USB HID v1.11 Mouse [Logitech USB Optical Mouse] on usb-0000:01:00.0-1.3/input0
+[    2.791276] usb 1-1.4: new low-speed USB device number 4 using xhci_hcd
+[    2.899543] usb 1-1.4: New USB device found, idVendor=046d, idProduct=c31c, bcdDevice=64.00
+[    2.899575] usb 1-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    2.899598] usb 1-1.4: Product: USB Keyboard
+[    2.899615] usb 1-1.4: Manufacturer: Logitech
+[    2.909986] input: Logitech USB Keyboard as /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.4/1-1.4:1.0/0003:046D:C31C.0002/input/input1
+[    2.968071] hid-generic 0003:046D:C31C.0002: input,hidraw1: USB HID v1.10 Keyboard [Logitech USB Keyboard] on usb-0000:01:00.0-1.4/input0
+[    2.981076] input: Logitech USB Keyboard Consumer Control as /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.4/1-1.4:1.1/0003:046D:C31C.0003/input/input2
+[    3.039526] input: Logitech USB Keyboard System Control as /devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb1/1-1/1-1.4/1-1.4:1.1/0003:046D:C31C.0003/input/input3
+[    3.039818] hid-generic 0003:046D:C31C.0003: input,hidraw2: USB HID v1.10 Device [Logitech USB Keyboard] on usb-0000:01:00.0-1.4/input1
+[    5.055652] bcmgenet fd580000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+[    5.083283] IP-Config: Complete:
+[    5.083300]      device=eth0, hwaddr=d8:3a:dd:6f:a3:94, ipaddr=169.254.55.240, mask=255.255.0.0, gw=255.255.255.255
+[    5.083330]      host=169.254.55.240, domain=, nis-domain=(none)
+[    5.083347]      bootserver=255.255.255.255, rootserver=255.255.255.255, rootpath=
+[    5.083678] clk: Disabling unused clocks
+[    5.092397] Freeing unused kernel memory: 4864K
+[    5.092636] Run /init as init process
+[    5.092652]   with arguments:
+[    5.092657]     /init
+[    5.092662]     nosplash
+[    5.092668]   with environment:
+[    5.092673]     HOME=/
+[    5.092678]     TERM=linux
+[    5.092684]     autologin-user=nc4
+[    5.685334] EXT4-fs (mmcblk0p2): mounted filesystem a36be96c-66be-4487-a7a6-0481bca99d89 ro with ordered data mode. Quota mode: none.
+[    6.163550] systemd[1]: System time before build time, advancing clock.
+[    6.268928] NET: Registered PF_INET6 protocol family
+[    6.269632] Segment Routing with IPv6
+[    6.269652] In-situ OAM (IOAM) with IPv6
+[    6.313913] systemd[1]: systemd 252.31-1~deb12u1 running in system mode (+PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBFDISK +PCRE2 -PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+[    6.313990] systemd[1]: Detected architecture arm64.
+[    6.318510] systemd[1]: Hostname set to <raspberrypi>.
+[    6.889379] systemd[1]: /lib/systemd/system/writeboost.service:28: Standard output type syslog+console is obsolete, automatically updating to journal+console. Please update your unit file, and consider removing the setting altogether.
+[    6.896570] systemd[1]: Queued start job for default target multi-user.target.
+[    6.922323] systemd[1]: Created slice system-getty.slice - Slice /system/getty.
+[    6.924265] systemd[1]: Created slice system-modprobe.slice - Slice /system/modprobe.
+[    6.925752] systemd[1]: Created slice system-systemd\x2dfsck.slice - Slice /system/systemd-fsck.
+[    6.926715] systemd[1]: Created slice user.slice - User and Session Slice.
+[    6.927678] systemd[1]: Started systemd-ask-password-wall.path - Forward Password Requests to Wall Directory Watch.
+[    6.928783] systemd[1]: Set up automount proc-sys-fs-binfmt_misc.automount - Arbitrary Executable File Formats File System Automount Point.
+[    6.929150] systemd[1]: Expecting device dev-disk-by\x2dpartuuid-60ff2e57\x2d01.device - /dev/disk/by-partuuid/60ff2e57-01...
+[    6.929492] systemd[1]: Reached target integritysetup.target - Local Integrity Protected Volumes.
+[    6.929988] systemd[1]: Reached target slices.target - Slice Units.
+[    6.930306] systemd[1]: Reached target swap.target - Swaps.
+[    6.930597] systemd[1]: Reached target veritysetup.target - Local Verity Protected Volumes.
+[    6.931481] systemd[1]: Listening on systemd-fsckd.socket - fsck to fsckd communication Socket.
+[    6.931814] systemd[1]: Listening on systemd-initctl.socket - initctl Compatibility Named Pipe.
+[    6.932509] systemd[1]: Listening on systemd-journald-audit.socket - Journal Audit Socket.
+[    6.932941] systemd[1]: Listening on systemd-journald-dev-log.socket - Journal Socket (/dev/log).
+[    6.933359] systemd[1]: Listening on systemd-journald.socket - Journal Socket.
+[    6.935449] systemd[1]: Listening on systemd-udevd-control.socket - udev Control Socket.
+[    6.935895] systemd[1]: Listening on systemd-udevd-kernel.socket - udev Kernel Socket.
+[    6.936343] systemd[1]: dev-hugepages.mount - Huge Pages File System was skipped because of an unmet condition check (ConditionPathExists=/sys/kernel/mm/hugepages).
+[    6.951483] systemd[1]: Mounting dev-mqueue.mount - POSIX Message Queue File System...
+[    6.953749] systemd[1]: Mounting sys-kernel-debug.mount - Kernel Debug File System...
+[    6.958093] systemd[1]: Mounting sys-kernel-tracing.mount - Kernel Trace File System...
+[    6.958879] systemd[1]: auth-rpcgss-module.service - Kernel Module supporting RPCSEC_GSS was skipped because of an unmet condition check (ConditionPathExists=/etc/krb5.keytab).
+[    6.965964] systemd[1]: Starting fake-hwclock.service - Restore / save the current clock...
+[    6.968636] systemd[1]: Starting keyboard-setup.service - Set the console keyboard layout...
+[    6.971287] systemd[1]: Starting kmod-static-nodes.service - Create List of Static Device Nodes...
+[    6.974611] systemd[1]: Starting modprobe@configfs.service - Load Kernel Module configfs...
+[    6.978351] systemd[1]: Starting modprobe@dm_mod.service - Load Kernel Module dm_mod...
+[    6.982049] systemd[1]: Starting modprobe@drm.service - Load Kernel Module drm...
+[    6.986294] systemd[1]: Starting modprobe@efi_pstore.service - Load Kernel Module efi_pstore...
+[    6.990345] systemd[1]: Starting modprobe@fuse.service - Load Kernel Module fuse...
+[    6.995128] systemd[1]: Starting modprobe@loop.service - Load Kernel Module loop...
+[    6.995762] systemd[1]: systemd-fsck-root.service - File System Check on Root Device was skipped because of an unmet condition check (ConditionPathExists=!/run/initramfs/fsck-root).
+[    7.000258] systemd[1]: Starting systemd-journald.service - Journal Service...
+[    7.021945] systemd[1]: Starting systemd-modules-load.service - Load Kernel Modules...
+[    7.025152] systemd[1]: Starting systemd-remount-fs.service - Remount Root and Kernel File Systems...
+[    7.025675] device-mapper: ioctl: 4.48.0-ioctl (2023-03-01) initialised: dm-devel@redhat.com
+[    7.028350] systemd[1]: Starting systemd-udev-trigger.service - Coldplug All udev Devices...
+[    7.032173] systemd[1]: Starting writeboost.service - (dm-)writeboost mapper...
+[    7.040198] systemd[1]: Mounted dev-mqueue.mount - POSIX Message Queue File System.
+[    7.040782] systemd[1]: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+[    7.041186] fuse: init (API version 7.39)
+[    7.041232] systemd[1]: Mounted sys-kernel-tracing.mount - Kernel Trace File System.
+[    7.042058] systemd[1]: Finished kmod-static-nodes.service - Create List of Static Device Nodes.
+[    7.043564] systemd[1]: modprobe@configfs.service: Deactivated successfully.
+[    7.043955] systemd[1]: Finished modprobe@configfs.service - Load Kernel Module configfs.
+[    7.047444] systemd[1]: modprobe@dm_mod.service: Deactivated successfully.
+[    7.047781] systemd[1]: Finished modprobe@dm_mod.service - Load Kernel Module dm_mod.
+[    7.048881] systemd[1]: modprobe@efi_pstore.service: Deactivated successfully.
+[    7.049285] systemd[1]: Finished modprobe@efi_pstore.service - Load Kernel Module efi_pstore.
+[    7.050247] systemd[1]: modprobe@fuse.service: Deactivated successfully.
+[    7.050622] systemd[1]: Finished modprobe@fuse.service - Load Kernel Module fuse.
+[    7.051945] systemd[1]: modprobe@loop.service: Deactivated successfully.
+[    7.052598] systemd[1]: Finished modprobe@loop.service - Load Kernel Module loop.
+[    7.056849] systemd[1]: Mounting sys-fs-fuse-connections.mount - FUSE Control File System...
+[    7.060599] systemd[1]: Mounting sys-kernel-config.mount - Kernel Configuration File System...
+[    7.060930] systemd[1]: systemd-repart.service - Repartition Root Disk was skipped because no trigger condition checks were met.
+[    7.067230] systemd[1]: Finished writeboost.service - (dm-)writeboost mapper.
+[    7.070652] systemd[1]: Mounted sys-fs-fuse-connections.mount - FUSE Control File System.
+[    7.073710] systemd[1]: Finished fake-hwclock.service - Restore / save the current clock.
+[    7.074417] systemd[1]: Mounted sys-kernel-config.mount - Kernel Configuration File System.
+[    7.077646] i2c_dev: i2c /dev entries driver
+[    7.081832] systemd[1]: Finished systemd-modules-load.service - Load Kernel Modules.
+[    7.088020] EXT4-fs (mmcblk0p2): re-mounted a36be96c-66be-4487-a7a6-0481bca99d89 r/w. Quota mode: none.
+[    7.096160] [drm:drm_core_init [drm]] Initialized
+[    7.099754] systemd[1]: Starting systemd-sysctl.service - Apply Kernel Variables...
+[    7.102649] systemd[1]: modprobe@drm.service: Deactivated successfully.
+[    7.104334] systemd[1]: Finished modprobe@drm.service - Load Kernel Module drm.
+[    7.105500] systemd[1]: Finished systemd-remount-fs.service - Remount Root and Kernel File Systems.
+[    7.109956] systemd[1]: systemd-firstboot.service - First Boot Wizard was skipped because of an unmet condition check (ConditionFirstBoot=yes).
+[    7.110080] systemd[1]: systemd-pstore.service - Platform Persistent Storage Archival was skipped because of an unmet condition check (ConditionDirectoryNotEmpty=/sys/fs/pstore).
+[    7.112976] systemd[1]: Starting systemd-random-seed.service - Load/Save Random Seed...
+[    7.115795] systemd[1]: Starting systemd-sysusers.service - Create System Users...
+[    7.134650] systemd[1]: Started systemd-journald.service - Journal Service.
+[    7.175596] systemd-journald[246]: Received client request to flush runtime journal.
+[    7.199472] systemd-journald[246]: File /var/log/journal/e43f570a37704852b11cff2997cd5dc4/system.journal corrupted or uncleanly shut down, renaming and replacing.
+[    7.981890] mc: Linux media interface: v0.10
+[    7.999214] vc_sm_cma: module is from the staging directory, the quality is unknown, you have been warned.
+[    8.011005] bcm2835_vc_sm_cma_probe: Videocore shared memory driver
+[    8.011022] [vc_sm_connected_init]: start
+[    8.022739] [vc_sm_connected_init]: installed successfully
+[    8.071625] videodev: Linux video capture interface: v2.00
+[    8.073704] rpi-gpiomem fe200000.gpiomem: window base 0xfe200000 size 0x00001000
+[    8.096800] snd_bcm2835: module is from the staging directory, the quality is unknown, you have been warned.
+[    8.102268] rpi-gpiomem fe200000.gpiomem: initialised 1 regions as /dev/gpiomem
+[    8.114029] bcm2835_mmal_vchiq: module is from the staging directory, the quality is unknown, you have been warned.
+[    8.120853] bcm2835_audio bcm2835_audio: card created with 8 channels
+[    8.128891] rpivid_hevc: module is from the staging directory, the quality is unknown, you have been warned.
+[    8.146809] bcm2835_v4l2: module is from the staging directory, the quality is unknown, you have been warned.
+[    8.149599] bcm2835_codec: module is from the staging directory, the quality is unknown, you have been warned.
+[    8.151859] rpivid feb10000.codec: Device registered as /dev/video19
+[    8.166815] bcm2835_isp: module is from the staging directory, the quality is unknown, you have been warned.
+[    8.195384] bcm2835-codec bcm2835-codec: Device registered as /dev/video10
+[    8.195415] bcm2835-codec bcm2835-codec: Loaded V4L2 decode
+[    8.227379] bcm2835-codec bcm2835-codec: Device registered as /dev/video11
+[    8.227407] bcm2835-codec bcm2835-codec: Loaded V4L2 encode
+[    8.230141] bcm2835-isp bcm2835-isp: Device node output[0] registered as /dev/video13
+[    8.230567] bcm2835-isp bcm2835-isp: Device node capture[0] registered as /dev/video14
+[    8.235864] bcm2835-isp bcm2835-isp: Device node capture[1] registered as /dev/video15
+[    8.236194] bcm2835-codec bcm2835-codec: Device registered as /dev/video12
+[    8.236217] bcm2835-codec bcm2835-codec: Loaded V4L2 isp
+[    8.237720] bcm2835-isp bcm2835-isp: Device node stats[2] registered as /dev/video16
+[    8.237757] bcm2835-isp bcm2835-isp: Register output node 0 with media controller
+[    8.237766] bcm2835-isp bcm2835-isp: Register capture node 1 with media controller
+[    8.237770] bcm2835-isp bcm2835-isp: Register capture node 2 with media controller
+[    8.237774] bcm2835-isp bcm2835-isp: Register capture node 3 with media controller
+[    8.267426] bcm2835-codec bcm2835-codec: Device registered as /dev/video18
+[    8.267464] bcm2835-codec bcm2835-codec: Loaded V4L2 image_fx
+[    8.272585] bcm2835-isp bcm2835-isp: Device node output[0] registered as /dev/video20
+[    8.273829] bcm2835-isp bcm2835-isp: Device node capture[0] registered as /dev/video21
+[    8.274169] bcm2835-isp bcm2835-isp: Device node capture[1] registered as /dev/video22
+[    8.274522] bcm2835-codec bcm2835-codec: Device registered as /dev/video31
+[    8.274549] bcm2835-codec bcm2835-codec: Loaded V4L2 encode_image
+[    8.275287] bcm2835-isp bcm2835-isp: Device node stats[2] registered as /dev/video23
+[    8.275309] bcm2835-isp bcm2835-isp: Register output node 0 with media controller
+[    8.275316] bcm2835-isp bcm2835-isp: Register capture node 1 with media controller
+[    8.275320] bcm2835-isp bcm2835-isp: Register capture node 2 with media controller
+[    8.275332] bcm2835-isp bcm2835-isp: Register capture node 3 with media controller
+[    8.289186] bcm2835-isp bcm2835-isp: Loaded V4L2 bcm2835-isp
+[    8.343975] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[    8.367721] Loaded X.509 cert 'benh@debian.org: 577e021cb980e0e820821ba7b54b4961b8b4fadf'
+[    8.368083] Loaded X.509 cert 'romain.perier@gmail.com: 3abbc6ec146e09d1b6016ab9d6cf71dd233f0328'
+[    8.368409] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[    8.368725] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[    8.453912] Bluetooth: Core ver 2.22
+[    8.453977] NET: Registered PF_BLUETOOTH protocol family
+[    8.453980] Bluetooth: HCI device and connection manager initialized
+[    8.453994] Bluetooth: HCI socket layer initialized
+[    8.454001] Bluetooth: L2CAP socket layer initialized
+[    8.454010] Bluetooth: SCO socket layer initialized
+[    8.464299] brcmfmac: F1 signature read @0x18000000=0x15264345
+[    8.478985] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    8.483622] usbcore: registered new interface driver brcmfmac
+[    8.521313] Bluetooth: HCI UART driver ver 2.3
+[    8.521332] Bluetooth: HCI UART protocol H4 registered
+[    8.521406] Bluetooth: HCI UART protocol Three-wire (H5) registered
+[    8.540595] Bluetooth: HCI UART protocol Broadcom registered
+[    8.541868] hci_uart_bcm serial0-0: supply vbat not found, using dummy regulator
+[    8.542011] hci_uart_bcm serial0-0: supply vddio not found, using dummy regulator
+[    8.663435] uart-pl011 fe201000.serial: no DMA platform data
+[    8.797190] brcmfmac: brcmf_c_process_txcap_blob: no txcap_blob available (err=-2)
+[    8.797570] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: Aug 29 2023 01:47:08 version 7.45.265 (28bca26 CY) FWID 01-b677b91b
+[    8.820571] alsactl[454]: memfd_create() called without MFD_EXEC or MFD_NOEXEC_SEAL set
+[    8.903894] Bluetooth: hci0: BCM: chip id 107
+[    8.904195] Bluetooth: hci0: BCM: features 0x2f
+[    8.905898] Bluetooth: hci0: BCM4345C0
+[    8.905917] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
+[    8.909751] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.raspberrypi,4-model-b.hcd' Patch
+[    8.931606] spl: loading out-of-tree module taints kernel.
+[    9.146063] zfs: module license 'CDDL' taints kernel.
+[    9.146078] Disabling lock debugging due to kernel taint
+[    9.146135] zfs: module license taints kernel.
+[    9.626693] Bluetooth: hci0: BCM: features 0x2f
+[    9.635282] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+-0190
+[    9.635288] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0382
+[   10.274737] ZFS: Loaded module v2.2.3-1~bpo12+1~rpt1, ZFS pool version 5000, ZFS filesystem version 5
+[   10.978644] Adding 524284k swap on /var/swap.  Priority:-2 extents:5 across:2211836k SS
+[   11.108332] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+[   11.108347] Bluetooth: BNEP filters: protocol multicast
+[   11.108358] Bluetooth: BNEP socket layer initialized
+[   11.114858] Bluetooth: MGMT ver 1.22
+[   11.136398] NET: Registered PF_ALG protocol family
+[   12.012525] brcmfmac: brcmf_cfg80211_set_power_mgmt: power save enabled
+[   18.507350] OF: overlay: WARNING: memory leak will occur if overlay removed, property: /soc/spi@7e204000/status
+[   18.507373] OF: overlay: WARNING: memory leak will occur if overlay removed, property: /soc/spi@7e204000/spidev@0/status
+[   18.507382] OF: overlay: WARNING: memory leak will occur if overlay removed, property: /soc/spi@7e204000/spidev@1/status
+[   18.662855] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Starting probe for device spi0.0 on SPI0, CS=0
+[   18.662954] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Allocated DRM device successfully.
+[   18.662965] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Driver Name: nc4_ili9488
+[   18.662974] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Description: nc4 ILI9488
+[   18.662983] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Date: 20241227
+[   18.663014] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] RESET GPIO: acquired
+[   18.663031] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DC GPIO: acquired
+[   18.663075] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Backlight initialized successfully.
+[   18.663085] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Device rotation property: 0
+[   18.663096] [drm:mipi_dbi_spi_init [drm_mipi_dbi]] SPI speed: 20MHz
+[   18.663109] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] SPI0 initialized successfully.
+[   18.663118] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_dev_init] dev_init mode=320x480 rotation=0
+[   18.663179] [drm:mipi_dbi_dev_init_with_formats [drm_mipi_dbi]] rotation = 0
+[   18.663191] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] MIPI-DBI device initialized successfully.
+[   18.663206] [drm:drm_minor_register [drm]] 
+[   18.663398] [drm:drm_minor_register [drm]] 
+[   18.663875] [drm:drm_minor_register [drm]] new minor registered 0
+[   18.663964] [drm:drm_minor_register [drm]] 
+[   18.664059] [drm:drm_sysfs_connector_add [drm]] adding "SPI-1" to sysfs
+[   18.664289] nc4_ili9488 spi0.0: [drm:drm_sysfs_connector_hotplug_event [drm]] [CONNECTOR:31:SPI-1] generating connector hotplug event
+[   18.664453] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.0 on minor 0
+[   18.664459] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DRM device registered successfully.
+[   18.664480] [drm:drm_client_modeset_probe [drm]] 
+[   18.664555] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   18.664629] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-1]
+[   18.664684] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-1] status updated from unknown to connected
+[   18.664739] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-1] probed modes :
+[   18.664773] [drm:drm_mode_debug_printmodeline [drm]] Modeline "320x480": 0 1 320 320 320 320 480 480 480 480 0x48 0x0
+[   18.664849] [drm:drm_client_modeset_probe [drm]] connector 31 enabled? yes
+[   18.664923] [drm:drm_client_modeset_probe [drm]] Not using firmware configuration
+[   18.664998] [drm:drm_client_modeset_probe [drm]] looking for cmdline mode on connector 31
+[   18.665075] [drm:drm_client_modeset_probe [drm]] looking for preferred mode on connector 31 0
+[   18.665147] [drm:drm_client_modeset_probe [drm]] found mode 320x480
+[   18.665219] [drm:drm_client_modeset_probe [drm]] picking CRTCs for 320x480 config
+[   18.665292] [drm:drm_client_modeset_probe [drm]] desired mode 320x480 set on crtc 34 (0,0)
+[   18.665364] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   18.665436] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (3)
+[   18.665510] nc4_ili9488 spi0.0: [drm:__drm_fb_helper_initial_config_and_unlock [drm_kms_helper]] test CRTC 0 primary plane
+[   18.665559] nc4_ili9488 spi0.0: [drm:drm_fbdev_generic_helper_fb_probe [drm_kms_helper]] surface width(320), height(480) and bpp(32)
+[   18.666033] nc4_ili9488 spi0.0: [drm:drm_mode_addfb2 [drm]] [FB:36]
+[   18.666126] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (2)
+[   18.666953] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000b16e2361
+[   18.667077] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000363ac999 state to 00000000b16e2361
+[   18.667152] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 00000000ac5b6fe5 state to 00000000b16e2361
+[   18.667229] nc4_ili9488 spi0.0: [drm:drm_atomic_set_mode_for_crtc [drm]] Set [MODE:320x480] for [CRTC:34:crtc-0] state 00000000ac5b6fe5
+[   18.668793] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_plane [drm]] Link [PLANE:32:plane-0] state 00000000363ac999 to [CRTC:34:crtc-0]
+[   18.668947] nc4_ili9488 spi0.0: [drm:drm_atomic_set_fb_for_plane [drm]] Set [FB:36] for [PLANE:32:plane-0] state 00000000363ac999
+[   18.669028] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (1)
+[   18.669108] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_connectors [drm]] Adding all current connectors for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.669189] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   18.669260] nc4_ili9488 spi0.0: [drm:drm_atomic_get_connector_state [drm]] Added [CONNECTOR:31:SPI-1] 000000003f47e34b state to 00000000b16e2361
+[   18.669332] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (3)
+[   18.669428] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_connector [drm]] Link [CONNECTOR:31:SPI-1] state 000000003f47e34b to [CRTC:34:crtc-0]
+[   18.669504] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 00000000b16e2361
+[   18.669578] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] mode changed
+[   18.669638] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] enable changed
+[   18.669671] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] active changed
+[   18.669706] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] Updating routing for [CONNECTOR:31:SPI-1]
+[   18.669740] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CONNECTOR:31:SPI-1] using [ENCODER:35:None-35] on [CRTC:34:crtc-0]
+[   18.669774] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CRTC:34:crtc-0] needs all connectors, enable: y, active: y
+[   18.669809] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_connectors [drm]] Adding all current connectors for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.669890] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.669961] nc4_ili9488 spi0.0: [drm:drm_atomic_add_encoder_bridges [drm]] Adding all bridges for [encoder:35:None-35] to 00000000b16e2361
+[   18.670043] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000b16e2361
+[   18.670114] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 00000000b16e2361
+[   18.670200] nc4_ili9488 spi0.0: [drm:crtc_set_mode [drm_kms_helper]] modeset on [ENCODER:35:None-35]
+[   18.670241] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   18.670255] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x480+0+0)
+[   18.670266] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   18.670277] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   18.670286] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   18.670300] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   18.671883] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   18.671918] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   18.671953] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   18.671972] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   18.671981] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   18.864748] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   18.864782] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_commit_modeset_enables [drm_kms_helper]] enabling [CRTC:34:crtc-0]
+[   18.864837] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Starting enable sequence for device spi0.0 on SPI0, CS=0
+[   18.864869] [drm:mipi_dbi_typec3_command_read [drm_mipi_dbi]] cmd=0a, par=00
+[   18.991299] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=01
+[   19.003299] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Power-on reset completed for device spi0.0 on CS=0
+[   19.159262] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Explicit hardware reset completed for spi0.0 on CS=0
+[   19.159293] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Initializing panel commands for device spi0.0 on CS=0
+[   19.159303] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=SW_RESET(0x01), num_args=0
+[   19.159314] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:SW_RESET(0x01), args(0):
+[   19.159323] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.159334] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=01, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.287257] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=DISPLAY_OFF(0x28), num_args=0
+[   19.287275] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:DISPLAY_OFF(0x28), args(0):
+[   19.287284] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.287292] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=28, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.287328] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=SLEEP_OUT(0x11), num_args=0
+[   19.287337] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:SLEEP_OUT(0x11), args(0):
+[   19.287346] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.287353] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=11, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.415256] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] SPI dev=spi0 cs=0 -> cmd=DISPLAY_ON(0x29), num_args=0
+[   19.415268] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_send_cmd] CMD:DISPLAY_ON(0x29), args(0):
+[   19.415277] [drm:nc4_ili9488_send_cmd.constprop.0 [nc4_ili9488]] 
+[   19.415286] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=29, par=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   19.415318] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Address mode configuration.
+[   19.415326] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=36, par=40
+[   19.415341] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Address mode set to 0x40 for rotation 0
+[   19.415350] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Flushing framebuffer to panel.
+[   19.415358] [drm:nc4_mipi_dbi18_enable_flush [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_enable_flush] enable_flush - full screen
+[   19.415368] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   19.415379] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   19.415387] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   19.415401] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   19.416621] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   19.416632] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   19.416650] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   19.416668] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   19.416676] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   19.608977] [drm:nc4_mipi_dbi18_enable_flush [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_enable_flush] after fb_dirty in enable_flush dev=spi0 cs=0
+[   19.608998] [drm:nc4_mipi_dbi18_enable_flush [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_enable_flush] enabling backlight
+[   19.609008] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Backlight enabled for device spi0.0 on CS=0
+[   19.609017] [drm:nc4_ili9488_enable [nc4_ili9488]] nc4_ili9488: [ENABLE] Enable sequence completed for device spi0.0 on CS=0
+[   19.609028] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_commit_modeset_enables [drm_kms_helper]] enabling [ENCODER:35:None-35]
+[   19.609091] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000b16e2361
+[   19.609206] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (4)
+[   19.609281] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000b16e2361
+[   19.609392] Console: switching to colour frame buffer device 40x30
+[   19.609410] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 0000000096e9a93b
+[   19.609485] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (2)
+[   19.609556] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000a2542d9a state to 0000000096e9a93b
+[   19.609630] [drm:drm_mode_object_get [drm]] OBJ ID: 37 (1)
+[   19.609701] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 0000000061eff2aa state to 0000000096e9a93b
+[   19.609777] nc4_ili9488 spi0.0: [drm:drm_atomic_set_fb_for_plane [drm]] Set [FB:36] for [PLANE:32:plane-0] state 00000000a2542d9a
+[   19.609848] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (3)
+[   19.609918] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (4)
+[   19.609990] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_connectors [drm]] Adding all current connectors for [CRTC:34:crtc-0] to 0000000096e9a93b
+[   19.610064] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (4)
+[   19.610135] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (5)
+[   19.610205] nc4_ili9488 spi0.0: [drm:drm_atomic_get_connector_state [drm]] Added [CONNECTOR:31:SPI-1] 00000000a169be87 state to 0000000096e9a93b
+[   19.610278] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (5)
+[   19.610348] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_connector [drm]] Link [CONNECTOR:31:SPI-1] state 00000000a169be87 to [NOCRTC]
+[   19.610421] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (4)
+[   19.610491] nc4_ili9488 spi0.0: [drm:drm_atomic_set_crtc_for_connector [drm]] Link [CONNECTOR:31:SPI-1] state 00000000a169be87 to [CRTC:34:crtc-0]
+[   19.610564] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 0000000096e9a93b
+[   19.610641] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] Updating routing for [CONNECTOR:31:SPI-1]
+[   19.610678] nc4_ili9488 spi0.0: [drm:drm_atomic_helper_check_modeset [drm_kms_helper]] [CONNECTOR:31:SPI-1] keeps [ENCODER:35:None-35], now on [CRTC:34:crtc-0]
+[   19.610713] nc4_ili9488 spi0.0: [drm:drm_atomic_add_encoder_bridges [drm]] Adding all bridges for [encoder:35:None-35] to 0000000096e9a93b
+[   19.610786] nc4_ili9488 spi0.0: [drm:drm_atomic_add_encoder_bridges [drm]] Adding all bridges for [encoder:35:None-35] to 0000000096e9a93b
+[   19.610862] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 0000000096e9a93b
+[   19.610935] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 0000000096e9a93b
+[   19.611019] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   19.611032] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x480+0+0)
+[   19.611042] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   19.611052] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   19.611060] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   19.611073] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   19.612322] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   19.612336] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   19.612364] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   19.612382] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   19.612390] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   19.804631] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   19.804674] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 0000000096e9a93b
+[   19.804807] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (5)
+[   19.804880] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (4)
+[   19.804952] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 37 (2)
+[   19.805024] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (3)
+[   19.805095] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 0000000096e9a93b
+[   19.805482] nc4_ili9488 spi0.0: [drm] fb0: nc4_ili9488drmf frame buffer device
+[   19.805745] Bluetooth: RFCOMM TTY layer initialized
+[   19.805803] Bluetooth: RFCOMM socket layer initialized
+[   19.805859] Bluetooth: RFCOMM ver 1.11
+[   19.805871] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 0000000096e9a93b
+[   19.805998] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (2)
+[   19.806074] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000f3f9ee18 state to 0000000096e9a93b
+[   19.806151] [drm:drm_mode_object_get [drm]] OBJ ID: 37 (1)
+[   19.806225] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 000000004e21b5c8 state to 0000000096e9a93b
+[   19.806300] [drm:drm_mode_object_get [drm]] OBJ ID: 38 (1)
+[   19.806378] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 0000000096e9a93b
+[   19.806480] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 0000000096e9a93b
+[   19.806566] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 0000000096e9a93b
+[   19.806687] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   19.806715] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x480+0+0)
+[   19.806729] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,0)-(320,480)
+[   19.806742] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Full framebuffer update detected.
+[   19.806752] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,0)-(320,480)
+[   19.806776] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   19.808988] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=0 ye=479
+[   19.809022] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   19.809063] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=00 00 01 df
+[   19.809082] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   19.809091] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=460800
+[   19.829460] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Probe completed for device spi0.0 on CS=0
+[   19.829650] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Starting probe for device spi0.1 on SPI0, CS=1
+[   19.829771] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Allocated DRM device successfully.
+[   19.829783] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Driver Name: nc4_ili9488
+[   19.829795] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Description: nc4 ILI9488
+[   19.829804] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [DRIVER INFO] Date: 20241227
+[   19.829844] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] RESET GPIO: acquired
+[   19.829862] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DC GPIO: acquired
+[   19.829887] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Backlight initialized successfully.
+[   19.829900] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Device rotation property: 0
+[   19.829911] [drm:mipi_dbi_spi_init [drm_mipi_dbi]] SPI speed: 20MHz
+[   19.829926] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] SPI0 initialized successfully.
+[   19.829935] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_dev_init] dev_init mode=320x480 rotation=0
+[   19.830014] [drm:mipi_dbi_dev_init_with_formats [drm_mipi_dbi]] rotation = 0
+[   19.830029] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] MIPI-DBI device initialized successfully.
+[   19.830048] [drm:drm_minor_register [drm]] 
+[   19.830197] [drm:drm_minor_register [drm]] 
+[   19.830530] [drm:drm_minor_register [drm]] new minor registered 1
+[   19.830640] [drm:drm_minor_register [drm]] 
+[   19.830763] [drm:drm_sysfs_connector_add [drm]] adding "SPI-2" to sysfs
+[   19.831031] nc4_ili9488 spi0.1: [drm:drm_sysfs_connector_hotplug_event [drm]] [CONNECTOR:31:SPI-2] generating connector hotplug event
+[   19.831163] [drm] Initialized nc4_ili9488 1.0.0 20241227 for spi0.1 on minor 1
+[   19.831168] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] DRM device registered successfully.
+[   19.831192] [drm:drm_client_modeset_probe [drm]] 
+[   19.831380] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   19.831470] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-2]
+[   19.831535] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-2] status updated from unknown to connected
+[   19.831593] [drm:drm_helper_probe_single_connector_modes [drm_kms_helper]] [CONNECTOR:31:SPI-2] probed modes :
+[   19.831742] [drm:drm_mode_debug_printmodeline [drm]] Modeline "320x480": 0 1 320 320 320 320 480 480 480 480 0x48 0x0
+[   19.831893] [drm:drm_client_modeset_probe [drm]] connector 31 enabled? yes
+[   19.831984] [drm:drm_client_modeset_probe [drm]] Not using firmware configuration
+[   19.832072] [drm:drm_client_modeset_probe [drm]] looking for cmdline mode on connector 31
+[   19.832154] [drm:drm_client_modeset_probe [drm]] looking for preferred mode on connector 31 0
+[   19.832232] [drm:drm_client_modeset_probe [drm]] found mode 320x480
+[   19.832315] [drm:drm_client_modeset_probe [drm]] picking CRTCs for 320x480 config
+[   19.832399] [drm:drm_client_modeset_probe [drm]] desired mode 320x480 set on crtc 34 (0,0)
+[   19.832482] [drm:drm_mode_object_get [drm]] OBJ ID: 31 (2)
+[   19.832564] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 31 (3)
+[   19.832644] nc4_ili9488 spi0.1: [drm:__drm_fb_helper_initial_config_and_unlock [drm_kms_helper]] test CRTC 0 primary plane
+[   19.832711] nc4_ili9488 spi0.1: [drm:drm_fbdev_generic_helper_fb_probe [drm_kms_helper]] surface width(320), height(480) and bpp(32)
+[   19.833786] nc4_ili9488 spi0.1: [drm:drm_mode_addfb2 [drm]] [FB:36]
+[   19.833954] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (2)
+[   19.834611] nc4_ili9488 spi0.1: [drm] fb1: nc4_ili9488drmf frame buffer device
+[   19.834621] [drm:nc4_ili9488_probe [nc4_ili9488]] nc4_ili9488: [nc4_ili9488_probe] Probe completed for device spi0.1 on CS=1
+[   20.003793] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   20.003837] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 38 (2)
+[   20.003979] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 0000000096e9a93b
+[   20.004054] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 37 (2)
+[   20.004126] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (3)
+[   20.004197] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 0000000096e9a93b
+[   20.004290] nc4_ili9488 spi0.0: [drm:drm_atomic_state_init [drm]] Allocated atomic state 00000000325fd64d
+[   20.004367] [drm:drm_mode_object_get [drm]] OBJ ID: 36 (2)
+[   20.004438] nc4_ili9488 spi0.0: [drm:drm_atomic_get_plane_state [drm]] Added [PLANE:32:plane-0] 00000000f01376d1 state to 00000000325fd64d
+[   20.004511] [drm:drm_mode_object_get [drm]] OBJ ID: 37 (1)
+[   20.004581] nc4_ili9488 spi0.0: [drm:drm_atomic_get_crtc_state [drm]] Added [CRTC:34:crtc-0] 0000000061eff2aa state to 00000000325fd64d
+[   20.004652] [drm:drm_mode_object_get [drm]] OBJ ID: 39 (1)
+[   20.004721] nc4_ili9488 spi0.0: [drm:drm_atomic_check_only [drm]] checking 00000000325fd64d
+[   20.004804] nc4_ili9488 spi0.0: [drm:drm_atomic_add_affected_planes [drm]] Adding all current planes for [CRTC:34:crtc-0] to 00000000325fd64d
+[   20.004876] nc4_ili9488 spi0.0: [drm:drm_atomic_commit [drm]] committing 00000000325fd64d
+[   20.004959] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update called
+[   20.004971] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] merged damage rect=(320x16+0+272)
+[   20.004981] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Dirty framebuffer update: dev=spi0.0 on SPI0, CS=0 rect=(0,272)-(320,288)
+[   20.004992] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] format=XR24 little-endian (0x34325258) swap=1 clip=(0,272)-(320,288)
+[   20.005004] [drm:nc4_mipi_dbi18_buf_copy [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_buf_copy] Converting from XRGB8888 to 18-bit
+[   20.005056] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi_set_window_address] dev=spi0 cs=0 xs=0 xe=319 ys=272 ye=287
+[   20.005068] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2a, par=00 00 01 3f
+[   20.005098] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2b, par=01 10 01 1f
+[   20.005117] [drm:nc4_mipi_dbi18_fb_dirty [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_fb_dirty] Writing memory data to device.
+[   20.005125] [drm:mipi_dbi_typec3_command [drm_mipi_dbi]] cmd=2c, len=15360
+[   20.011590] [drm:nc4_mipi_dbi18_pipe_update [nc4_ili9488]] nc4_ili9488: [nc4_mipi_dbi18_pipe_update] pipe_update done for dev=spi0.0 cs=0
+[   20.011622] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 39 (2)
+[   20.011731] nc4_ili9488 spi0.0: [drm:drm_atomic_state_default_clear [drm]] Clearing atomic state 00000000325fd64d
+[   20.011806] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 37 (2)
+[   20.011877] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 36 (3)
+[   20.011948] [drm:drm_mode_object_put.part.0 [drm]] OBJ ID: 38 (1)
+[   20.012019] nc4_ili9488 spi0.0: [drm:__drm_atomic_state_free [drm]] Freeing atomic state 00000000325fd64d
+
+=== Recent KMSCON Logs (Last 30 Minutes) ===
+Jan 03 20:48:46 raspberrypi sudo[2331]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/usr/bin/journalctl -u kmsconvt@tty1.service --no-pager
+Jan 03 21:01:11 raspberrypi sudo[2703]:      nc4 : TTY=pts/2 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/usr/bin/systemctl disable kmsconvt@tty1
+Jan 03 21:01:17 raspberrypi kmscon[663]: [7824.721320] WARNING: seat: destroying seat seat0 while still awake: -16 (kmscon_seat_free() in ../src/kmscon_seat.c:806)
+Jan 03 21:01:18 raspberrypi systemd[1]: Stopping kmsconvt@tty1.service - KMS System Console on tty1...
+Jan 03 21:01:18 raspberrypi systemd[1]: kmsconvt@tty1.service: Deactivated successfully.
+Jan 03 21:01:18 raspberrypi systemd[1]: Stopped kmsconvt@tty1.service - KMS System Console on tty1.
+Jan 03 21:01:18 raspberrypi systemd[1]: kmsconvt@tty1.service: Consumed 4.569s CPU time.
+Jan 03 21:01:19 raspberrypi systemd[1]: Removed slice system-kmsconvt.slice - Slice /system/kmsconvt.
+Jan 03 21:01:19 raspberrypi systemd[1]: system-kmsconvt.slice: Consumed 4.569s CPU time.
+Jan 03 21:15:29 raspberrypi sudo[1406]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/usr/bin/journalctl -u kmsconvt@tty1.service --no-pager
+Jan 03 21:16:51 raspberrypi sudo[1641]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/usr/bin/journalctl -u kmsconvt@tty1.service --no-pager
+
+=== KMSCON Boot-Only Logs ===
+Jan 03 21:15:29 raspberrypi sudo[1406]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/usr/bin/journalctl -u kmsconvt@tty1.service --no-pager
+Jan 03 21:16:51 raspberrypi sudo[1641]:      nc4 : TTY=pts/3 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/usr/bin/journalctl -u kmsconvt@tty1.service --no-pager

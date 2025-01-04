@@ -198,6 +198,21 @@ else
     echo "!!ERROR!!: Framebuffer path $FB_PATH not found. Check graphics setup."
 fi
 
+# Validate framebuffer configurations using fbset
+echo
+echo "==== Verifying Framebuffer Configurationss ===="
+echo
+FRAMEBUFFERS=("/dev/fb0" "/dev/fb1")
+for FB in "${FRAMEBUFFERS[@]}"; do
+    if [ -e "$FB" ]; then
+        echo "Framebuffer configuration for $FB:"
+        fbset -fb "$FB"
+    else
+        echo "!!ERROR!!: Framebuffer device $FB not found."
+    fi
+    echo
+done
+
 # Check SPI devices and driver binding
 echo
 echo "==== Checking Driver Probe and Device Binding for SPI0 Devices ===="

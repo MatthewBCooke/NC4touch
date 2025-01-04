@@ -181,6 +181,27 @@ uevent
 
 -----------------------------------------------------------
 
+==== Verifying Framebuffer Configurationss ====
+
+Framebuffer configuration for /dev/fb0:
+
+mode "320x480"
+    geometry 320 480 320 480 32
+    timings 0 0 0 0 0 0 0
+    rgba 8/16,8/8,8/0,0/0
+endmode
+
+
+Framebuffer configuration for /dev/fb1:
+
+mode "320x480"
+    geometry 320 480 320 480 32
+    timings 0 0 0 0 0 0 0
+    rgba 8/16,8/8,8/0,0/0
+endmode
+
+
+
 ==== Checking Driver Probe and Device Binding for SPI0 Devices ====
 Driver probe for spi0.0 detected in logs.
 spi0.0 is correctly bound to nc4_ili9488 driver.
@@ -202,7 +223,7 @@ Checking GPIO 25 (LCD_0 RES):
 GPIO 25: level=1 func=OUTPUT pull=DOWN
 
 Checking GPIO 24 (LCD_0 DC):
-GPIO 24: level=0 func=OUTPUT pull=DOWN
+GPIO 24: level=1 func=OUTPUT pull=DOWN
 
 Checking GPIO 23 (LCD_1 RES):
 GPIO 23: level=1 func=OUTPUT pull=DOWN

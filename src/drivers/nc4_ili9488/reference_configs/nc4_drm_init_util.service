@@ -41,9 +41,6 @@ After=multi-user.target dev-dri-card1.device
 # This is a one-time task, so we use "oneshot"
 Type=oneshot
 
-# # Command to load the overlay
-# ExecStart=/usr/bin/dtoverlay nc4_ili9488
-
 # Command to initialize displays
 ExecStart=/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/utils/nc4_drm_init_util
 

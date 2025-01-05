@@ -19,7 +19,7 @@ source /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/config.env
 
 # Configuration variables
 DRIVER_NAME="nc4_ili9488"
-LOG_FILE="$LOGS_DIR/nc4_ili9488_debug.log"
+LOG_FILE="$LOGS_DIR/dblog_nc4_ili9488.log"
 
 # Ensure the log directory exists
 mkdir -p "$LOGS_DIR"

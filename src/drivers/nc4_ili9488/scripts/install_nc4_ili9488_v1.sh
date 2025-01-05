@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 ################################################################################
-# driver_install.sh
 #
 # Script to build, install, and deploy the nc4_ili9488 driver and overlay on
 # a Raspberry Pi running Debian Bookworm (or similar).
 #
-# Adjust paths as needed for your environment.
 ################################################################################
 
 set -e

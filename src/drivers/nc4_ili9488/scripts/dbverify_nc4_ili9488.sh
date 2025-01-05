@@ -13,15 +13,11 @@
 #
 # Logging:
 # - Outputs results to both the console and a log file in the
-#   logs directory (`nc4_ili9488_verify.log`).
+#   logs directory.
 #
 # Prerequisites:
 # - Ensure `config.env` is correctly set up.
 # - Requires permissions for `dmesg`, `lsmod`, `insmod`, etc.
-#
-# Usage:
-# Run this script from the `scripts` directory:
-#   ./validate_install.sh
 # ==========================================================
 
 set -e
@@ -33,7 +29,7 @@ source /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/config.env
 DRIVER_NAME="nc4_ili9488"
 OVERLAY_DTBO="/boot/firmware/overlays/${OVERLAY_NAME}.dtbo"
 DRIVER_PATH="/lib/modules/$(uname -r)/extra/${DRIVER_NAME}.ko"
-LOG_FILE="${LOGS_DIR}/nc4_ili9488_verify.log"
+LOG_FILE="${LOGS_DIR}/dbverify_nc4_ili9488.log"
 
 # Ensure log directory exists
 mkdir -p "$LOGS_DIR"

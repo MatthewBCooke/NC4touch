@@ -13,7 +13,7 @@ set -e
 # Source the configuration file
 source /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/config.env
 
-LOG_FILE="$LOGS_DIR/nc4_ili9488_install.log"
+LOG_FILE="$LOGS_DIR/install_nc4_ili9488.log"
 
 # Ensure the log directory exists
 mkdir -p "$LOGS_DIR"
@@ -52,6 +52,23 @@ make clean |& tee -a "$LOG_FILE" || true
 # Compile the kernel module with verbose logging
 echo "Compiling nc4_ili9488.ko..." | tee -a "$LOG_FILE"
 make |& tee -a "$LOG_FILE"
+
+# Post-build cleanup: Purge and move artifacts to BUILDS_DIR
+echo "Moving build artifacts to BUILDS_DIR..." | tee -a "$LOG_FILE"
+mkdir -p "$BUILDS_DIR"
+
+# Purge BUILDS_DIR
+rm -rf "$BUILDS_DIR"/* 2>/dev/null || true
+
+# Move build artifacts to BUILDS_DIR, checking existence
+ARTIFACTS=( "*.o" "*.mod.c" "*.symvers" "*.order" "*.ko" )
+for ARTIFACT in "${ARTIFACTS[@]}"; do
+    if compgen -G "$ARTIFACT" > /dev/null; then
+        mv $ARTIFACT "$BUILDS_DIR" 2>/dev/null || true
+    else
+        echo "Warning: No $ARTIFACT found to move." | tee -a "$LOG_FILE"
+    fi
+done
 
 echo "==== Installing the nc4_ili9488 Kernel Module ====" | tee -a "$LOG_FILE"
 

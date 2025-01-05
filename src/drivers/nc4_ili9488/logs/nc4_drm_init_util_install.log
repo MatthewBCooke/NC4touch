@@ -1,6 +1,0 @@
-==== Compiling nc4_drm_init_util ====
-/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/utils/nc4_drm_init_util.c:10:10: fatal error: xf86drm.h: No such file or directory
-   10 | #include <xf86drm.h>
-      |          ^~~~~~~~~~~
-compilation terminated.
-!!ERROR!!: Script failed at line 35.

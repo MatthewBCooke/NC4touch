@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 ################################################################################
-# run_nc4_drm_init_util_install.sh
 #
 # Script to build, execute, and validate the nc4_drm_init_util program for
 # initializing DRM-based displays.
 #
-# Adjust paths as needed for your environment.
 ################################################################################
 
 set -e
@@ -16,7 +14,7 @@ source /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/config.env
 # Define utility and log paths using sourced variables
 UTILITY_DIR="$UTILS_DIR"
 LOG_DIR="$LOGS_DIR"
-LOG_FILE="$LOG_DIR/nc4_drm_init_util_install.log"
+LOG_FILE="$LOG_DIR/install_nc4_drm_init_util.log"
 UTILITY_SOURCE="$UTILITY_DIR/nc4_drm_init_util.c"
 UTILITY_BINARY="$UTILITY_DIR/nc4_drm_init_util"
 

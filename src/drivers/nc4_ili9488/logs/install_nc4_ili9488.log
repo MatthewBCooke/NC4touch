@@ -29,6 +29,12 @@ make[2]: *** [/usr/src/linux-headers-6.6.62+rpt-common-rpi/Makefile:817: include
 make[1]: *** [/usr/src/linux-headers-6.6.62+rpt-common-rpi/Makefile:246: __sub-make] Error 2
 make[1]: Leaving directory '/usr/src/linux-headers-6.6.62+rpt-rpi-v8'
 make: *** [Makefile:9: all] Error 2
+Moving build artifacts to BUILDS_DIR...
+Warning: No *.o found to move.
+Warning: No *.mod.c found to move.
+Warning: No *.symvers found to move.
+Warning: No *.order found to move.
+Warning: No *.ko found to move.
 ==== Installing the nc4_ili9488 Kernel Module ====
 cp: cannot stat '/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/builds/nc4_ili9488.ko': No such file or directory
 ==== Done Installing nc4_ili9488 ====

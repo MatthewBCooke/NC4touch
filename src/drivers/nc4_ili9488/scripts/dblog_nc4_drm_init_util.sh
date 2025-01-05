@@ -18,7 +18,7 @@ set -e
 source /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/config.env
 
 # Configuration variables
-LOG_FILE="$LOGS_DIR/nc4_drm_init_util_debug.log"
+LOG_FILE="$LOGS_DIR/dblog_nc4_drm_init_util.log"
 
 # Ensure the log directory exists
 mkdir -p "$LOGS_DIR"

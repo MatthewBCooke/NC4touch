@@ -121,18 +121,7 @@ You can do this from your SSH connection using:
 sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
-2. Add the following content:
-   ```
-   country=CA
-   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-   update_config=1
-
-   network={
-       ssid="NC4_Neurogenesis_Exposure"
-       psk="nc4lab1434"
-   }
-   ```
-   Or
+2. Add the following content(s):
    ```
    country=CA
    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -141,6 +130,15 @@ sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
    network={
        ssid="poserguru_s24"
        psk="funkstar"
+   }
+
+   country=CA
+   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+   update_config=1
+
+   network={
+       ssid="NC4_Neurogenesis_Exposure"
+       psk="nc4lab1434"
    }
    ```
 

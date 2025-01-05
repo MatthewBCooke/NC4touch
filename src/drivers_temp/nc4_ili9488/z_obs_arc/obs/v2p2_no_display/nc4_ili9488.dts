@@ -1,0 +1,153 @@
+/********************************************************************************
+ * nc4_ili9488.dts
+ *
+ * Device Tree Overlay for two ILI9488 panels on Raspberry Pi's SPI0 bus.
+ * - Disables spidev0 (CE0) and spidev1 (CE1) unless needed for spidev.
+ * - Creates two SPI child nodes, pitft0@0 (CE0) and pitft1@1 (CE1).
+ * - Gathers all GPIO lines (RESET, DC, Backlight) into a single pinctrl node
+ *   labeled "spi0_aux_pins" under &gpio.
+ * - Then references that label in the parent SPI0 node so the Pi firmware
+ *   merges them properly.
+ *
+ * Usage:
+ *   dtoverlay=nc4_ili9488
+ ********************************************************************************/
+
+ /dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	/****************************************************************************
+	 * Fragment 0: Enable SPI0 hardware
+	 ****************************************************************************/
+	fragment@0 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	/****************************************************************************
+	 * Fragment 1: Disable spidev0 (on CE0)
+	 ****************************************************************************/
+	fragment@1 {
+		target = <&spidev0>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	/****************************************************************************
+	 * Fragment 2: Disable spidev1 (on CE1)
+	 ****************************************************************************/
+	fragment@2 {
+		target = <&spidev1>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	/****************************************************************************
+	 * Fragment 3: Define a single pin group node for SPI0's auxiliary lines:
+	 *             DC, RESET for both panels, plus the backlight pin.
+	 *
+	 *   GPIO24,25 => first panel (pitft0)
+	 *   GPIO23,27 => second panel (pitft1)
+	 *   GPIO18    => shared backlight
+	 * 
+	 * We give it a LABEL: 'spi0_aux_pins:'
+	 ****************************************************************************/
+	fragment@3 {
+		target = <&gpio>;
+		__overlay__ {
+			spi0_aux_pins: spi0_aux_pins {
+				brcm,pins = <18 23 24 25 27>;
+				brcm,function = <1 1 1 1 1>; /* set all as output */
+			};
+		};
+	};
+
+	/****************************************************************************
+	 * Fragment 4: Attach the 'spi0_aux_pins' label to the SPI0 node by referencing
+	 *             it in pinctrl-0.
+	 ****************************************************************************/
+	fragment@4 {
+		target = <&spi0>;
+		__overlay__ {
+			pinctrl-names = "default";
+			pinctrl-0 = <&spi0_aux_pins>;
+			/* status already set to "okay" in fragment@0 */
+		};
+	};
+
+	/****************************************************************************
+	 * Fragment 5: FIRST ILI9488 device node on SPI0 CE0 (pitft0@0)
+	 ****************************************************************************/
+	fragment@5 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			pitft0: pitft0@0 {
+				compatible = "ili9488";
+				reg = <0>; /* CE0 line */
+				spi-max-frequency = <4000000>;
+				rotation = <0>;
+
+				/* First panel's RESET/DC lines */
+				reset-gpios = <&gpio 24 0>;
+				dc-gpios    = <&gpio 25 0>;
+
+				/* Shared backlight on GPIO18 */
+				backlight = <&backlight>;
+			};
+		};
+	};
+
+	/****************************************************************************
+	 * Fragment 6: SECOND ILI9488 device node on SPI0 CE1 (pitft1@1)
+	 ****************************************************************************/
+	fragment@6 {
+		target = <&spi0>;
+		__overlay__ {
+			pitft1: pitft1@1 {
+				compatible = "ili9488";
+				reg = <1>; /* CE1 line */
+				spi-max-frequency = <4000000>;
+				rotation = <0>;
+
+				/* Second panel's RESET/DC lines */
+				reset-gpios = <&gpio 23 0>;
+				dc-gpios    = <&gpio 27 0>;
+
+				backlight = <&backlight>;
+			};
+		};
+	};
+
+	/****************************************************************************
+	 * Fragment 7: Shared backlight control on GPIO18
+	 ****************************************************************************/
+	fragment@7 {
+		target-path = "/soc";
+		__overlay__ {
+			backlight: backlight {
+				compatible = "gpio-backlight";
+				gpios = <&gpio 18 0>;
+			};
+		};
+	};
+
+	/****************************************************************************
+	 * Overridable parameters for speed and rotation
+	 ****************************************************************************/
+	__overrides__ {
+		speed = <&pitft0>,"spi-max-frequency:0",
+		         <&pitft1>,"spi-max-frequency:0";
+		rotation = <&pitft0>,"rotation:0",
+		            <&pitft1>,"rotation:0";
+	};
+};

@@ -1,0 +1,10 @@
+Jan 04 16:45:46 raspberrypi sudo[3410]:      nc4 : TTY=pts/1 ; PWD=/etc/systemd/system ; USER=root ; COMMAND=/usr/bin/rm -f nc4_drm_init_util.service
+Jan 04 17:11:24 raspberrypi sudo[4045]:      nc4 : TTY=pts/1 ; PWD=/etc/systemd/system ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/utils/nc4_drm_init_util
+Jan 04 17:11:24 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] Opened DRM device successfully
+Jan 04 17:11:24 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] Fetched DRM resources successfully
+Jan 04 17:11:24 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] Connector 31 is connected with mode 320x480
+Jan 04 17:11:24 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 04 17:11:24 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] Framebuffer added with ID=39
+Jan 04 17:11:24 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer mapped at offset=4295581696
+Jan 04 17:11:24 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] Framebuffer filled with white color
+Jan 04 17:11:25 raspberrypi nc4_drm_init_util[4047]: nc4_ili9488: [nc4_drm_init_util] CRTC set successfully for mode 320x480 on connector 31

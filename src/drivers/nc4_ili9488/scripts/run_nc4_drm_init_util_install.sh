@@ -10,10 +10,13 @@
 
 set -e
 
-# Paths
-UTILITY_DIR="/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/nc4_drm_init_util"
-LOG_DIR="/home/nc4/TouchscreenApparatus/src/drivers/debug/kmscon_debug/logs"
-LOG_FILE="$LOG_DIR/drm_debug.log"
+# Source the configuration file
+source /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/config.env
+
+# Define utility and log paths using sourced variables
+UTILITY_DIR="$UTILS_DIR"
+LOG_DIR="$LOGS_DIR"
+LOG_FILE="$LOG_DIR/nc4_drm_init_util_install.log"
 UTILITY_SOURCE="$UTILITY_DIR/nc4_drm_init_util.c"
 UTILITY_BINARY="$UTILITY_DIR/nc4_drm_init_util"
 
@@ -21,19 +24,10 @@ UTILITY_BINARY="$UTILITY_DIR/nc4_drm_init_util"
 trap 'echo "!!ERROR!!: Script failed at line $LINENO."; exit 1;' ERR
 
 # Ensure the log directory exists
-mkdir -p "$LOG_DIR"
+mkdir -p "$LOGS_DIR"
 
-# Delete the old log file if it exists
-if [[ -f "$LOG_FILE" ]]; then
-    echo "Removing old log file: $LOG_FILE"
-    rm "$LOG_FILE"
-fi
-
-# Ensure the log directory is writable
-if [[ ! -w "$LOG_DIR" ]]; then
-    echo "!!ERROR!!: Cannot write to log directory: $LOG_DIR"
-    exit 1
-fi
+# Clear the log file if it exists
+> "$LOG_FILE"
 
 echo "==== Compiling nc4_drm_init_util ===="
 

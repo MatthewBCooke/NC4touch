@@ -1,0 +1,140 @@
+/********************************************************************************
+ * nc4_ili9488.dts (Revised)
+ *
+ * Two or three ILI9488 panels on SPI0 with correct pin muxing and spidev disabled.
+ *
+ * Usage:
+ *   1) Copy/modify this file to /boot/firmware/overlays/ (on Debian Bookworm).
+ *   2) Compile with: dtc -@ -I dts -O dtb -o nc4_ili9488.dtbo nc4_ili9488.dts
+ *   3) In /boot/firmware/config.txt, add:  dtoverlay=nc4_ili9488
+ ********************************************************************************/
+ /dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	/***********************************************************************
+	 * fragment@0: Pin Muxing for SPI0
+	 *   - GPIO9,10,11 = MISO, MOSI, SCLK (alt0 → function=4)
+	 *   - GPIO8,7,6 = CE0, CE1, CE2 (alt0 → function=4)
+	 ***********************************************************************/
+	fragment@0 {
+		target = <&gpio>;
+		__overlay__ {
+			spi0_pins: spi0_pins {
+				brcm,pins = <9 10 11>;
+				brcm,function = <4 4 4>; /* ALT0 for MISO, MOSI, SCLK */
+			};
+
+			spi0_cs_pins: spi0_cs_pins {
+				brcm,pins = <8 7 6>;
+				brcm,function = <4 4 4>; /* ALT0 for CE0, CE1, CE2 */
+			};
+		};
+	};
+
+	/***********************************************************************
+	 * fragment@1: Disable default spidev child nodes on SPI0
+	 *   (so that our custom ILI9488 nodes can fully own the bus)
+	 ***********************************************************************/
+	fragment@1 {
+		target = <&spidev0>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	fragment@2 {
+		target = <&spidev1>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	/***********************************************************************
+	 * fragment@3: Define & enable SPI0 with new pinctrl, cs-gpios, and up
+	 *             to three child devices (ili9488@0, ili9488@1, ili9488@2).
+	 ***********************************************************************/
+	fragment@3 {
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&spi0_pins &spi0_cs_pins>;
+			cs-gpios = <&gpio 8 1>, <&gpio 7 1>, <&gpio 6 1>;
+			status = "okay";
+
+			/* First display on CE0 */
+			ili9488_0: ili9488_0@0 {
+				compatible = "ili9488";
+				reg = <0>; /* CE0 */
+				spi-max-frequency = <4000000>;
+				rotation = <0>;
+
+				reset-gpios = <&gpio 24 0>;
+				dc-gpios = <&gpio 25 0>;
+				backlight = <&backlight>;
+				status = "okay";
+			};
+
+			/* Second display on CE1 */
+			ili9488_1: ili9488_1@1 {
+				compatible = "ili9488";
+				reg = <1>; /* CE1 */
+				spi-max-frequency = <4000000>;
+				rotation = <0>;
+
+				reset-gpios = <&gpio 23 0>;
+				dc-gpios = <&gpio 27 0>;
+				backlight = <&backlight>;
+				status = "okay";
+			};
+
+			/* Third display on CE2 (optional) */
+			ili9488_2: ili9488_2@2 {
+				compatible = "ili9488";
+				reg = <2>; /* CE2 */
+				spi-max-frequency = <4000000>;
+				rotation = <0>;
+
+				/* Adjust these pins if you have a third display physically connected. */
+				reset-gpios = <&gpio 22 0>;
+				dc-gpios = <&gpio 5 0>;
+				backlight = <&backlight>;
+				status = "disabled";  /* change to "okay" if you truly have a 3rd LCD */
+			};
+		};
+	};
+
+	/***********************************************************************
+	 * fragment@4: Shared backlight node
+	 ***********************************************************************/
+	fragment@4 {
+		target-path = "/soc";
+		__overlay__ {
+			backlight: backlight {
+				compatible = "gpio-backlight";
+				gpios = <&gpio 18 0>;
+				default-state = "on";
+			};
+		};
+	};
+
+	/***********************************************************************
+	 * Overridable parameters
+	 ***********************************************************************/
+	__overrides__ {
+		speed =       <&ili9488_0>,"spi-max-frequency:0",
+					  <&ili9488_1>,"spi-max-frequency:0",
+					  <&ili9488_2>,"spi-max-frequency:0";
+
+		rotation =    <&ili9488_0>,"rotation:0",
+					  <&ili9488_1>,"rotation:0",
+					  <&ili9488_2>,"rotation:0";
+
+		enable3rd =   <&ili9488_2>,"status";
+	};
+};

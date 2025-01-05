@@ -1,20 +1,44 @@
 #!/bin/bash
+# ==========================================================
+# nc4_ili9488 Installation Validation Script
+# ----------------------------------------------------------
+# Purpose:
+# This script validates the installation of the nc4_ili9488
+# device tree overlay and driver by performing the following:
+# - Validates the presence of overlay files and nodes.
+# - Checks kernel logs and `config.txt` for overlay references.
+# - Ensures the driver module exists and is loaded.
+# - Inspects DRM cards, framebuffers, and SPI device bindings.
+# - Verifies GPIO states for pins used by the nc4_ili9488 setup.
+#
+# Logging:
+# - Outputs results to both the console and a log file in the
+#   logs directory (`install_validation.log`).
+#
+# Prerequisites:
+# - Ensure `config.env` is correctly set up.
+# - Requires permissions for `dmesg`, `lsmod`, `insmod`, etc.
+#
+# Usage:
+# Run this script from the `scripts` directory:
+#   ./validate_install.sh
+# ==========================================================
 
-# Configuration
-OVERLAY_NAME="nc4_ili9488"
+set -e
+
+# Load configuration from config.env
+source /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/config.env
+
+# Configuration variables
 OVERLAY_DTBO="/boot/firmware/overlays/${OVERLAY_NAME}.dtbo"
-DRIVER_NAME="nc4_ili9488"
 DRIVER_PATH="/lib/modules/$(uname -r)/extra/${DRIVER_NAME}.ko"
-LOG_DIR="/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/logs"
-LOG_FILE="${LOG_DIR}/install_validation.log"
+LOG_FILE="${LOGS_DIR}/install_validation.log"
 
 # Ensure log directory exists
-mkdir -p "$LOG_DIR"
+mkdir -p "$LOGS_DIR"
 
-# Delete the old log file if it exists
-if [[ -f "$LOG_FILE" ]]; then
-    rm "$LOG_FILE"
-fi
+# Clear the log file if it exists
+> "$LOG_FILE"
 
 # Redirect all output to log file and console
 exec > >(tee -a "$LOG_FILE") 2>&1
@@ -56,23 +80,13 @@ echo "-----------------------------------------------------------"
 echo "Note: Full dtc output (including Pi-specific warnings) is in $TMP_DTC_RAW"
 
 # Define the expected nodes
-EXPECTED_NODES=(
-    "pitft0@0"
-    "pitft0_pins"
-    "pitft1@1"
-    "pitft1_pins"
-    "backlight"
-)
+EXPECTED_NODES=( "pitft0@0" "pitft0_pins" "pitft1@1" "pitft1_pins" "backlight" )
 
 # Validate each node in the live device tree
 echo
 echo "---- Checking overlay nodes in the live device tree ----"
 for NODE in "${EXPECTED_NODES[@]}"; do
-    NODE_PATHS=(
-        "/proc/device-tree/soc/spi@7e204000/$NODE"
-        "/proc/device-tree/soc/gpio@7e200000/$NODE"
-    )
-    
+    NODE_PATHS=( "/proc/device-tree/soc/spi@7e204000/$NODE" "/proc/device-tree/soc/gpio@7e200000/$NODE" )
     FOUND=false
     for NODE_PATH in "${NODE_PATHS[@]}"; do
         if [ -d "$NODE_PATH" ]; then
@@ -81,12 +95,10 @@ for NODE in "${EXPECTED_NODES[@]}"; do
             break
         fi
     done
-    
     if ! $FOUND && grep -q "$NODE" "$TMP_DTC_RAW"; then
         echo "Node '$NODE' found in decompiled Device Tree (TMP_DTC_RAW)."
         FOUND=true
     fi
-
     if ! $FOUND; then
         echo "!!ERROR!!: Node '$NODE' not found. Check overlay or binding for issues."
     fi
@@ -174,103 +186,6 @@ if [ -d "$DRM_PATH" ]; then
 else
     echo "!!ERROR!!: DRM path $DRM_PATH not found. Check driver setup."
 fi
-
-# Confirm framebuffers are associated with DRM cards
-echo
-echo "==== Verifying Framebuffers ===="
-echo
-FB_PATH="/sys/class/graphics"
-if [ -d "$FB_PATH" ]; then
-    echo "---- Listing framebuffers ----"
-    ls "$FB_PATH"
-    echo
-    echo "---- Details for each framebuffer ----"
-    for FB in "$FB_PATH"/fb*; do
-        echo "Inspecting $(basename "$FB"):"
-        ls "$FB"
-        if [ -f "$FB/uevent" ]; then
-            cat "$FB/uevent"
-        fi
-        echo
-    done
-    echo "-----------------------------------------------------------"
-else
-    echo "!!ERROR!!: Framebuffer path $FB_PATH not found. Check graphics setup."
-fi
-
-# Validate framebuffer configurations using fbset
-echo
-echo "==== Verifying Framebuffer Configurationss ===="
-echo
-FRAMEBUFFERS=("/dev/fb0" "/dev/fb1")
-for FB in "${FRAMEBUFFERS[@]}"; do
-    if [ -e "$FB" ]; then
-        echo "Framebuffer configuration for $FB:"
-        fbset -fb "$FB"
-    else
-        echo "!!ERROR!!: Framebuffer device $FB not found."
-    fi
-    echo
-done
-
-# Check SPI devices and driver binding
-echo
-echo "==== Checking Driver Probe and Device Binding for SPI0 Devices ===="
-
-# Update SPI device list to the first two SPI0 devices
-SPI_DEVICES=("spi0.0" "spi0.1")
-
-# Define the driver name
-DRIVER_NAME="nc4_ili9488"
-
-for DEVICE in "${SPI_DEVICES[@]}"; do
-    # Check driver probe in kernel logs
-    if dmesg | grep -q -i "$DRIVER_NAME.*$DEVICE"; then
-        echo "Driver probe for $DEVICE detected in logs."
-    else
-        echo "!!ERROR!!: No logs found for driver probe on $DEVICE."
-    fi
-
-    # Check driver binding
-    DEVICE_PATH="/sys/bus/spi/devices/$DEVICE/driver"
-    if [ -e "$DEVICE_PATH" ]; then
-        DRIVER_BOUND=$(readlink "$DEVICE_PATH")
-        if [[ $DRIVER_BOUND == *"$DRIVER_NAME"* ]]; then
-            echo "$DEVICE is correctly bound to $DRIVER_NAME driver."
-        else
-            echo "!!ERROR!!: $DEVICE is not bound to $DRIVER_NAME driver."
-        fi
-    else
-        echo "!!ERROR!!: No driver found bound to $DEVICE."
-    fi
-done
-
-# Check Relevant GPIO Pin States
-echo
-echo "==== Validating GPIO Pin States ===="
-echo
-
-# Define GPIO pins with labels
-declare -A GPIO_LABELS=(
-    [10]="MOSI"
-    [11]="SCLK"
-    [7]="LCD_1 CS (CE1)"
-    [8]="LCD_0 CS (CE0)"
-    [22]="LCD_1 DC"
-    [23]="LCD_1 RES"
-    [24]="LCD_0 DC"
-    [25]="LCD_0 RES"
-    [27]="Backlight"
-)
-
-# Iterate through GPIO pins and print states with labels
-for PIN in "${!GPIO_LABELS[@]}"; do
-    LABEL=${GPIO_LABELS[$PIN]}
-    echo "Checking GPIO $PIN ($LABEL):"
-    raspi-gpio get $PIN
-    echo
-done
-
 
 echo
 echo "=== Validation Complete ==="

@@ -1,0 +1,16 @@
+# Module target
+obj-m += nc4_ili9488.o
+
+# Kernel build directory
+KDIR ?= /lib/modules/$(shell uname -r)/build
+
+# Output directory for build artifacts
+BUILDS_DIR ?= /home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/builds
+
+# Build the module
+all:
+	$(MAKE) -C $(KDIR) M=$(PWD) O=$(BUILDS_DIR) modules
+
+# Clean the module
+clean:
+	$(MAKE) -C $(KDIR) M=$(PWD) O=$(BUILDS_DIR) clean

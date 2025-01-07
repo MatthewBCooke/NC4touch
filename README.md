@@ -502,7 +502,7 @@ sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
    crw-rw---- 1 root spi 153, 1 Dec 10 10:00 /dev/spidev0.1
    ```
 
-## Setup access to GitHub
+## Setup access to GitHub in Pi
 
 1. Generate a new SSH key:
    ```

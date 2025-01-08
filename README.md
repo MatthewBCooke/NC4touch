@@ -902,7 +902,7 @@ sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/
 
 Retain only 10 MB of log data (M, K):
 ```
-sudo journalctl --vacuum-size=10M
+sudo journalctl --vacuum-size=15M
 ```
 
 Remove logs older than 1 hour (h, d, w):

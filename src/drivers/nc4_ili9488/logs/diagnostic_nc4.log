@@ -3,10 +3,10 @@
 ==== DRM Resource Details ====
 Listing /dev/dri devices:
 total 0
-drwxr-xr-x  2 root root     100 Jan  7 18:09 by-path
-crw-rw----+ 1 root video 226, 0 Jan  7 18:09 card0
-crw-rw----+ 1 root video 226, 1 Jan  7 18:09 card1
-crw-rw----+ 1 root video 226, 2 Jan  7 18:09 card2
+drwxr-xr-x  2 root root     100 Jan  7 19:42 by-path
+crw-rw----+ 1 root video 226, 0 Jan  7 19:42 card0
+crw-rw----+ 1 root video 226, 1 Jan  7 19:42 card1
+crw-rw----+ 1 root video 226, 2 Jan  7 19:42 card2
 
 Detailed DRM Information (via drm_info):
 Node: /dev/dri/card0
@@ -108,7 +108,7 @@ Node: /dev/dri/card0
             │   └───DRM_FORMAT_MOD_LINEAR (0x0)
             │       ├───RGB565 (0x36314752)
             │       └───XRGB8888 (0x34325258)
-            └───"FB_DAMAGE_CLIPS" (atomic): blob = 0
+            └───"FB_DAMAGE_CLIPS" (atomic): blob = 39
 Node: /dev/dri/card1
 ├───Driver: nc4_ili9488 (nc4 ILI9488) version 1.0.0 (20241227)
 │   ├───DRM_CLIENT_CAP_STEREO_3D supported
@@ -151,7 +151,7 @@ Node: /dev/dri/card1
 │           ├───"link-status": enum {Good, Bad} = Good
 │           ├───"non-desktop" (immutable): range [0, 1] = 0
 │           ├───"TILE" (immutable): blob = 0
-│           └───"CRTC_ID" (atomic): object CRTC = 34
+│           └───"CRTC_ID" (atomic): object CRTC = 0
 ├───Encoders
 │   └───Encoder 0
 │       ├───Object ID: 35
@@ -162,12 +162,10 @@ Node: /dev/dri/card1
 │   └───CRTC 0
 │       ├───Object ID: 34
 │       ├───Legacy info
-│       │   ├───Mode: 320x480@0.01 preferred driver 
 │       │   └───Gamma size: 0
 │       └───Properties
-│           ├───"ACTIVE" (atomic): range [0, 1] = 1
-│           ├───"MODE_ID" (atomic): blob = 37
-│           │   └───320x480@0.01 preferred driver 
+│           ├───"ACTIVE" (atomic): range [0, 1] = 0
+│           ├───"MODE_ID" (atomic): blob = 0
 │           ├───"OUT_FENCE_PTR" (atomic): range [0, UINT64_MAX] = 0
 │           └───"VRR_ENABLED": range [0, 1] = 0
 └───Planes
@@ -175,35 +173,23 @@ Node: /dev/dri/card1
         ├───Object ID: 32
         ├───CRTCs: {0}
         ├───Legacy info
-        │   ├───FB ID: 36
-        │   │   ├───Object ID: 36
-        │   │   ├───Size: 320x480
-        │   │   ├───Format: XRGB8888 (0x34325258)
-        │   │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
-        │   │   └───Planes:
-        │   │       └───Plane 0: offset = 0, pitch = 1280 bytes
+        │   ├───FB ID: 0
         │   └───Formats:
         │       ├───RGB565 (0x36314752)
         │       └───XRGB8888 (0x34325258)
         └───Properties
             ├───"type" (immutable): enum {Overlay, Primary, Cursor} = Primary
-            ├───"FB_ID" (atomic): object framebuffer = 36
-            │   ├───Object ID: 36
-            │   ├───Size: 320x480
-            │   ├───Format: XRGB8888 (0x34325258)
-            │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
-            │   └───Planes:
-            │       └───Plane 0: offset = 0, pitch = 1280 bytes
+            ├───"FB_ID" (atomic): object framebuffer = 0
             ├───"IN_FENCE_FD" (atomic): srange [-1, INT32_MAX] = -1
-            ├───"CRTC_ID" (atomic): object CRTC = 34
+            ├───"CRTC_ID" (atomic): object CRTC = 0
             ├───"CRTC_X" (atomic): srange [INT32_MIN, INT32_MAX] = 0
             ├───"CRTC_Y" (atomic): srange [INT32_MIN, INT32_MAX] = 0
-            ├───"CRTC_W" (atomic): range [0, INT32_MAX] = 320
-            ├───"CRTC_H" (atomic): range [0, INT32_MAX] = 480
+            ├───"CRTC_W" (atomic): range [0, INT32_MAX] = 0
+            ├───"CRTC_H" (atomic): range [0, INT32_MAX] = 0
             ├───"SRC_X" (atomic): range [0, UINT32_MAX] = 0
             ├───"SRC_Y" (atomic): range [0, UINT32_MAX] = 0
-            ├───"SRC_W" (atomic): range [0, UINT32_MAX] = 320
-            ├───"SRC_H" (atomic): range [0, UINT32_MAX] = 480
+            ├───"SRC_W" (atomic): range [0, UINT32_MAX] = 0
+            ├───"SRC_H" (atomic): range [0, UINT32_MAX] = 0
             ├───"IN_FORMATS" (immutable): blob = 33
             │   └───DRM_FORMAT_MOD_LINEAR (0x0)
             │       ├───RGB565 (0x36314752)
@@ -251,7 +237,7 @@ Node: /dev/dri/card2
 │           ├───"link-status": enum {Good, Bad} = Good
 │           ├───"non-desktop" (immutable): range [0, 1] = 0
 │           ├───"TILE" (immutable): blob = 0
-│           └───"CRTC_ID" (atomic): object CRTC = 34
+│           └───"CRTC_ID" (atomic): object CRTC = 0
 ├───Encoders
 │   └───Encoder 0
 │       ├───Object ID: 35
@@ -262,12 +248,10 @@ Node: /dev/dri/card2
 │   └───CRTC 0
 │       ├───Object ID: 34
 │       ├───Legacy info
-│       │   ├───Mode: 320x480@0.01 preferred driver 
 │       │   └───Gamma size: 0
 │       └───Properties
-│           ├───"ACTIVE" (atomic): range [0, 1] = 1
-│           ├───"MODE_ID" (atomic): blob = 37
-│           │   └───320x480@0.01 preferred driver 
+│           ├───"ACTIVE" (atomic): range [0, 1] = 0
+│           ├───"MODE_ID" (atomic): blob = 0
 │           ├───"OUT_FENCE_PTR" (atomic): range [0, UINT64_MAX] = 0
 │           └───"VRR_ENABLED": range [0, 1] = 0
 └───Planes
@@ -275,35 +259,23 @@ Node: /dev/dri/card2
         ├───Object ID: 32
         ├───CRTCs: {0}
         ├───Legacy info
-        │   ├───FB ID: 36
-        │   │   ├───Object ID: 36
-        │   │   ├───Size: 320x480
-        │   │   ├───Format: XRGB8888 (0x34325258)
-        │   │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
-        │   │   └───Planes:
-        │   │       └───Plane 0: offset = 0, pitch = 1280 bytes
+        │   ├───FB ID: 0
         │   └───Formats:
         │       ├───RGB565 (0x36314752)
         │       └───XRGB8888 (0x34325258)
         └───Properties
             ├───"type" (immutable): enum {Overlay, Primary, Cursor} = Primary
-            ├───"FB_ID" (atomic): object framebuffer = 36
-            │   ├───Object ID: 36
-            │   ├───Size: 320x480
-            │   ├───Format: XRGB8888 (0x34325258)
-            │   ├───Modifier: DRM_FORMAT_MOD_LINEAR (0x0)
-            │   └───Planes:
-            │       └───Plane 0: offset = 0, pitch = 1280 bytes
+            ├───"FB_ID" (atomic): object framebuffer = 0
             ├───"IN_FENCE_FD" (atomic): srange [-1, INT32_MAX] = -1
-            ├───"CRTC_ID" (atomic): object CRTC = 34
+            ├───"CRTC_ID" (atomic): object CRTC = 0
             ├───"CRTC_X" (atomic): srange [INT32_MIN, INT32_MAX] = 0
             ├───"CRTC_Y" (atomic): srange [INT32_MIN, INT32_MAX] = 0
-            ├───"CRTC_W" (atomic): range [0, INT32_MAX] = 320
-            ├───"CRTC_H" (atomic): range [0, INT32_MAX] = 480
+            ├───"CRTC_W" (atomic): range [0, INT32_MAX] = 0
+            ├───"CRTC_H" (atomic): range [0, INT32_MAX] = 0
             ├───"SRC_X" (atomic): range [0, UINT32_MAX] = 0
             ├───"SRC_Y" (atomic): range [0, UINT32_MAX] = 0
-            ├───"SRC_W" (atomic): range [0, UINT32_MAX] = 320
-            ├───"SRC_H" (atomic): range [0, UINT32_MAX] = 480
+            ├───"SRC_W" (atomic): range [0, UINT32_MAX] = 0
+            ├───"SRC_H" (atomic): range [0, UINT32_MAX] = 0
             ├───"IN_FORMATS" (immutable): blob = 33
             │   └───DRM_FORMAT_MOD_LINEAR (0x0)
             │       ├───RGB565 (0x36314752)

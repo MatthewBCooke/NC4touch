@@ -645,8 +645,8 @@ static void nc4_ili9488_remove(struct spi_device *spi)
 {
 	struct drm_device *drm = spi_get_drvdata(spi);
 
-	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_remove] Removing dev=%s cs=%d\n",
-				  dev_name(&spi->dev), spi->chip_select);
+	// DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_remove] Removing dev=%s cs=%d\n",
+	// 			  dev_name(&spi->dev), spi->chip_select);
 
 	drm_dev_unplug(drm);
 	drm_atomic_helper_shutdown(drm);
@@ -657,8 +657,8 @@ static void nc4_ili9488_remove(struct spi_device *spi)
  ******************************************************************************/
 static void nc4_ili9488_shutdown(struct spi_device *spi)
 {
-	DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_shutdown] Shutdown dev=%s cs=%d\n",
-				  dev_name(&spi->dev), spi->chip_select);
+	// DRM_DEBUG_KMS("nc4_ili9488: [nc4_ili9488_shutdown] Shutdown dev=%s cs=%d\n",
+	// 			  dev_name(&spi->dev), spi->chip_select);
 	drm_atomic_helper_shutdown(spi_get_drvdata(spi));
 }
 

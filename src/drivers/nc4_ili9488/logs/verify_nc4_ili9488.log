@@ -13,13 +13,13 @@ Overlay file found: /boot/firmware/overlays/nc4_ili9488.dtbo
 Note: Full dtc output (including Pi-specific warnings) is in /tmp/dtc_raw_output.txt
 
 ---- Checking overlay nodes in the live device tree ----
-!!ERROR!!: Node 'pitft0@0' not found. Check overlay or binding for issues.
-!!ERROR!!: Node 'pitft0_pins' not found. Check overlay or binding for issues.
-!!ERROR!!: Node 'pitft1@1' not found. Check overlay or binding for issues.
-!!ERROR!!: Node 'pitft1_pins' not found. Check overlay or binding for issues.
-!!ERROR!!: Node 'pitft2@2' not found. Check overlay or binding for issues.
-!!ERROR!!: Node 'pitft2_pins' not found. Check overlay or binding for issues.
-!!ERROR!!: Node 'backlight' not found. Check overlay or binding for issues.
+Node 'pitft0@0' found at path: /proc/device-tree/soc/spi@7e215080/pitft0@0
+Node 'pitft0_pins' found at path: /proc/device-tree/soc/gpio@7e200000/pitft0_pins
+Node 'pitft1@1' found at path: /proc/device-tree/soc/spi@7e215080/pitft1@1
+Node 'pitft1_pins' found at path: /proc/device-tree/soc/gpio@7e200000/pitft1_pins
+Node 'pitft2@2' found at path: /proc/device-tree/soc/spi@7e215080/pitft2@2
+Node 'pitft2_pins' found at path: /proc/device-tree/soc/gpio@7e200000/pitft2_pins
+Node 'backlight' found in decompiled Device Tree (TMP_DTC_RAW).
 -----------------------------------------------------------
 
 ---- Listing all nodes under /proc/device-tree/soc/spi@7e215080 for verification: ----
@@ -32,6 +32,9 @@ name
 phandle
 pinctrl-0
 pinctrl-names
+pitft0@0
+pitft1@1
+pitft2@2
 reg
 #size-cells
 spidev@0
@@ -41,7 +44,7 @@ status
 -----------------------------------------------------------
 
 Checking kernel logs for overlay application:
-!!ERROR!!: Overlay not found in kernel messages. Check the logs for issues.
+Overlay is logged in kernel messages.
 
 Verifying overlay references in config.txt:
 Overlay is referenced in config.txt.
@@ -52,27 +55,175 @@ Checking if the driver is found:
 Driver file found: /lib/modules/6.6.62+rpt-rpi-v8/extra/nc4_ili9488.ko
 
 Checking if the driver module is loaded:
-Driver module is not loaded. Attempting to load it...
-insmod: ERROR: could not insert module /lib/modules/6.6.62+rpt-rpi-v8/extra/nc4_ili9488.ko: Unknown symbol in module
-!!ERROR!!: Failed to load the driver module.
+Driver module is loaded.
 
 ==== Verifying DRM Cards Setup ====
 
 ---- Listing DRM cards and connectors ----
+card0
+card0-SPI-1
+card1
+card1-SPI-2
+card2
+card2-SPI-3
 version
 
 ---- Details for each DRM card ----
-Inspecting card*:
-ls: cannot access '/sys/class/drm/card*': No such file or directory
+Inspecting card0:
+card0-SPI-1
+dev
+device
+power
+subsystem
+uevent
+MAJOR=226
+MINOR=0
+DEVNAME=dri/card0
+DEVTYPE=drm_minor
+
+Inspecting card0-SPI-1:
+connector_id
+device
+dpms
+edid
+enabled
+modes
+power
+status
+subsystem
+uevent
+DEVTYPE=drm_connector
+
+Inspecting card1:
+card1-SPI-2
+dev
+device
+power
+subsystem
+uevent
+MAJOR=226
+MINOR=1
+DEVNAME=dri/card1
+DEVTYPE=drm_minor
+
+Inspecting card1-SPI-2:
+connector_id
+device
+dpms
+edid
+enabled
+modes
+power
+status
+subsystem
+uevent
+DEVTYPE=drm_connector
+
+Inspecting card2:
+card2-SPI-3
+dev
+device
+power
+subsystem
+uevent
+MAJOR=226
+MINOR=2
+DEVNAME=dri/card2
+DEVTYPE=drm_minor
+
+Inspecting card2-SPI-3:
+connector_id
+device
+dpms
+edid
+enabled
+modes
+power
+status
+subsystem
+uevent
+DEVTYPE=drm_connector
 
 -----------------------------------------------------------
 
 ==== Verifying Framebuffers ====
 
 ---- Listing framebuffers ----
+fb0
+fb1
+fb2
 fbcon
 
 ---- Details for each framebuffer ----
+Inspecting fb0:
+bits_per_pixel
+blank
+bl_curve
+console
+cursor
+dev
+device
+mode
+modes
+name
+pan
+power
+rotate
+state
+stride
+subsystem
+uevent
+virtual_size
+MAJOR=29
+MINOR=0
+DEVNAME=fb0
+
+Inspecting fb1:
+bits_per_pixel
+blank
+bl_curve
+console
+cursor
+dev
+device
+mode
+modes
+name
+pan
+power
+rotate
+state
+stride
+subsystem
+uevent
+virtual_size
+MAJOR=29
+MINOR=1
+DEVNAME=fb1
+
+Inspecting fb2:
+bits_per_pixel
+blank
+bl_curve
+console
+cursor
+dev
+device
+mode
+modes
+name
+pan
+power
+rotate
+state
+stride
+subsystem
+uevent
+virtual_size
+MAJOR=29
+MINOR=2
+DEVNAME=fb2
+
 Inspecting fbcon:
 cursor_blink
 power
@@ -86,12 +237,12 @@ uevent
 ==== Checking Driver Probe and Device Binding for SPI Devices ====
 
 ==== Checking Driver Probe and Device Binding for SPI Devices ====
-!!ERROR!!: No logs found for driver probe on spi1.0.
-!!ERROR!!: spi1.0 is not bound to nc4_ili9488 driver.
-!!ERROR!!: No logs found for driver probe on spi1.1.
-!!ERROR!!: spi1.1 is not bound to nc4_ili9488 driver.
-!!ERROR!!: No logs found for driver probe on spi1.2.
-!!ERROR!!: spi1.2 is not bound to nc4_ili9488 driver.
+Driver probe for spi1.0 detected in logs.
+spi1.0 is correctly bound to nc4_ili9488 driver.
+Driver probe for spi1.1 detected in logs.
+spi1.1 is correctly bound to nc4_ili9488 driver.
+Driver probe for spi1.2 detected in logs.
+spi1.2 is correctly bound to nc4_ili9488 driver.
 
 ==== Validating GPIO Pin States ====
 
@@ -102,18 +253,18 @@ GPIO 17: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 16:
 GPIO 16: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 12:
-GPIO 12: level=0 func=INPUT pull=DOWN
+GPIO 12: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 13:
-GPIO 13: level=0 func=INPUT pull=DOWN
+GPIO 13: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 22:
-GPIO 22: level=0 func=INPUT pull=DOWN
+GPIO 22: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 23:
-GPIO 23: level=1 func=INPUT pull=DOWN
+GPIO 23: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 24:
-GPIO 24: level=0 func=INPUT pull=DOWN
+GPIO 24: level=1 func=OUTPUT pull=DOWN
 Checking GPIO 25:
-GPIO 25: level=1 func=INPUT pull=DOWN
+GPIO 25: level=0 func=OUTPUT pull=DOWN
 Checking GPIO 27:
-GPIO 27: level=0 func=INPUT pull=DOWN
+GPIO 27: level=1 func=OUTPUT pull=DOWN
 
 === Validation Complete ===

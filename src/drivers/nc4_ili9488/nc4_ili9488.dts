@@ -80,21 +80,21 @@
 	 *      actually labels these spidev nodes as spidev1_0, spidev1_1, spidev1_2.
 	 ****************************************************************************/
 	fragment@1 {
-		target = <&spidev1_0>;
+		target-path = "/soc/spi@7e215080/spidev@0";
 		__overlay__ {
 			status = "disabled";
 		};
 	};
 
 	fragment@2 {
-		target = <&spidev1_1>;
+		target-path = "/soc/spi@7e215080/spidev@1";
 		__overlay__ {
 			status = "disabled";
 		};
 	};
 
 	fragment@3 {
-		target = <&spidev1_2>;
+		target-path = "/soc/spi@7e215080/spidev@2";
 		__overlay__ {
 			status = "disabled";
 		};

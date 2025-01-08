@@ -13,25 +13,30 @@ if __name__ == "__main__":
     # Initialize the LCD class
     lcd_0 = LCD(framebuffer_device="/dev/fb0", image_dir="data/images")
     lcd_1 = LCD(framebuffer_device="/dev/fb1", image_dir="data/images")
+    lcd_2 = LCD(framebuffer_device="/dev/fb2", image_dir="data/images")
 
     # Load image to fb0 and fb1
     lcd_0.load_image("C01.png")
     lcd_1.load_image("B01.bmp")
+    lcd_2.load_image("C01.bmp")
     time.sleep(2)
 
     # Switch images
     lcd_0.load_image("B01.bmp")
     lcd_1.load_image("C01.png")
+    lcd_2.load_image("B01.bmp")
     time.sleep(2)
 
     # Clear the screen at the end
     lcd_0.clear_screen()
     lcd_1.clear_screen()
+    lcd_2.clear_screen()
 
     # TEMP Turn backlight back on
     time.sleep(1)
     lcd_0.set_backlight(1)
     lcd_1.set_backlight(1)
+    lcd_2.set_backlight(1)
 
 
     print("Image display test complete.")

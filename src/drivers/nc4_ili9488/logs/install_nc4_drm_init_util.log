@@ -8,3 +8,70 @@ Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init
 Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card2
 Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card2: No such file or directory
 Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card2
+Jan 07 15:09:52 raspberrypi systemd[1]: Starting nc4_drm_init_util.service - Initialize DRM Services...
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card0
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card0: No such file or directory
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card0
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card1
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card1: No such file or directory
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card1
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card2
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card2: No such file or directory
+Jan 07 15:09:52 raspberrypi nc4_drm_init_util[1268]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card2
+Jan 07 15:09:52 raspberrypi systemd[1]: Finished nc4_drm_init_util.service - Initialize DRM Services.
+Jan 07 15:15:49 raspberrypi systemd[1]: nc4_drm_init_util.service: Deactivated successfully.
+Jan 07 15:15:49 raspberrypi systemd[1]: Stopped nc4_drm_init_util.service - Initialize DRM Services.
+Jan 07 15:17:39 raspberrypi systemd[1]: Starting nc4_drm_init_util.service - Initialize DRM Services...
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card0
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card0: No such file or directory
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card0
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card1
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card1: No such file or directory
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card1
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card2
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card2: No such file or directory
+Jan 07 15:17:39 raspberrypi nc4_drm_init_util[1406]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card2
+Jan 07 15:17:39 raspberrypi systemd[1]: Finished nc4_drm_init_util.service - Initialize DRM Services.
+Jan 07 15:23:45 raspberrypi systemd[1]: nc4_drm_init_util.service: Deactivated successfully.
+Jan 07 15:23:45 raspberrypi systemd[1]: Stopped nc4_drm_init_util.service - Initialize DRM Services.
+Jan 07 15:27:03 raspberrypi systemd[1]: Starting nc4_drm_init_util.service - Initialize DRM Services...
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card0
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card0: No such file or directory
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card0
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card1
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card1: No such file or directory
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card1
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card2
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card2: No such file or directory
+Jan 07 15:27:03 raspberrypi nc4_drm_init_util[1304]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card2
+Jan 07 15:27:03 raspberrypi systemd[1]: Finished nc4_drm_init_util.service - Initialize DRM Services.
+Jan 07 16:49:44 raspberrypi systemd[1]: nc4_drm_init_util.service: Deactivated successfully.
+Jan 07 16:49:44 raspberrypi systemd[1]: Stopped nc4_drm_init_util.service - Initialize DRM Services.
+Jan 07 16:53:06 raspberrypi sudo[1523]:      nc4 : TTY=pts/1 ; PWD=/home/nc4/TouchscreenApparatus ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/utils/nc4_drm_init_util
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card0
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Opened DRM device /dev/dri/card0 successfully
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Fetched DRM resources for /dev/dri/card0 successfully
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Connector 31 is connected with mode 320x480
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Framebuffer added with ID=39 for /dev/dri/card0
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer mapped at offset=4296196096
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Framebuffer filled with white color for /dev/dri/card0
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Failed to set CRTC for /dev/dri/card0: Permission denied
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card1
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Opened DRM device /dev/dri/card1 successfully
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Fetched DRM resources for /dev/dri/card1 successfully
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Connector 31 is connected with mode 320x480
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Framebuffer added with ID=39 for /dev/dri/card1
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer mapped at offset=4296196096
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Framebuffer filled with white color for /dev/dri/card1
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Failed to set CRTC for /dev/dri/card1: Permission denied
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card2
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Opened DRM device /dev/dri/card2 successfully
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Fetched DRM resources for /dev/dri/card2 successfully
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Connector 31 is connected with mode 320x480
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer created: handle=1, pitch=1280, size=614400
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Framebuffer added with ID=38 for /dev/dri/card2
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Dumb buffer mapped at offset=4296196096
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Framebuffer filled with white color for /dev/dri/card2
+Jan 07 16:53:06 raspberrypi nc4_drm_init_util[1525]: nc4_ili9488: [nc4_drm_init_util] Failed to set CRTC for /dev/dri/card2: Permission denied

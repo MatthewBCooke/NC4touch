@@ -1,0 +1,10 @@
+Jan 07 14:48:39 raspberrypi sudo[39561]:      nc4 : TTY=pts/3 ; PWD=/var/log/journal ; USER=root ; COMMAND=/home/nc4/TouchscreenApparatus/src/drivers/nc4_ili9488/utils/nc4_drm_init_util
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card0
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card0: No such file or directory
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card0
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card1
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card1: No such file or directory
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card1
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Initializing display for card2
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to open DRM device /dev/dri/card2: No such file or directory
+Jan 07 14:48:39 raspberrypi nc4_drm_init_util[39563]: nc4_ili9488: [nc4_drm_init_util] Failed to initialize card2

@@ -49,13 +49,13 @@ dtoverlay=dwc2,dr_mode=host
 
 [all]
 # Enable SPI0
-#dtparam=spi=on
+dtparam=spi=on
 
 # Enable SPI1 
-dtoverlay=spi1-3cs
+#dtoverlay=spi1-3cs
 
 # NC4 ili9488  driver
-dtoverlay=nc4_ili9488
+#dtoverlay=nc4_ili9488
 
 # Enable detailed overlay debugging 
 dtdebug=on

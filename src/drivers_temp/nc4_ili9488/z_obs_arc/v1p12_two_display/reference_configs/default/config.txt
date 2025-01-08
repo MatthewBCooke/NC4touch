@@ -5,6 +5,7 @@
 # Uncomment some or all of these to enable the optional hardware interfaces
 #dtparam=i2c_arm=on
 #dtparam=i2s=on
+#dtparam=spi=on
 
 # Enable audio (loads snd_bcm2835)
 dtparam=audio=on
@@ -22,12 +23,12 @@ display_auto_detect=1
 auto_initramfs=1
 
 # Enable DRM VC4 V3D driver
-#dtoverlay=vc4-kms-v3d
+dtoverlay=vc4-kms-v3d
 max_framebuffers=2
 
 # Don't have the firmware create an initial video= setting in cmdline.txt.
 # Use the kernel's default instead.
-#disable_fw_kms_setup=1
+disable_fw_kms_setup=1
 
 # Run in 64-bit mode
 arm_64bit=1
@@ -48,20 +49,3 @@ otg_mode=1
 dtoverlay=dwc2,dr_mode=host
 
 [all]
-# Enable SPI0
-#dtparam=spi=on
-
-# Enable SPI1 
-dtoverlay=spi1-3cs
-
-# NC4 ili9488  driver
-dtoverlay=nc4_ili9488
-
-# Enable detailed overlay debugging 
-dtdebug=on
-
-# Original driver
-#dtparam=spi=on
-#dtoverlay=ili9488
-#dtparam=speed=62000000
-#dtparam=rotation=0

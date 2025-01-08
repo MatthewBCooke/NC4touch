@@ -321,25 +321,25 @@ sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
 2. Add the following content(s):
-   ```
-   country=CA
-   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-   update_config=1
+```
+country=CA
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
 
-   network={
-       ssid="poserguru_s24"
-       psk="funkstar"
-   }
+network={
+      ssid="poserguru_s24"
+      psk="funkstar"
+}
 
-   country=CA
-   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-   update_config=1
+country=CA
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
 
-   network={
-       ssid="NC4_Neurogenesis_Exposure"
-       psk="nc4lab1434"
-   }
-   ```
+network={
+      ssid="NC4_Neurogenesis_Exposure"
+      psk="nc4lab1434"
+}
+```
 
 3. Save the file and eject the SD card.
 
@@ -356,34 +356,34 @@ sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
 1. On your computer, open a terminal or SSH client.
 
 2. Ping the Raspberry Pi:
-   ```bash
-   ping 169.254.55.240
-   ```
+```bash
+ping 169.254.55.240
+```
 169.254.55.240 ssh-ed25519
 3. If the ping is successful, SSH into the Raspberry Pi:
-   ```bash
-   ssh nc4@169.254.55.240
-   ```
-   If you get a warning about the hot key changing open:
-   ```
-   C:\Users\lester\.ssh\known_hosts
-   ```
-   Delete the line:
-   ssh-keygen -R 169.254.55.240
+```bash
+ssh nc4@169.254.55.240
+```
+If you get a warning about the hot key changing open:
+```
+C:\Users\lester\.ssh\known_hosts
+```
+Delete the line:
+ssh-keygen -R 169.254.55.240
 
 4. When prompted:
-   - Type `yes` to continue connecting.
-   - Enter the password: `1434`.
+- Type `yes` to continue connecting.
+- Enter the password: `1434`.
 
 5. After connecting via SSH, varify the Wi-Fi connection:
-   ```
-   ping -c 4 google.com
-   ```
+```
+ping -c 4 google.com
+```
 
 6. Verify the connection works, then exit the SSH session:
-   ```bash
-   exit
-   ```
+```bash
+exit
+```
 
 ## Set Up Remote Development in VS Code
 
@@ -392,14 +392,14 @@ sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
 2. Press `Ctrl + Shift + P` to open the Command Palette.
 
 3. Search for and select:
-   ```
-   Remote-SSH: Add New SSH Host...
-   ```
+```
+Remote-SSH: Add New SSH Host...
+```
 
 4. Enter the Raspberry Pi's SSH connection string:
-   ```
-   nc4@169.254.55.240
-   ```
+```
+nc4@169.254.55.240
+```
 
 5. Save the configuration when prompted (e.g., `~/.ssh/config`).
 
@@ -408,9 +408,9 @@ sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
 7. A new VS Code window will open.
 
 8. When prompted to select the platform, choose:
-   ```
-   Linux
-   ```
+```
+Linux
+```
 
 9. Enter the password again: `1434`.
 
@@ -435,7 +435,6 @@ sudo micro /etc/wpa_supplicant/wpa_supplicant.conf
    ```
    source ~/.bashrc
    ```
-
 ## Setup access to GitHub
 
 1. Generate a new SSH key:
@@ -901,7 +900,7 @@ sudo grep -rli "ili9488" /home/nc4/TouchscreenApparatus/src/drivers/ili9488/ 2>/
 
 ## Log Housekeeping
 
-Retain only 10 MB of log data:
+Retain only 10 MB of log data (M, K):
 ```
 sudo journalctl --vacuum-size=10M
 ```
@@ -910,6 +909,23 @@ Remove logs older than 1 hour (h, d, w):
 ```
 sudo journalctl --vacuum-time=6h
 ```
+
+Remove all logs
+```
+sudo rm -rf /var/log/journal/*
+sudo systemctl restart systemd-journald
+```
+
+Check all logs
+```
+sudo journalctl
+```
+
+Check log disk usage
+```
+sudo journalctl --disk-usage
+```
+
 
 ## WiFi
 

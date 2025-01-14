@@ -114,6 +114,11 @@ sudo apt install micro -y
 ### **Purpose**:
 - **`micro`**: A lightweight and user-friendly text editor, useful for editing configuration files like `config.txt` or `.json` settings.
 
+### **Alternatively, you can install vim**:
+```bash
+sudo apt install vim -y
+```
+
 ### **Confirm**:
 - Open the editor:
   ```bash
@@ -283,14 +288,14 @@ dpkg -l | grep -E "build-essential|git|bc|bison|flex|libssl-dev|raspberrypi-kern
 
 ### 2: Configure a Static IP for the Ethernet Interface
 
-1. Open the `cmdline.txt` file in the **boot** partition using a text editor.
+1. Open `/boot/firmware/cmdline.txt` using a text editor.
 
 2. Add the following to the end of the single line (ensure everything remains on a single line):
    ```
-   ip=169.254.55.240::0.0.0.0:255.255.0.0::eth0:off
+   ip=<IP>::0.0.0.0:255.255.0.0::eth0:off
    ```
 - Explanation:
-  - `169.254.55.240`: Static IP for the Raspberry Pi’s Ethernet interface.
+  - `<IP>`: Static IP for the Raspberry Pi’s Ethernet interface.
   - `0.0.0.0`: No default gateway for Ethernet (traffic won’t be routed through this interface).
   - `255.255.0.0`: Subnet mask for the Ethernet interface.
   - `eth0:off`: Specifies the Ethernet interface and disables DHCP.

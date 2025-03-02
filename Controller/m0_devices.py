@@ -12,7 +12,8 @@ import threading
 import queue
 import serial
 import serial.tools.list_ports
-
+import pigpio
+import subprocess
 
 def discover_m0_boards():
     """
@@ -51,15 +52,20 @@ class M0Device:
     - Provides stop() to end the read thread and close the port.
     """
 
-    def __init__(self, m0_id, port_path, baudrate=115200):
+    def __init__(self, m0_id, port_path, reset_pin, baudrate=115200):
         """
         m0_id    : e.g. "M0_0"
         port_path: e.g. "/dev/ttyACM0"
         baudrate : default 115200
         """
+        self.pi = pigpio.pi()
         self.m0_id = m0_id
         self.port_path = port_path
+        self.reset_pin = reset_pin
         self.baudrate = baudrate
+
+        self.pi.set_mode(self.reset_pin, pigpio.OUTPUT)
+        self.reset()  # Reset the M0 board
 
         self.ser = None
         self.stop_flag = threading.Event()
@@ -77,6 +83,59 @@ class M0Device:
         # Start read thread
         self.thread = threading.Thread(target=self.read_loop, daemon=True)
         self.thread.start()
+    
+    def mountUD(self):
+        """
+        Mounts the UD drive connected to the M0 board by double clicking the reset pin.
+        """
+        print(f"[{self.m0_id}] Mounting UD drive.")
+        try:
+            self.reset()
+            time.sleep(0.1)
+            self.reset()
+        except Exception as e:
+            print(f"[{self.m0_id}] Error mounting UD drive: {e}")
+    
+    def reset(self):
+        """
+        Resets the M0 board by toggling the reset pin.
+        """
+        # print(f"[{self.m0_id}] Resetting M0 board.")
+        try:
+            self.pi.write(self.reset_pin, 0)
+            time.sleep(0.1)
+            self.pi.write(self.reset_pin, 1)
+        except Exception as e:
+            print(f"[{self.m0_id}] Error resetting M0 board: {e}")
+    
+    def sync_image_folder(self):
+        """
+        Syncs the image folder (../data/images) to the UD drive.
+        """
+        print(f"[{self.m0_id}] Syncing image folder.")
+
+        # Mount the UD drive
+        self.mountUD()
+        time.sleep(6)
+        # Find the mount location from lsblk
+        try:
+            lsblk = subprocess.check_output("lsblk", shell=True).decode("utf-8")
+            mount_loc = "/media/" + lsblk.split("/media/")[1].split("\n")[0]
+            print(f"[{self.m0_id}] Found mount location: {mount_loc}")
+        except Exception as e:
+            print(f"[{self.m0_id}] Error finding mount location: {e}")
+            return
+
+        # Sync the image folder
+        try:
+            subprocess.run(["rsync", "-av", "../data/images/", mount_loc])
+            print(f"[{self.m0_id}] Synced image folder.")
+        except Exception as e:
+            print(f"[{self.m0_id}] Error syncing image folder: {e}")
+            return
+
+        # Unmount the UD drive
+        self.reset()                
 
     def read_loop(self):
         print(f"[{self.m0_id}] read_loop started.")

@@ -3,6 +3,12 @@
 # Manu Madhav
 # 2025
 
+import pigpio
+from Controller.LED import LED
+from Controller.Reward import Reward
+from Controller.BeamBreak import BeamBreak
+from Controller.Buzzer import Buzzer
+
 class Chamber:
   def __init__(self,
                reward_LED_pin = 21,

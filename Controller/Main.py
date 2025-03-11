@@ -622,138 +622,36 @@ class MultiPhaseTraining:
 
 
 
-def must_initiate_phase(self, csv_file_path):
-
-    print("Starting Must Initiate.")
-    self.is_session_active = True
-
-    trials = self.read_csv(csv_file_path)
-    if not trials:
-        print("No trials found in CSV.")
-        return
-
-    from PyQt5.QtWidgets import QApplication
-
-    try:
-        # ----- Trial 1 -----
-        img0_first, img1_first = trials[0]
-        print("Preloading images for Trial 1 (pre-free reward phase)...")
-        self.send_m0_command("M0_0", f"IMG:{img0_first}")
-        self.send_m0_command("M0_1", f"IMG:{img1_first}")
-        print("Dispensing free reward.")
-        _ = self.large_reward(4.0)
-        self.send_m0_command("M0_0", "SHOW")
-        self.send_m0_command("M0_1", "SHOW")
-        
-        trial_start_time = datetime.now().strftime("%H:%M:%S")
-        print(f"\nTrial 1: M0_0 -> {img0_first}, M0_1 -> {img1_first}")
-        start_t = time.time()
-        touched_m0 = None
-        touched_image = None
-        correct_choice = False
-        # Wait up to 300s for a correct (A01) touch.
-        while (time.time() - start_t) < 300 and self.is_session_active and not correct_choice:
-            QApplication.processEvents()
-            sub_timeout = 1.0
-            sub_start = time.time()
-            found_touch = False
-            while ((time.time() - sub_start) < sub_timeout and not found_touch and self.is_session_active):
-                QApplication.processEvents()
-                for m0_id, device in self.m0_devices.items():
-                    try:
-                        m_id, line = device.message_queue.get(timeout=0.02)
-                        if line.startswith("TOUCH:"):
-                            found_touch = True
-                            if m_id == "M0_0":
-                                touched_m0 = "M0_0"
-                                touched_image = img0_first
-                            else:
-                                touched_m0 = "M0_1"
-                                touched_image = img1_first
-                            break
-                    except queue.Empty:
-                        pass
-                time.sleep(0.01)
-            if found_touch:
-                if touched_image == "A01":
-                    correct_choice = True
-                else:
-                    # For must touch phase, other touches are simply ignored.
-                    print(f"{touched_m0} touched => {touched_image}. Ignoring, must press A01.")
-                    print("Incorrect choice")
-                    touched_m0 = None
-                    touched_image = None
-        if not self.is_session_active:
+    def must_initiate_phase(self, csv_file_path):
+    
+        print("Starting Must Initiate.")
+        self.is_session_active = True
+    
+        trials = self.read_csv(csv_file_path)
+        if not trials:
+            print("No trials found in CSV.")
             return
-        if not correct_choice:
-            print("No touch => skipping reward.")
-            self.send_m0_command("M0_0", "BLACK")
-            self.send_m0_command("M0_1", "BLACK")
-            row_data = {
-                "ID": self.rodent_id or "UNKNOWN",
-                "TrialNumber": "1",
-                "M0_0": img0_first,
-                "M0_1": img1_first,
-                "M0_2": "",
-                "touched_m0": None,
-                "Choice": "no_touch",
-                "InitiationTime": trial_start_time,
-                "StartTraining": self.session_start_time or "",
-                "EndTraining": "",
-                "Reward": ""
-            }
-            self._write_realtime_csv_row(row_data)
-            self.trial_data.append(row_data)
-        else:
-            print(f"{touched_m0} touched => {touched_image} (correct).")
-            choice_result = "correct"
-            print("Correct choice")
-            print("Black out both screens and dispense reward.")
-            self.send_m0_command("M0_0", "BLACK")
-            self.send_m0_command("M0_1", "BLACK")
-            reward_time = self.large_reward(3.0)
-            row_data = {
-                "ID": self.rodent_id or "UNKNOWN",
-                "TrialNumber": "1",
-                "M0_0": img0_first,
-                "M0_1": img1_first,
-                "M0_2": "N/A",
-                "touched_m0": touched_m0,
-                "Choice": choice_result,
-                "InitiationTime": trial_start_time,
-                "StartTraining": self.session_start_time or "",
-                "EndTraining": "",
-                "Reward": reward_time if reward_time else ""
-            }
-            self._write_realtime_csv_row(row_data)
-            self.trial_data.append(row_data)
-
-        # ----- Subsequent Trials -----
-        for i in range(1, len(trials)):
-            if not self.is_session_active:
-                break
-            # Preload images for trial i immediately before ITI.
-            img0, img1 = trials[i]
-            print(f"\nPreloading images for Trial {i+1} (pre-ITI)...")
-            self.send_m0_command("M0_0", f"IMG:{img0}")
-            self.send_m0_command("M0_1", f"IMG:{img1}")
-            print(f"--- ITI before Trial {i+1} ---")
-            self._fixed_iti()
-            if not self.is_session_active:
-                break
-            print(f"--- Waiting for rodent to initiate Trial {i+1} ---")
-            if not self.wait_for_trial_initiation():
-                print(f"Session stopped during initiation for trial {i+1}.")
-                break
-            # Immediately display images after initiation.
+    
+        from PyQt5.QtWidgets import QApplication
+    
+        try:
+            # ----- Trial 1 -----
+            img0_first, img1_first = trials[0]
+            print("Preloading images for Trial 1 (pre-free reward phase)...")
+            self.send_m0_command("M0_0", f"IMG:{img0_first}")
+            self.send_m0_command("M0_1", f"IMG:{img1_first}")
+            print("Dispensing free reward.")
+            _ = self.large_reward(4.0)
             self.send_m0_command("M0_0", "SHOW")
             self.send_m0_command("M0_1", "SHOW")
+            
             trial_start_time = datetime.now().strftime("%H:%M:%S")
-            print(f"=== Trial {i+1}: M0_0 -> {img0}, M0_1 -> {img1} ===")
+            print(f"\nTrial 1: M0_0 -> {img0_first}, M0_1 -> {img1_first}")
             start_t = time.time()
             touched_m0 = None
             touched_image = None
             correct_choice = False
+            # Wait up to 300s for a correct (A01) touch.
             while (time.time() - start_t) < 300 and self.is_session_active and not correct_choice:
                 QApplication.processEvents()
                 sub_timeout = 1.0
@@ -768,10 +666,10 @@ def must_initiate_phase(self, csv_file_path):
                                 found_touch = True
                                 if m_id == "M0_0":
                                     touched_m0 = "M0_0"
-                                    touched_image = img0
+                                    touched_image = img0_first
                                 else:
                                     touched_m0 = "M0_1"
-                                    touched_image = img1
+                                    touched_image = img1_first
                                 break
                         except queue.Empty:
                             pass
@@ -780,21 +678,22 @@ def must_initiate_phase(self, csv_file_path):
                     if touched_image == "A01":
                         correct_choice = True
                     else:
+                        # For must touch phase, other touches are simply ignored.
                         print(f"{touched_m0} touched => {touched_image}. Ignoring, must press A01.")
                         print("Incorrect choice")
                         touched_m0 = None
                         touched_image = None
             if not self.is_session_active:
-                break
+                return
             if not correct_choice:
                 print("No touch => skipping reward.")
                 self.send_m0_command("M0_0", "BLACK")
                 self.send_m0_command("M0_1", "BLACK")
                 row_data = {
                     "ID": self.rodent_id or "UNKNOWN",
-                    "TrialNumber": i+1,
-                    "M0_0": img0,
-                    "M0_1": img1,
+                    "TrialNumber": "1",
+                    "M0_0": img0_first,
+                    "M0_1": img1_first,
                     "M0_2": "",
                     "touched_m0": None,
                     "Choice": "no_touch",
@@ -815,9 +714,9 @@ def must_initiate_phase(self, csv_file_path):
                 reward_time = self.large_reward(3.0)
                 row_data = {
                     "ID": self.rodent_id or "UNKNOWN",
-                    "TrialNumber": i+1,
-                    "M0_0": img0,
-                    "M0_1": img1,
+                    "TrialNumber": "1",
+                    "M0_0": img0_first,
+                    "M0_1": img1_first,
                     "M0_2": "N/A",
                     "touched_m0": touched_m0,
                     "Choice": choice_result,
@@ -828,18 +727,119 @@ def must_initiate_phase(self, csv_file_path):
                 }
                 self._write_realtime_csv_row(row_data)
                 self.trial_data.append(row_data)
-            # Preload images for next trial if available.
-            if i < len(trials) - 1 and self.is_session_active:
-                next_img0, next_img1 = trials[i+1]
-                print(f"Preloading images for next trial {i+2} (pre-ITI)...")
-                self.send_m0_command("M0_0", f"IMG:{next_img0}")
-                self.send_m0_command("M0_1", f"IMG:{next_img1}")
-    finally:
-        self.finalize_training_timestamp()
-        self.is_session_active = False
-        for m0_id in self.m0_ports:
-            self.send_m0_command(m0_id, "BLACK")
-        print("Must Initiate training stage finished.")
+    
+            # ----- Subsequent Trials -----
+            for i in range(1, len(trials)):
+                if not self.is_session_active:
+                    break
+                # Preload images for trial i immediately before ITI.
+                img0, img1 = trials[i]
+                print(f"\nPreloading images for Trial {i+1} (pre-ITI)...")
+                self.send_m0_command("M0_0", f"IMG:{img0}")
+                self.send_m0_command("M0_1", f"IMG:{img1}")
+                print(f"--- ITI before Trial {i+1} ---")
+                self._fixed_iti()
+                if not self.is_session_active:
+                    break
+                print(f"--- Waiting for rodent to initiate Trial {i+1} ---")
+                if not self.wait_for_trial_initiation():
+                    print(f"Session stopped during initiation for trial {i+1}.")
+                    break
+                # Immediately display images after initiation.
+                self.send_m0_command("M0_0", "SHOW")
+                self.send_m0_command("M0_1", "SHOW")
+                trial_start_time = datetime.now().strftime("%H:%M:%S")
+                print(f"=== Trial {i+1}: M0_0 -> {img0}, M0_1 -> {img1} ===")
+                start_t = time.time()
+                touched_m0 = None
+                touched_image = None
+                correct_choice = False
+                while (time.time() - start_t) < 300 and self.is_session_active and not correct_choice:
+                    QApplication.processEvents()
+                    sub_timeout = 1.0
+                    sub_start = time.time()
+                    found_touch = False
+                    while ((time.time() - sub_start) < sub_timeout and not found_touch and self.is_session_active):
+                        QApplication.processEvents()
+                        for m0_id, device in self.m0_devices.items():
+                            try:
+                                m_id, line = device.message_queue.get(timeout=0.02)
+                                if line.startswith("TOUCH:"):
+                                    found_touch = True
+                                    if m_id == "M0_0":
+                                        touched_m0 = "M0_0"
+                                        touched_image = img0
+                                    else:
+                                        touched_m0 = "M0_1"
+                                        touched_image = img1
+                                    break
+                            except queue.Empty:
+                                pass
+                        time.sleep(0.01)
+                    if found_touch:
+                        if touched_image == "A01":
+                            correct_choice = True
+                        else:
+                            print(f"{touched_m0} touched => {touched_image}. Ignoring, must press A01.")
+                            print("Incorrect choice")
+                            touched_m0 = None
+                            touched_image = None
+                if not self.is_session_active:
+                    break
+                if not correct_choice:
+                    print("No touch => skipping reward.")
+                    self.send_m0_command("M0_0", "BLACK")
+                    self.send_m0_command("M0_1", "BLACK")
+                    row_data = {
+                        "ID": self.rodent_id or "UNKNOWN",
+                        "TrialNumber": i+1,
+                        "M0_0": img0,
+                        "M0_1": img1,
+                        "M0_2": "",
+                        "touched_m0": None,
+                        "Choice": "no_touch",
+                        "InitiationTime": trial_start_time,
+                        "StartTraining": self.session_start_time or "",
+                        "EndTraining": "",
+                        "Reward": ""
+                    }
+                    self._write_realtime_csv_row(row_data)
+                    self.trial_data.append(row_data)
+                else:
+                    print(f"{touched_m0} touched => {touched_image} (correct).")
+                    choice_result = "correct"
+                    print("Correct choice")
+                    print("Black out both screens and dispense reward.")
+                    self.send_m0_command("M0_0", "BLACK")
+                    self.send_m0_command("M0_1", "BLACK")
+                    reward_time = self.large_reward(3.0)
+                    row_data = {
+                        "ID": self.rodent_id or "UNKNOWN",
+                        "TrialNumber": i+1,
+                        "M0_0": img0,
+                        "M0_1": img1,
+                        "M0_2": "N/A",
+                        "touched_m0": touched_m0,
+                        "Choice": choice_result,
+                        "InitiationTime": trial_start_time,
+                        "StartTraining": self.session_start_time or "",
+                        "EndTraining": "",
+                        "Reward": reward_time if reward_time else ""
+                    }
+                    self._write_realtime_csv_row(row_data)
+                    self.trial_data.append(row_data)
+                # Preload images for next trial if available.
+                if i < len(trials) - 1 and self.is_session_active:
+                    next_img0, next_img1 = trials[i+1]
+                    print(f"Preloading images for next trial {i+2} (pre-ITI)...")
+                    self.send_m0_command("M0_0", f"IMG:{next_img0}")
+                    self.send_m0_command("M0_1", f"IMG:{next_img1}")
+        finally:
+            self.finalize_training_timestamp()
+            self.is_session_active = False
+            for m0_id in self.m0_ports:
+                self.send_m0_command(m0_id, "BLACK")
+            print("Must Initiate training stage finished.")
 
 
 

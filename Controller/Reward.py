@@ -59,8 +59,8 @@ class Reward:
             print(f"Error during priming: {e}")
 
     def stop_priming(self):
-        self.pi.set_PWM_dutycycle(self.pin, 0)
         self.is_priming = False
+        self.pi.set_PWM_dutycycle(self.pin, 0)
         print("Priming stopped.")
 
     def cleanup(self):

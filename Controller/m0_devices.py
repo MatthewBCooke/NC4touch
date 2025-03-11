@@ -12,7 +12,8 @@ import threading
 import queue
 import serial
 import serial.tools.list_ports
-
+import pigpio
+import subprocess
 
 def discover_m0_boards():
     """
@@ -57,6 +58,7 @@ class M0Device:
         port_path: e.g. "/dev/ttyACM0"
         baudrate : default 115200
         """
+        self.pi = pigpio.pi()
         self.m0_id = m0_id
         self.port_path = port_path
         self.baudrate = baudrate
@@ -93,8 +95,6 @@ class M0Device:
                 # re-open self.ser here
                 self._attempt_reopen()
         print(f"[{self.m0_id}] read_loop ending.")
-
-
 
     def send_command(self, cmd):
         """

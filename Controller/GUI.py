@@ -489,7 +489,7 @@ class MultiTrialGUI(QMainWindow):
         Reward_LED_PIN = 21
         Reward_PIN = 27
         BeamBreak_PIN = 4
-        Punishment_LED_PIN = 17
+        Punishment_LED_PIN = 19
         Buzzer_PIN = 16
 
         self.peripherals = {

@@ -94,7 +94,20 @@ class M0Device:
                 self._attempt_reopen()
         print(f"[{self.m0_id}] read_loop ending.")
 
-
+    def _attempt_reopen(self):
+        print(f"[{self.m0_id}] Attempting to reinitialize the port {self.port_path}...")
+        try:
+            if self.ser:
+                # Flush input and output buffers
+                self.ser.reset_input_buffer()
+                self.ser.reset_output_buffer()
+                self.ser.close()
+            # Reopen the serial connection
+            self.ser = serial.Serial(self.port_path, self.baudrate, timeout=1)
+            print(f"[{self.m0_id}] Reinitialized port {self.port_path} successfully.")
+        except Exception as e:
+            print(f"[{self.m0_id}] Failed to reinitialize port: {e}")
+            time.sleep(1)
 
     def send_command(self, cmd):
         """

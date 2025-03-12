@@ -166,6 +166,7 @@ class MultiPhaseTraining:
 
     def Habituation(self):
         print("Starting Habituation.")
+        
         self.is_session_active = True
 
         AUTO_ACTIVATION_LIMIT = 30
@@ -285,6 +286,9 @@ class MultiPhaseTraining:
 
     def initial_touch_phase(self, csv_file_path):
         print("Starting Initial Touch.")
+
+        for dev in self.m0_devices.values():
+            dev._attempt_reopen()
         self.is_session_active = True
 
         trials = self.read_csv(csv_file_path)
@@ -387,6 +391,9 @@ class MultiPhaseTraining:
 
     def must_touch_phase(self, csv_file_path):
         print("Starting Must Touch.")
+        
+        for dev in self.m0_devices.values():
+            dev._attempt_reopen()
         self.is_session_active = True
 
         trials = self.read_csv(csv_file_path)
@@ -625,6 +632,9 @@ class MultiPhaseTraining:
     def must_initiate_phase(self, csv_file_path):
     
         print("Starting Must Initiate.")
+
+        for dev in self.m0_devices.values():
+            dev._attempt_reopen()
         self.is_session_active = True
     
         trials = self.read_csv(csv_file_path)
@@ -845,6 +855,9 @@ class MultiPhaseTraining:
 
     def punish_incorrect_phase(self, csv_file_path):
         print("Starting Punish Incorrect.")
+        
+        for dev in self.m0_devices.values():
+            dev._attempt_reopen()
         self.is_session_active = True
         trials = self.read_csv(csv_file_path)
         if not trials:
@@ -1062,6 +1075,8 @@ class MultiPhaseTraining:
 
     def simple_discrimination_phase(self, csv_file_path):
         print("Starting Simple Discrimination.")
+        for dev in self.m0_devices.values():
+            dev._attempt_reopen()
         self.is_session_active = True
         trials = self.read_csv(csv_file_path)
         if not trials:

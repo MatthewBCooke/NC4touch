@@ -13,10 +13,10 @@ class Buzzer:
         self.pi.set_PWM_frequency(self.pin, self.frequency)
         print(f"Buzzer initialized on GPIO {self.pin} with volume {self.volume}% and frequency {self.frequency}Hz.")
 
-    def activate_buzzer(self):
+    def activate(self):
         self.pi.set_PWM_dutycycle(self.pin, self.volume)
         print("Buzzer activated.")
 
-    def deactivate_buzzer(self):
+    def deactivate(self):
         self.pi.set_PWM_dutycycle(self.pin, 0)
         print("Buzzer deactivated.")

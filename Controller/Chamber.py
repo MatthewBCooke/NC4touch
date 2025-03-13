@@ -8,8 +8,7 @@ from LED import LED
 from Reward import Reward
 from BeamBreak import BeamBreak
 from Buzzer import Buzzer
-from M0Initializer import M0Initializer
-from m0_devices import M0Device
+from M0Device import M0Device
 
 import time
 import serial
@@ -38,16 +37,16 @@ class Chamber:
     # self.buzzer = Buzzer(self.pi, self.buzzer_pin)
 
     # Initialize M0s and find the ports
-    self.m0_initializer = M0Initializer(self.pi)
-    self.m0_initializer.find_all_m0_devices()
+    self.left_m0 = M0Device(pi = self.pi, id = "M0_0", reset_pin = self.reset_pins[0])
+    self.middle_m0 = M0Device(pi = self.pi, id = "M0_1", reset_pin = self.reset_pins[1])
+    self.right_m0 = M0Device(pi = self.pi, id = "M0_2", reset_pin = self.reset_pins[2])
 
-    self.m0s = []
-    k=0
-    for device, port in self.m0_initializer.device_map.items():
-      k+=1
-      m0 = M0Device(f"M0_{k}", port_path = port, pi = self.pi)
-      self.m0s.append(m0)
-      print(f"Initialized M0 {device} on {port}")
+    self.m0s = [self.left_m0, self.middle_m0, self.right_m0]
+    [m0.find_device() for m0 in self.m0s]
+    [m0.open_serial() for m0 in self.m0s]
+    [m0.start_read_thread() for m0 in self.m0s]
+    [m0.send_command("WHOAREYOU?") for m0 in self.m0s]
+
 
 
 if __name__ == "__main__":

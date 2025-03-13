@@ -8,7 +8,7 @@ import argparse
 import serial
 
 class M0Initializer:
-    reset_pins = [6, 5, 25] # GPIO pins for reset
+    reset_pins = [6] # GPIO pins for reset
 
     def __init__(self, pi=None):
         if pi is not None:
@@ -120,37 +120,6 @@ class M0Initializer:
             if device_id is not None and port is not None:
                 self.device_map[device_id] = port
 
-    # def detect_all_m0s(self):
-    #     """
-    #     Detects the M0 boards connected to the system.
-    #     """
-    #     # Reset all M0 boards
-    #     self.reset_all_m0s()
-    #     time.sleep(0.1)
-    #     print("Detecting M0 boards.")
-    #     try:
-    #         # Run arduino-cli board list
-    #         boards = subprocess.check_output("arduino-cli board list", shell=True).decode("utf-8")
-    #         print(boards)
-
-    #         """
-    #         Output format:
-    #         Port         Protocol Type              Board Name FQBN Core
-    #         /dev/ttyACM0 serial   Serial Port (USB) Unknown
-    #         /dev/ttyACM1 serial   Serial Port (USB) Unknown
-    #         /dev/ttyACM2 serial   Serial Port (USB) Unknown
-    #         """
-
-    #         # Parse the output
-    #         self.ports = []
-    #         for line in boards.split("\n"):
-    #             if "serial" in line:
-    #                 self.ports.append(line.split()[0])
-            
-    #     except Exception as e:
-    #         print(f"Error detecting M0 boards: {e}")
-    #         return []
-    
     def upload_to_port(self, port, sketch_path):
         """
         Uploads the sketch to the M0 board connected to the given port.
@@ -202,43 +171,20 @@ class M0Initializer:
             self.sync_image_folder(pin)
             time.sleep(6)
     
-    # def serial_interface_m0(self, port):
-    #     """
-    #     Opens a serial interface to the M0 board connected to the given port.
-    #     """
-    #     try:
-    #         ser = serial.Serial(port, 115200)
-    #         # Print initial message
-    #         print(f"Opened serial interface to {port}.")
-    #         time.sleep(0.3)
-    #         return ser
-    #     except Exception as e:
-    #         print(f"Error opening serial interface to {port}: {e}")
-    #         return None
-    
-    # def serial_interface_all_m0s(self):
-    #     """
-    #     Opens serial interfaces to all M0 boards.
-    #     """
-    #     self.ser_map = {}
-    #     for port in self.ports:
-    #         ser = self.serial_interface_m0(port)
-    #         if ser is not None:
-    #             self.ser_map[port] = ser
-    #     return self.ser_map
-        
-    # def query_m0(self, port):
-    #     """
-    #     Queries the M0 board connected to the given port.
-    #     """
-    #     # try:
-    #     ser = self.ser_map[port]
-    #     ser.reset_input_buffer()
-    #     ser.write(b"WHOAREYOU?\n")
-    #     line = ser.readline().decode("utf-8", errors="ignore").strip()
-    #     print(f"Query response from {port}: {line}")
-    #     # except Exception as e:
-    #     #     print(f"Error querying {port}: {e}")
+    def query_m0(self, port):
+        """
+        Queries the M0 board connected to the given port.
+        """
+        try:
+            with serial.Serial(port, 115200, timeout=1) as ser:
+                ser.reset_input_buffer()
+                ser.reset_output_buffer()
+                time.sleep(0.3)
+                ser.write(b"WHOAREYOU?\n")
+                line = ser.readline().decode("utf-8", errors="ignore").strip()
+                print(f"Query response from {port}: {line}")
+        except Exception as e:
+            print(f"Error querying {port}: {e}")
     
     # def query_all_m0s(self):
     #     """

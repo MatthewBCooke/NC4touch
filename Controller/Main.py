@@ -1078,11 +1078,16 @@ class MultiPhaseTraining:
             dev._attempt_reopen()
             time.sleep(0.5)
 
-
-
-
-    def simple_discrimination_phase(self, csv_file_path):
+            
+   def simple_discrimination_phase(self, csv_file_path):
         print("Starting Simple Discrimination.")
+
+        for dev in self.m0_devices.values():
+            while not dev.message_queue.empty():
+                try:
+                    dev.message_queue.get_nowait()
+                except queue.Empty:
+                    break
 
         self.is_session_active = True
         trials = self.read_csv(csv_file_path)
@@ -1094,22 +1099,26 @@ class MultiPhaseTraining:
 
         try:
             trial_index = 0
-
+            # Process each trial (including trial 1) with correction attempts for incorrect responses.
             while trial_index < len(trials) and self.is_session_active:
+                # Get current trial stimuli.
                 img0, img1 = trials[trial_index]
                 correction_count = 0
                 trial_completed = False
 
                 while not trial_completed and self.is_session_active:
+                    # For Trial 1 first attempt: no initiation required.
                     if trial_index == 0 and correction_count == 0:
                         print("Preloading images for Trial 1 (pre-free reward phase)...")
                         self.send_m0_command("M0_0", f"IMG:{img0}")
                         self.send_m0_command("M0_1", f"IMG:{img1}")
                         print("Dispensing free reward.")
                         _ = self.large_reward(4.0)
+                        # Immediately display images.
                         self.send_m0_command("M0_0", "SHOW")
                         self.send_m0_command("M0_1", "SHOW")
                     else:
+                        # For any new trial (trial_index > 0) or for correction attempts:
                         print(f"Preloading images for Trial {trial_index+1}{' (correction)' if correction_count > 0 else ''} (pre-ITI)...")
                         self.send_m0_command("M0_0", f"IMG:{img0}")
                         self.send_m0_command("M0_1", f"IMG:{img1}")
@@ -1121,19 +1130,26 @@ class MultiPhaseTraining:
                         if not self.wait_for_trial_initiation():
                             print(f"Session stopped during initiation for trial {trial_index+1}.")
                             break
+                        # Immediately show images after initiation.
                         self.send_m0_command("M0_0", "SHOW")
                         self.send_m0_command("M0_1", "SHOW")
+
+                    # Record initiation time.
                     trial_start_time = datetime.now().strftime("%H:%M:%S")
                     print(f"=== Trial {trial_index+1}{'*' if correction_count > 0 else ''}: M0_0 -> {img0}, M0_1 -> {img1} ===")
+
+                    # Wait for touch response (up to 300 seconds).
                     start_t = time.time()
                     touched_m0 = None
                     touched_image = None
                     choice_result = None
+
                     while (time.time() - start_t) < 300 and self.is_session_active and not choice_result:
                         QApplication.processEvents()
                         sub_timeout = 1.0
                         sub_start = time.time()
                         found_touch = False
+
                         while ((time.time() - sub_start) < sub_timeout and not found_touch and self.is_session_active):
                             QApplication.processEvents()
                             for m0_id, device in self.m0_devices.items():
@@ -1151,6 +1167,7 @@ class MultiPhaseTraining:
                                 except queue.Empty:
                                     pass
                             time.sleep(0.01)
+
                         if found_touch:
                             if touched_image == "A01":
                                 choice_result = "correct"
@@ -1160,17 +1177,21 @@ class MultiPhaseTraining:
                                 choice_result = "incorrect"
                                 print("Incorrect choice")
                                 break
+
                     if not self.is_session_active:
                         break
+
+                    # If we never got a touch or it didn't match 'E01'/'D01', call it "no_touch".
                     if not choice_result:
                         choice_result = "no_touch"
                         print("No touch => skipping reward")
-                    
-                    # Process outcome.
+
+                    # -------------------- Outcome Handling --------------------
                     if choice_result == "correct":
                         self.send_m0_command("M0_0", "BLACK")
                         self.send_m0_command("M0_1", "BLACK")
                         reward_time = self.large_reward(3.0)
+
                         row_data = {
                             "ID": self.rodent_id or "UNKNOWN",
                             "TrialNumber": f"{trial_index+1}" if correction_count == 0 else f"{trial_index+1}*",
@@ -1186,8 +1207,18 @@ class MultiPhaseTraining:
                         }
                         self._write_realtime_csv_row(row_data)
                         self.trial_data.append(row_data)
+
+                        # Flush any leftover messages before next trial
+                        for dev in self.m0_devices.values():
+                            while not dev.message_queue.empty():
+                                try:
+                                    dev.message_queue.get_nowait()
+                                except queue.Empty:
+                                    break
+
                         trial_completed = True
                         correction_count = 0  # Reset corrections for next trial.
+
                     elif choice_result == "incorrect":
                         self.send_m0_command("M0_0", "BLACK")
                         self.send_m0_command("M0_1", "BLACK")
@@ -1195,6 +1226,7 @@ class MultiPhaseTraining:
                         self.peripherals['buzzer'].activate()
                         start_punish = time.time()
                         buzzer_off = False
+
                         while (time.time() - start_punish) < 5 and self.is_session_active:
                             QApplication.processEvents()
                             elapsed = time.time() - start_punish
@@ -1202,7 +1234,9 @@ class MultiPhaseTraining:
                                 self.peripherals['buzzer'].deactivate()
                                 buzzer_off = True
                             time.sleep(0.01)
+
                         self.peripherals['punishment_led'].deactivate()
+
                         row_data = {
                             "ID": self.rodent_id or "UNKNOWN",
                             "TrialNumber": f"{trial_index+1}" if correction_count == 0 else f"{trial_index+1}*",
@@ -1218,6 +1252,15 @@ class MultiPhaseTraining:
                         }
                         self._write_realtime_csv_row(row_data)
                         self.trial_data.append(row_data)
+
+                        # Flush leftover messages before next correction attempt
+                        for dev in self.m0_devices.values():
+                            while not dev.message_queue.empty():
+                                try:
+                                    dev.message_queue.get_nowait()
+                                except queue.Empty:
+                                    break
+
                         correction_count += 1
                         if correction_count >= 3:
                             print("Maximum correction trials reached. Moving on to next trial.")
@@ -1225,9 +1268,11 @@ class MultiPhaseTraining:
                         else:
                             print(f"Repeating trial {trial_index+1} as correction (attempt {correction_count}).")
                             continue  # Retry the same trial.
+
                     else:  # "no_touch" outcome
                         self.send_m0_command("M0_0", "BLACK")
                         self.send_m0_command("M0_1", "BLACK")
+
                         row_data = {
                             "ID": self.rodent_id or "UNKNOWN",
                             "TrialNumber": f"{trial_index+1}" if correction_count == 0 else f"{trial_index+1}*",
@@ -1243,32 +1288,281 @@ class MultiPhaseTraining:
                         }
                         self._write_realtime_csv_row(row_data)
                         self.trial_data.append(row_data)
+
+                        # Flush leftover messages before next trial
+                        for dev in self.m0_devices.values():
+                            while not dev.message_queue.empty():
+                                try:
+                                    dev.message_queue.get_nowait()
+                                except queue.Empty:
+                                    break
+
                         trial_completed = True
                         correction_count = 0
+
+                # End of inner loop; move to next trial.
                 trial_index += 1
                 if trial_index < len(trials) and self.is_session_active:
                     next_img0, next_img1 = trials[trial_index]
                     print(f"Preloading images for next trial {trial_index+1} (pre-ITI)...")
                     self.send_m0_command("M0_0", f"IMG:{next_img0}")
                     self.send_m0_command("M0_1", f"IMG:{next_img1}")
+
         finally:
             self.finalize_training_timestamp()
             self.is_session_active = False
             for m0_id in self.m0_ports:
                 self.send_m0_command(m0_id, "BLACK")
             print(f"Simple Discrimination Phase finished at {self.session_end_time}.")
+
         for dev in self.m0_devices.values():
             dev._attempt_reopen()
             time.sleep(0.5)
 
 
 
+    def complex_discrimination_phase(self, csv_file_path):
+        print("Starting Complex Discrimination.")
 
+            # 1) Flush queues immediately when the phase starts
+        for dev in self.m0_devices.values():
+            while not dev.message_queue.empty():
+                try:
+                    dev.message_queue.get_nowait()
+                except queue.Empty:
+                    break
 
+        self.is_session_active = True
+        trials = self.read_csv(csv_file_path)
+        if not trials:
+            print("No trials found in CSV.")
+            return
 
+        from PyQt5.QtWidgets import QApplication
 
+        try:
+            trial_index = 0
+            # Process each trial (including trial 1) with correction attempts for incorrect responses.
+            while trial_index < len(trials) and self.is_session_active:
+                # Get current trial stimuli.
+                img0, img1 = trials[trial_index]
+                correction_count = 0
+                trial_completed = False
 
+                while not trial_completed and self.is_session_active:
+                    # For Trial 1 first attempt: no initiation required.
+                    if trial_index == 0 and correction_count == 0:
+                        print("Preloading images for Trial 1 (pre-free reward phase)...")
+                        self.send_m0_command("M0_0", f"IMG:{img0}")
+                        self.send_m0_command("M0_1", f"IMG:{img1}")
+                        print("Dispensing free reward.")
+                        _ = self.large_reward(4.0)
+                        # Immediately display images.
+                        self.send_m0_command("M0_0", "SHOW")
+                        self.send_m0_command("M0_1", "SHOW")
+                    else:
+                        # For any new trial (trial_index > 0) or for correction attempts:
+                        print(f"Preloading images for Trial {trial_index+1}{' (correction)' if correction_count > 0 else ''} (pre-ITI)...")
+                        self.send_m0_command("M0_0", f"IMG:{img0}")
+                        self.send_m0_command("M0_1", f"IMG:{img1}")
+                        print(f"--- ITI before Trial {trial_index+1}{' (correction)' if correction_count > 0 else ''} ---")
+                        self._fixed_iti()
+                        if not self.is_session_active:
+                            break
+                        print(f"--- Waiting for rodent to initiate Trial {trial_index+1}{' (correction)' if correction_count > 0 else ''} ---")
+                        if not self.wait_for_trial_initiation():
+                            print(f"Session stopped during initiation for trial {trial_index+1}.")
+                            break
+                        # Immediately show images after initiation.
+                        self.send_m0_command("M0_0", "SHOW")
+                        self.send_m0_command("M0_1", "SHOW")
 
+                    # Record initiation time.
+                    trial_start_time = datetime.now().strftime("%H:%M:%S")
+                    print(f"=== Trial {trial_index+1}{'*' if correction_count > 0 else ''}: M0_0 -> {img0}, M0_1 -> {img1} ===")
+
+                    # Wait for touch response (up to 300 seconds).
+                    start_t = time.time()
+                    touched_m0 = None
+                    touched_image = None
+                    choice_result = None
+
+                    while (time.time() - start_t) < 300 and self.is_session_active and not choice_result:
+                        QApplication.processEvents()
+                        sub_timeout = 1.0
+                        sub_start = time.time()
+                        found_touch = False
+
+                        while ((time.time() - sub_start) < sub_timeout and not found_touch and self.is_session_active):
+                            QApplication.processEvents()
+                            for m0_id, device in self.m0_devices.items():
+                                try:
+                                    m_id, line = device.message_queue.get(timeout=0.02)
+                                    if line.startswith("TOUCH:"):
+                                        found_touch = True
+                                        if m_id == "M0_0":
+                                            touched_m0 = "M0_0"
+                                            touched_image = img0
+                                        else:
+                                            touched_m0 = "M0_1"
+                                            touched_image = img1
+                                        break
+                                except queue.Empty:
+                                    pass
+                            time.sleep(0.01)
+
+                        if found_touch:
+                            if touched_image == "E01":
+                                choice_result = "correct"
+                                print("Correct choice")
+                                break
+                            elif touched_image == "D01":
+                                choice_result = "incorrect"
+                                print("Incorrect choice")
+                                break
+
+                    if not self.is_session_active:
+                        break
+
+                    # If we never got a touch or it didn't match 'E01'/'D01', call it "no_touch".
+                    if not choice_result:
+                        choice_result = "no_touch"
+                        print("No touch => skipping reward")
+
+                    # -------------------- Outcome Handling --------------------
+                    if choice_result == "correct":
+                        self.send_m0_command("M0_0", "BLACK")
+                        self.send_m0_command("M0_1", "BLACK")
+                        reward_time = self.large_reward(3.0)
+
+                        row_data = {
+                            "ID": self.rodent_id or "UNKNOWN",
+                            "TrialNumber": f"{trial_index+1}" if correction_count == 0 else f"{trial_index+1}*",
+                            "M0_0": img0,
+                            "M0_1": img1,
+                            "M0_2": "",
+                            "touched_m0": touched_m0,
+                            "Choice": choice_result,
+                            "InitiationTime": trial_start_time,
+                            "StartTraining": self.session_start_time or "",
+                            "EndTraining": "",
+                            "Reward": reward_time if reward_time else ""
+                        }
+                        self._write_realtime_csv_row(row_data)
+                        self.trial_data.append(row_data)
+
+                        # Flush any leftover messages before next trial
+                        for dev in self.m0_devices.values():
+                            while not dev.message_queue.empty():
+                                try:
+                                    dev.message_queue.get_nowait()
+                                except queue.Empty:
+                                    break
+
+                        trial_completed = True
+                        correction_count = 0  # Reset corrections for next trial.
+
+                    elif choice_result == "incorrect":
+                        self.send_m0_command("M0_0", "BLACK")
+                        self.send_m0_command("M0_1", "BLACK")
+                        self.peripherals['punishment_led'].activate()
+                        self.peripherals['buzzer'].activate()
+                        start_punish = time.time()
+                        buzzer_off = False
+
+                        while (time.time() - start_punish) < 5 and self.is_session_active:
+                            QApplication.processEvents()
+                            elapsed = time.time() - start_punish
+                            if (not buzzer_off) and (elapsed >= 0.5):
+                                self.peripherals['buzzer'].deactivate()
+                                buzzer_off = True
+                            time.sleep(0.01)
+
+                        self.peripherals['punishment_led'].deactivate()
+
+                        row_data = {
+                            "ID": self.rodent_id or "UNKNOWN",
+                            "TrialNumber": f"{trial_index+1}" if correction_count == 0 else f"{trial_index+1}*",
+                            "M0_0": img0,
+                            "M0_1": img1,
+                            "M0_2": "",
+                            "touched_m0": touched_m0,
+                            "Choice": choice_result,
+                            "InitiationTime": trial_start_time,
+                            "StartTraining": self.session_start_time or "",
+                            "EndTraining": "",
+                            "Reward": ""
+                        }
+                        self._write_realtime_csv_row(row_data)
+                        self.trial_data.append(row_data)
+
+                        # Flush leftover messages before next correction attempt
+                        for dev in self.m0_devices.values():
+                            while not dev.message_queue.empty():
+                                try:
+                                    dev.message_queue.get_nowait()
+                                except queue.Empty:
+                                    break
+
+                        correction_count += 1
+                        if correction_count >= 3:
+                            print("Maximum correction trials reached. Moving on to next trial.")
+                            trial_completed = True
+                        else:
+                            print(f"Repeating trial {trial_index+1} as correction (attempt {correction_count}).")
+                            continue  # Retry the same trial.
+
+                    else:  # "no_touch" outcome
+                        self.send_m0_command("M0_0", "BLACK")
+                        self.send_m0_command("M0_1", "BLACK")
+
+                        row_data = {
+                            "ID": self.rodent_id or "UNKNOWN",
+                            "TrialNumber": f"{trial_index+1}" if correction_count == 0 else f"{trial_index+1}*",
+                            "M0_0": img0,
+                            "M0_1": img1,
+                            "M0_2": "",
+                            "touched_m0": None,
+                            "Choice": "no_touch",
+                            "InitiationTime": trial_start_time,
+                            "StartTraining": self.session_start_time or "",
+                            "EndTraining": "",
+                            "Reward": ""
+                        }
+                        self._write_realtime_csv_row(row_data)
+                        self.trial_data.append(row_data)
+
+                        # Flush leftover messages before next trial
+                        for dev in self.m0_devices.values():
+                            while not dev.message_queue.empty():
+                                try:
+                                    dev.message_queue.get_nowait()
+                                except queue.Empty:
+                                    break
+
+                        trial_completed = True
+                        correction_count = 0
+
+                # End of inner loop; move to next trial.
+                trial_index += 1
+                if trial_index < len(trials) and self.is_session_active:
+                    next_img0, next_img1 = trials[trial_index]
+                    print(f"Preloading images for next trial {trial_index+1} (pre-ITI)...")
+                    self.send_m0_command("M0_0", f"IMG:{next_img0}")
+                    self.send_m0_command("M0_1", f"IMG:{next_img1}")
+
+        finally:
+            self.finalize_training_timestamp()
+            self.is_session_active = False
+            for m0_id in self.m0_ports:
+                self.send_m0_command(m0_id, "BLACK")
+            print(f"Complex Discrimination Phase finished at {self.session_end_time}.")
+
+        for dev in self.m0_devices.values():
+            dev._attempt_reopen()
+            time.sleep(0.5)
+
+    
     def read_csv(self, csv_file_path):
         trials = []
         try:

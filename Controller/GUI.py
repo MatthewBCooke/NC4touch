@@ -558,7 +558,7 @@ class MultiTrialGUI(QMainWindow):
         if not self.video_capture.isOpened():
             print("Warning: Could not open camera (index=0) with V4L2.")
             return
-        self.video_capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+        self.video_capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'X264'))
         self.video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         self.video_capture.set(cv2.CAP_PROP_FPS, 30)

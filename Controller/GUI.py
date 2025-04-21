@@ -20,6 +20,8 @@ from PyQt5.QtGui import QImage, QPixmap
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+import yaml
+
 # Local modules
 import m0_devices       # discover_m0_boards()
 import Main             # The MultiPhaseTraining code
@@ -111,6 +113,10 @@ class MultiTrialGUI(QMainWindow):
         # Initialize pigpio and trainer
         self.init_hardware()
 
+        # Initialize config file
+        self.init_config_file()
+
+
         # Redirect stdout to GUI text monitor
         self.stdout_buffer = ""
         self.emitting_stream = EmittingStream()
@@ -126,6 +132,16 @@ class MultiTrialGUI(QMainWindow):
             self.video_recorder = VideoRecorder(self.video_capture)
 
     # ---------------- LEFT COLUMN UI ----------------
+    def init_config_file(self):
+        code_dir = os.path.dirname(os.path.realpath(__file__))
+        self.config_file = os.path.join(code_dir, 'config.yaml')
+        if os.path.isfile(self.config_file):
+            with open(self.config_file, 'r') as file:
+                self.config = yaml.safe_load(file)
+        else:
+            self.config = {}
+        
+
     def init_mouse_info_ui(self):
         self.mouse_info_group = QGroupBox("Rodent Information")
         self.mouse_info_group.setStyleSheet("""
@@ -598,11 +614,19 @@ class MultiTrialGUI(QMainWindow):
             )
             livestream = (reply == QMessageBox.Yes)
             options = QFileDialog.Options()
+            if "recording_dir" in self.config:
+                config_recording_dir = self.config["recording_dir"]
+            else:
+                config_recording_dir = ""
             filepath, _ = QFileDialog.getSaveFileName(
-                self, "Save Video", "", "Video Files (*.avi);;Video Files (*.mp4)", options=options
+                self, "Save Video", config_recording_dir, "Video Files (*.avi);;Video Files (*.mp4)", options=options
             )
             if not filepath:
                 return
+
+            self.config["recording_dir"] = os.path.dirname(filepath)
+            self.write_config_file()
+
             rtmp_url = ""
             if livestream:
                 # Replace YOUR_STREAM_KEY with your actual YouTube stream key.
@@ -610,6 +634,10 @@ class MultiTrialGUI(QMainWindow):
             if self.video_recorder.start_recording(filepath, livestream=livestream, stream_url=rtmp_url):
                 self.is_recording = True
                 self.record_toggle_button.setText("Stop Recording")
+    
+    def write_config_file(self):
+        with open(self.config_file, 'w') as f:
+            yaml.dump(self.config, f)
 
     # ---------------- SESSION CONTROL ----------------
     def on_discover(self):
@@ -625,17 +653,31 @@ class MultiTrialGUI(QMainWindow):
             print("No M0 boards found.")
 
     def on_load_csv(self):
+        if "seq_csv_dir" in self.config:
+            config_seq_csv_dir = self.config["seq_csv_dir"]
+        else:
+            config_seq_csv_dir = ""
+
         fname, _ = QFileDialog.getOpenFileName(
-            self, "Open CSV", "", "CSV Files (*.csv)"
+            self, "Open Seq CSV", config_seq_csv_dir, "CSV Files (*.csv)"
         )
         if fname:
             self.csv_file = fname
             print(f"CSV loaded: {fname}")
 
+            self.config["seq_csv_dir"] = os.path.dirname(fname)
+            self.write_config_file()
+
     def on_export_csv(self):
         if not self.trainer:
             print("No trainer object to export from.")
             return
+        
+        if "data_csv_dir" in self.config:
+            config_data_csv_dir = self.config["data_csv_dir"]
+        else:
+            config_data_csv_dir = ""
+
         fname, _ = QFileDialog.getSaveFileName(
             self, "Save CSV", "", "CSV Files (*.csv)"
         )
@@ -643,6 +685,9 @@ class MultiTrialGUI(QMainWindow):
             self.trainer.rodent_id = self.rodent_id
             self.trainer.export_results_csv(fname)
             print(f"Exported trial data to {fname}")
+
+            self.config["data_csv_dir"] = os.path.dirname(fname)
+            self.write_config_file()
         else:
             print("Export canceled.")
 

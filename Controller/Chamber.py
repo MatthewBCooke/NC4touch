@@ -84,29 +84,10 @@ class Chamber:
 
     self.reward.setup_reward()
 
-    self.reward_LED.activate()
-    self.punishment_LED.activate()
-    self.beambreak.activate()
-    self.buzzer.activate()
-    self.reward.dispense_reward()
-
-    time.sleep(2)
-
-    self.reward_LED.deactivate()
-    self.punishment_LED.deactivate()
-    self.beambreak.deactivate()
-    self.buzzer.deactivate()
-    self.reward.stop_reward_dispense()
-
-  
-
-
-
-
 if __name__ == "__main__":
   chamber = Chamber()
   # [m0.initialize() for m0 in chamber.m0s]
-  [m0.sync_image_folder() for m0 in chamber.m0s]
+  # [m0.sync_image_folder() for m0 in chamber.m0s]
 
   # chamber.reward_LED.turn_on()
   # chamber.punishment_LED.turn_on()

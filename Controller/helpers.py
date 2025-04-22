@@ -12,13 +12,14 @@ def wait_for_dmesg(msg="", timeout=30):
         time.sleep(0.1)
 
         dmesg = subprocess.check_output("dmesg -T | tail", shell=True).decode("utf-8")
-        dmesg = dmesg.split("\n")[:-2]
+        dmesg = dmesg.split("\n")[:-1]
 
         timestamps = [line.split("]")[0][1:] for line in dmesg]
         timestamps = [time.mktime(time.strptime(ts, "%a %b %d %H:%M:%S %Y")) for ts in timestamps]
 
         # Filter for timestamps after start time
         dmesg = [line for line, ts in zip(dmesg, timestamps) if ts > start_time]
+        # print(dmesg)
 
         if dmesg:
             msg_line = [line for line in dmesg if msg in line]

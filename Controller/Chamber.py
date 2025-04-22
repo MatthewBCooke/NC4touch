@@ -34,7 +34,7 @@ class Chamber:
     # Initialize M0s
     self.left_m0 = M0Device(pi = self.pi, id = "M0_0", reset_pin = self.reset_pins[0])
     # self.middle_m0 = M0Device(pi = self.pi, id = "M0_1", reset_pin = self.reset_pins[1])
-    self.right_m0 = M0Device(pi = self.pi, id = "M0_2", reset_pin = self.reset_pins[2])
+    self.right_m0 = M0Device(pi = self.pi, id = "M0_1", reset_pin = self.reset_pins[2])
 
     self.m0s = [self.left_m0, self.right_m0]
 
@@ -87,6 +87,7 @@ class Chamber:
 if __name__ == "__main__":
   chamber = Chamber()
   [m0.initialize() for m0 in chamber.m0s]
+
   # [m0.sync_image_folder() for m0 in chamber.m0s]
 
   # chamber.reward_LED.deactivate()

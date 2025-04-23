@@ -154,6 +154,7 @@ void drawBMP(DFRobot_GDL *screen, const char *filename, int x, int y, boolean fl
 
     // startTime = millis();
 
+    // Write to screen
     if (BYTEDEPTH == 1) {
       uint8_t tftbuffer[3 * NROWS * SCREEN_HEIGHT];
       for (uint32_t sd_idx=0; sd_idx<(NROWS * bmpHeight); sd_idx++){

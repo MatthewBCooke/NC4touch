@@ -13,4 +13,3 @@ uint32_t read32(File&);
 ** Descriptions:            draw a BMP format bitmap to the screen
 ***************************************************************************************/
 void drawBMP(DFRobot_GDL*, const char *, int , int , boolean );
-void drawBMP8(DFRobot_GDL*, const char *, int , int , boolean );

@@ -9,7 +9,6 @@ import threading
 
 from Camera import Camera
 
-import pigpio
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QTextEdit, QFileDialog, QGroupBox,
@@ -22,15 +21,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-import yaml
-
-# Local modules
-import m0_devices       # discover_m0_boards()
-import Main             # The MultiPhaseTraining code
-from LED import LED
-from Reward import Reward
-from BeamBreak import BeamBreak
-from Buzzer import Buzzer
+from SessionController import SessionController
 
 class EmittingStream(QObject):
     """
@@ -73,31 +64,16 @@ class MultiTrialGUI(QMainWindow):
         self.notouch_count = 0
         self.trial_count = 0
 
-        # CSV info
-        self.rodent_id = None
-        self.csv_file = None
-
-        # pigpio/peripherals/trainer
-        self.pi = None
-        self.peripherals = None
+        self.session_controller = SessionController()
+        self.config = self.session_controller.config
+        self.camera = None
         self.trainer = None
 
-        # Video Recording
-        self.video_capture = None
-        self.video_timer = None
-        self.is_recording = False
-        self.video_file_path = ""
-
-        # Session Timer
-        self.session_start_time = None
         self.session_timer = QTimer(self)
         self.session_timer.timeout.connect(self.update_session_timer)
 
-        # A list to store rodent names (history)
-        self.mouse_names = []
-
         # Initialize GUI components
-        self.init_mouse_info_ui()
+        self.init_rodent_info_ui()
         self.init_video_ui()
         self.init_graph_ui()
 
@@ -106,13 +82,6 @@ class MultiTrialGUI(QMainWindow):
         self.init_parameters_ui()  # Parameters UI for ITI
         self.init_session_controls()
         self.init_serial_monitor()
-
-        # Initialize pigpio and trainer
-        self.init_hardware()
-
-        # Initialize config file
-        self.init_config_file()
-
 
         # Redirect stdout to GUI text monitor
         self.stdout_buffer = ""
@@ -127,19 +96,10 @@ class MultiTrialGUI(QMainWindow):
         self.initialize_video_capture()
 
     # ---------------- LEFT COLUMN UI ----------------
-    def init_config_file(self):
-        code_dir = os.path.dirname(os.path.realpath(__file__))
-        self.config_file = os.path.join(code_dir, 'config.yaml')
-        if os.path.isfile(self.config_file):
-            with open(self.config_file, 'r') as file:
-                self.config = yaml.safe_load(file)
-        else:
-            self.config = {}
-        
 
-    def init_mouse_info_ui(self):
-        self.mouse_info_group = QGroupBox("Rodent Information")
-        self.mouse_info_group.setStyleSheet("""
+    def init_rodent_info_ui(self):
+        self.rodent_info_group = QGroupBox("Rodent Information")
+        self.rodent_info_group.setStyleSheet("""
             QGroupBox {
                 background-color: #F9F9F9;
                 border: 2px solid #4A4A4A;
@@ -158,34 +118,34 @@ class MultiTrialGUI(QMainWindow):
                 font-weight: bold;
             }
         """)
-        self.mouse_info_group.setMaximumHeight(200)
+        self.rodent_info_group.setMaximumHeight(200)
 
         layout = QVBoxLayout()
         layout.setSpacing(10)
 
-        mouse_input_layout = QHBoxLayout()
-        mouse_input_layout.setSpacing(10)
+        rodent_input_layout = QHBoxLayout()
+        rodent_input_layout.setSpacing(10)
 
-        self.mouse_name_input = QLineEdit()
-        self.mouse_name_input.setPlaceholderText("Enter Mouse ID here")
-        self.mouse_name_input.setStyleSheet("background-color: #FCF8E3; padding: 4px;")
-        mouse_input_layout.addWidget(self.mouse_name_input)
+        self.rodent_name_input = QLineEdit()
+        self.rodent_name_input.setPlaceholderText("Enter Rodent ID here")
+        self.rodent_name_input.setStyleSheet("background-color: #FCF8E3; padding: 4px;")
+        rodent_input_layout.addWidget(self.rodent_name_input)
 
-        self.save_mouse_name_button = QPushButton("Save")
-        self.save_mouse_name_button.clicked.connect(self.save_mouse_name)
-        mouse_input_layout.addWidget(self.save_mouse_name_button)
-        layout.addLayout(mouse_input_layout)
+        self.save_rodent_name_button = QPushButton("Save")
+        self.save_rodent_name_button.clicked.connect(self.save_rodent_name)
+        rodent_input_layout.addWidget(self.save_rodent_name_button)
+        layout.addLayout(rodent_input_layout)
 
-        self.mouse_name_label = QLabel("Current Mouse Name: No Mouse Name Set")
-        self.mouse_name_label.setStyleSheet("font-weight: bold; font-size: 14px; color: #333;")
-        layout.addWidget(self.mouse_name_label)
+        self.rodent_name_label = QLabel("Current Rodent Name: No Rodent Name Set")
+        self.rodent_name_label.setStyleSheet("font-weight: bold; font-size: 14px; color: #333;")
+        layout.addWidget(self.rodent_name_label)
 
-        self.mouse_name_history_label = QLabel("Trained Mice: (none yet)")
-        self.mouse_name_history_label.setStyleSheet("font-size: 12px; color: #555;")
-        layout.addWidget(self.mouse_name_history_label)
+        self.rodent_name_history_label = QLabel("Trained Rodents: (none yet)")
+        self.rodent_name_history_label.setStyleSheet("font-size: 12px; color: #555;")
+        layout.addWidget(self.rodent_name_history_label)
 
-        self.mouse_info_group.setLayout(layout)
-        self.left_column.addWidget(self.mouse_info_group)
+        self.rodent_info_group.setLayout(layout)
+        self.left_column.addWidget(self.rodent_info_group)
 
     def init_video_ui(self):
         self.video_group = QGroupBox("Video Recording")
@@ -292,7 +252,8 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #FFAE00;
             }
         """)
-        self.discover_button.clicked.connect(self.on_discover)
+        self.discover_button.clicked.connect(self.session_controller.on_discover)
+        self.trainer = self.session_controller.trainer
         self.right_column.addWidget(self.discover_button)
 
     def init_phase_ui(self):
@@ -475,30 +436,6 @@ class MultiTrialGUI(QMainWindow):
         """)
         self.right_column.addWidget(self.serial_monitor)
 
-    # ---------------- Hardware/Trainer Init ----------------
-    def init_hardware(self):
-        self.pi = pigpio.pi()
-        if not self.pi.connected:
-            print("Failed to connect to pigpio!")
-            return
-
-        Reward_LED_PIN = 21
-        Reward_PIN = 27
-        BeamBreak_PIN = 4
-        Punishment_LED_PIN = 17
-        Buzzer_PIN = 16
-
-        self.peripherals = {
-            'reward_led': LED(self.pi, Reward_LED_PIN, brightness=140),
-            'reward':     Reward(self.pi, Reward_PIN),
-            'beam_break': BeamBreak(self.pi, BeamBreak_PIN),
-            'punishment_led': LED(self.pi, Punishment_LED_PIN, brightness=255),
-            'buzzer': Buzzer(self.pi, Buzzer_PIN)
-        }
-        self.trainer = None
-        #default_board_map = {"M0_0": "/dev/ttyACM0", "M0_1": "/dev/ttyACM1"}
-        #self.trainer = Main.MultiPhaseTraining(self.pi, self.peripherals, default_board_map)
-        #self.trainer.open_realtime_csv("FullSession")
 
     # ---------------- STDOUT Redirection ----------------
     def handle_new_text(self, text):
@@ -565,9 +502,8 @@ class MultiTrialGUI(QMainWindow):
 
     # ---------------- VIDEO CAPTURE ----------------
     def initialize_video_capture(self):
-        self.camera = Camera()
-        self.camera.initialize_video_capture()
-
+        self.session_controller.setup_camera(camera_device="/dev/video0", mode="video_capture")
+        self.camera = self.session_controller.camera
         self.video_timer = QTimer(self)
         self.video_timer.timeout.connect(self.update_video_feed)
         self.video_timer.start(int(1000 / 30))
@@ -588,17 +524,10 @@ class MultiTrialGUI(QMainWindow):
 
     def toggle_recording(self):
         if self.is_recording:
-            self.camera.video_recorder.stop_recording()
+            self.session_controller.stop_recording()
             self.is_recording = False
             self.record_toggle_button.setText("Start Recording")
         else:
-            reply = QMessageBox.question(
-                self,
-                "Livestream Option",
-                "Would you like to livestream your recording?",
-                QMessageBox.Yes | QMessageBox.No
-            )
-            livestream = (reply == QMessageBox.Yes)
             options = QFileDialog.Options()
 
             config_recording_dir = ""
@@ -612,33 +541,26 @@ class MultiTrialGUI(QMainWindow):
                 return
 
             self.config["recording_dir"] = os.path.dirname(filepath)
-            self.write_config_file()
+            self.session_controller.write_config_file()
 
-            rtmp_url = ""
-            if livestream:
-                # Replace YOUR_STREAM_KEY with your actual YouTube stream key.
-                rtmp_url = "rtmp://x.rtmp.youtube.com/live2/myxg-tayp-8cwx-wecv-ftv9"
-            if self.camera.video_recorder.start_recording(filepath, livestream=livestream, stream_url=rtmp_url):
+            if self.session_controller.start_recording(filepath):
                 self.is_recording = True
                 self.record_toggle_button.setText("Stop Recording")
+
+            # reply = QMessageBox.question(
+            #     self,
+            #     "Livestream Option",
+            #     "Would you like to livestream your recording?",
+            #     QMessageBox.Yes | QMessageBox.No
+            # )
+            # livestream = (reply == QMessageBox.Yes)
+            # rtmp_url = ""
+            # if livestream:
+            #     # Replace YOUR_STREAM_KEY with your actual YouTube stream key.
+            #     rtmp_url = "rtmp://x.rtmp.youtube.com/live2/myxg-tayp-8cwx-wecv-ftv9"
+            # if self.camera.video_recorder.start_recording(filepath, livestream=livestream, stream_url=rtmp_url):
+
     
-    def write_config_file(self):
-        with open(self.config_file, 'w') as f:
-            yaml.dump(self.config, f)
-
-    # ---------------- SESSION CONTROL ----------------
-    def on_discover(self):
-        boards = m0_devices.discover_m0_boards()
-        if boards:
-            print("Discovered boards:")
-            for bid, dev in boards.items():
-                print(f" - {bid} => {dev}")
-            self.trainer = Main.MultiPhaseTraining(self.pi, self.peripherals, boards)
-            print("Trainer updated with discovered boards.")
-            self.trainer.open_realtime_csv("FullSession_ReDiscovered")
-        else:
-            print("No M0 boards found.")
-
     def on_load_csv(self):
         config_seq_csv_dir = ""
         if "seq_csv_dir" in self.config:
@@ -652,7 +574,7 @@ class MultiTrialGUI(QMainWindow):
             print(f"CSV loaded: {fname}")
 
             self.config["seq_csv_dir"] = os.path.dirname(fname)
-            self.write_config_file()
+            self.session_controller.write_config_file()
 
     def on_export_csv(self):
         if not self.trainer:
@@ -672,7 +594,7 @@ class MultiTrialGUI(QMainWindow):
             print(f"Exported trial data to {fname}")
 
             self.config["data_csv_dir"] = os.path.dirname(fname)
-            self.write_config_file()
+            self.session_controller.write_config_file()
         else:
             print("Export canceled.")
 
@@ -753,22 +675,23 @@ class MultiTrialGUI(QMainWindow):
         print("Stopping priming.")
         self.trainer.peripherals['reward'].stop_priming()
 
-    def save_mouse_name(self):
-        name = self.mouse_name_input.text().strip()
+    def save_rodent_name(self):
+        name = self.rodent_name_input.text().strip()
         if name:
             self.rodent_id = name
+            self.session_controller.rodent_id = name
             if self.trainer:
                 self.trainer.rodent_id = name
-            self.mouse_name_label.setText(f"Current Mouse Name: {name}")
+            self.rodent_name_label.setText(f"Current Rodent Name: {name}")
             print(f"Rodent ID set to: {name}")
-            self.mouse_names.append(name)
-            if len(self.mouse_names) == 1:
-                self.mouse_name_history_label.setText(f"Trained Mice:\n - {name}")
+            self.rodent_names.append(name)
+            if len(self.rodent_names) == 1:
+                self.rodent_name_history_label.setText(f"Trained Rodents:\n - {name}")
             else:
-                lines = [f" - {n}" for n in self.mouse_names]
+                lines = [f" - {n}" for n in self.rodent_names]
                 all_names_str = "\n".join(lines)
-                self.mouse_name_history_label.setText(f"Trained Mice:\n{all_names_str}")
-            self.mouse_name_input.clear()
+                self.rodent_name_history_label.setText(f"Trained Rodents:\n{all_names_str}")
+            self.rodent_name_input.clear()
             self.start_training_btn.setEnabled(True)
         else:
             print("No rodent name entered.")
@@ -800,19 +723,6 @@ class MultiTrialGUI(QMainWindow):
             self.on_stop_training()  # Stop training as if the Stop Training button was pressed
         else:
             print("User chose to continue training.")
-
-    def closeEvent(self, event):
-        if self.video_timer:
-            self.video_timer.stop()
-        if self.video_capture and self.video_capture.isOpened():
-            self.video_capture.release()
-        if self.trainer:
-            self.trainer.close_realtime_csv()
-        if self.pi and self.pi.connected:
-            print("Stopping pigpio connection on close.")
-            self.pi.stop()
-        event.accept()
-
 
 def main():
     app = QApplication(sys.argv)

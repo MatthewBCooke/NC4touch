@@ -254,7 +254,7 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #FFAE00;
             }
         """)
-        self.discover_button.clicked.connect(self.session_controller.on_discover)
+        self.discover_button.clicked.connect(self.session_controller.discover_m0s)
         self.right_column.addWidget(self.discover_button)
 
     def init_phase_ui(self):

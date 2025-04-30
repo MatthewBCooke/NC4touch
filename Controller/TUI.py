@@ -1,5 +1,7 @@
 import time
 from SessionController import SessionController
+import curses
+import os
 
 class TUI:
     def __init__(self):
@@ -26,9 +28,6 @@ class TUI:
         self.rodent_name = None
         self.iti_duration = None
         self.csv_file = None
-    
-    def load_config(self, config_file):
-        
 
     def start_recording(self):
         if not self.is_recording:
@@ -77,7 +76,7 @@ class TUI:
         elif self.phase_name == "Complex Discrimination":
             self.trainer.complex_discrimination_phase(self.csv_file)
         print("Phase run finished.")
-    
+
     def stop_training(self):
         if self.trainer:
             self.trainer.stop_session()
@@ -98,3 +97,65 @@ class TUI:
             return
         print("Stopping priming.")
         self.trainer.peripherals['reward'].stop_priming()
+    
+if __name__ == "__main__":
+    tui = TUI()
+
+    # Create ncurses window
+    import curses
+    stdscr = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
+    stdscr.keypad(True)
+    stdscr.clear()
+    stdscr.refresh()
+
+    try:
+        while True:
+            lineIdx = 0
+            
+            # Option dictionary
+            options = {
+                "Discover M0s": tui.session_controller.discover_m0s,
+                "Start Recording": tui.start_recording,
+                "Stop Recording": tui.stop_recording,
+                "Start Training": tui.start_training,
+                "Stop Training": tui.stop_training,
+                "Start Priming": tui.start_priming,
+                "Stop Priming": tui.stop_priming,
+                "Set Rodent ID": lambda: tui.rodent_name,
+                "Set Phase Name": lambda: tui.phase_name,
+                "Set ITI Duration": lambda: tui.iti_duration,
+                "Set CSV File": lambda: tui.csv_file,
+                "Exit": exit
+            }
+
+            stdscr.clear()
+            stdscr.addstr(lineIdx, 0, "TUI Menu")
+            lineIdx += 1
+            stdscr.addstr(lineIdx, 0, "----------------")
+
+            for i, option in enumerate(options.keys()):
+                stdscr.addstr(lineIdx + i, 0, f"{i + 1}. {option}")
+
+            key = stdscr.getch()
+
+            success = False
+            for i, option in enumerate(options.keys()):
+                if key == ord(str(i + 1)):
+                    stdscr.addstr(8, 0, f"Selected: {option}")
+                    stdscr.refresh()
+                    options[option]()
+                    success = True
+                    time.sleep(1)
+            
+            if not success:
+                stdscr.addstr(8, 0, "Invalid option. Please try again.")
+                stdscr.refresh()
+                time.sleep(1)
+    finally:
+        curses.nocbreak()
+        stdscr.keypad(False)
+        curses.echo()
+        curses.endwin()
+        print("Exiting TUI.")

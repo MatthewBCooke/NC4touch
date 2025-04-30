@@ -102,7 +102,7 @@ class SessionController:
             yaml.dump(self.config, f)
 
     # ---------------- SESSION CONTROL ----------------
-    def on_discover(self):
+    def discover_m0s(self):
         boards = m0_devices.discover_m0_boards()
         if boards:
             print("Discovered boards:")

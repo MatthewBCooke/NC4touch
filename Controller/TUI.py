@@ -30,6 +30,8 @@ class TUI:
         self.csv_file = None
 
         self.stdscr = None
+        self.run_loop = True
+        self.lineIdx = 0
 
     def start_recording(self):
         if not self.is_recording:
@@ -110,6 +112,7 @@ class TUI:
         self.stdscr.refresh()
     
     def tui_set_rodent_name(self):
+        self.stdscr.clear()
         self.stdscr.addstr(0, 0, "Enter Rodent name: ")
         self.stdscr.refresh()
         rodent_name = self.stdscr.getstr(1, 0).decode("utf-8")
@@ -120,6 +123,7 @@ class TUI:
             print("No Rodent name entered.")
     
     def tui_set_phase_name(self):
+        self.stdscr.clear()
         self.stdscr.addstr(0, 0, "Enter Phase name: ")
         self.stdscr.refresh()
         phase_name = self.stdscr.getstr(1, 0).decode("utf-8")
@@ -130,6 +134,7 @@ class TUI:
             print("No Phase name entered.")
     
     def tui_set_iti_duration(self):
+        self.stdscr.clear()
         self.stdscr.addstr(0, 0, "Enter ITI Duration (seconds): ")
         self.stdscr.refresh()
         iti_duration = self.stdscr.getstr(1, 0).decode("utf-8")
@@ -140,6 +145,7 @@ class TUI:
             print("Invalid ITI Duration entered.")
     
     def tui_set_csv_file(self):
+        self.stdscr.clear()
         self.stdscr.addstr(0, 0, "Enter CSV file path: ")
         self.stdscr.refresh()
         csv_file = self.stdscr.getstr(1, 0).decode("utf-8")
@@ -158,9 +164,10 @@ class TUI:
         curses.echo()
         curses.endwin()
         print("TUI exited.")
+        self.run_loop = False
     
     def tui_show_menu(self):
-        lineIdx = 0
+        self.lineIdx = 0
         # Option dictionary
         options = {
             "Discover M0s": self.session_controller.discover_m0s,
@@ -170,21 +177,21 @@ class TUI:
             "Stop Training": self.stop_training,
             "Start Priming": self.start_priming,
             "Stop Priming": self.stop_priming,
-            "Set Rodent ID": self.tui_set_rodent_name,
-            "Set Phase Name": self.tui_set_phase_name,
-            "Set ITI Duration": self.tui_set_iti_duration,
-            "Set CSV File": self.tui_set_csv_file,
-            "Exit": self.tui_exit,
+            f"Set Rodent Name ({self.rodent_name})": self.tui_set_rodent_name,
+            f"Set Phase Name ({self.phase_name})": self.tui_set_phase_name,
+            f"Set ITI Duration ({self.iti_duration})": self.tui_set_iti_duration,
+            f"Set CSV File ({self.csv_file})": self.tui_set_csv_file,
+            "Exit": exit,
         }
 
         self.stdscr.clear()
-        self.stdscr.addstr(lineIdx, 0, "TUI Menu")
-        lineIdx += 1
-        self.stdscr.addstr(lineIdx, 0, "----------------")
-        lineIdx += 1
+        self.stdscr.addstr(self.lineIdx, 0, "TUI Menu")
+        self.lineIdx += 1
+        self.stdscr.addstr(self.lineIdx, 0, "----------------")
+        self.lineIdx += 1
 
         for i, option in enumerate(options.keys()):
-            self.stdscr.addstr(lineIdx + i, 0, f"{i + 1}. {option}")
+            self.stdscr.addstr(self.lineIdx + i, 0, f"{i + 1}. {option}")
 
         key = self.stdscr.getstr(0, 0).decode("utf-8")
 
@@ -198,7 +205,7 @@ class TUI:
                 time.sleep(1)
         
         if not success:
-            self.stdscr.addstr(lineIdx + len(options), 0, "Invalid option. Please try again.")
+            self.stdscr.addstr(self.lineIdx + len(options), 0, "Invalid option. Please try again.")
             self.stdscr.refresh()
             time.sleep(1)
 
@@ -208,7 +215,7 @@ if __name__ == "__main__":
     tui = TUI()
     tui.tui_init()
     try:
-        while True:
+        while tui.run_loop:
             tui.tui_show_menu()
     except KeyboardInterrupt:
         tui.tui_exit()

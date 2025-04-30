@@ -21,7 +21,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from SessionController import SessionController
+from Controller.Session import Session
 
 class EmittingStream(QObject):
     """
@@ -64,8 +64,8 @@ class MultiTrialGUI(QMainWindow):
         self.notouch_count = 0
         self.trial_count = 0
 
-        self.session_controller = SessionController()
-        self.config = self.session_controller.config
+        self.session = Session()
+        self.config = self.session.config
         self.camera = None
         self.trainer = None
         self.is_recording = False
@@ -254,7 +254,7 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #FFAE00;
             }
         """)
-        self.discover_button.clicked.connect(self.session_controller.discover_m0s)
+        self.discover_button.clicked.connect(self.session.discover_m0s)
         self.right_column.addWidget(self.discover_button)
 
     def init_phase_ui(self):
@@ -286,7 +286,7 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #F4E97E;
             }
         """)
-        self.load_csv_btn.clicked.connect(self.on_load_csv)
+        self.load_csv_btn.clicked.connect(self.on_load_seq_csv)
 
         phase_layout.addWidget(phase_label)
         phase_layout.addWidget(self.phase_combo)
@@ -356,7 +356,7 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #1082C2;
             }
         """)
-        self.export_csv_btn.clicked.connect(self.on_export_csv)
+        self.export_csv_btn.clicked.connect(self.on_export_data_csv)
         session_layout.addWidget(self.export_csv_btn)
 
         self.start_training_btn = QPushButton("Start Training")
@@ -503,8 +503,8 @@ class MultiTrialGUI(QMainWindow):
 
     # ---------------- VIDEO CAPTURE ----------------
     def initialize_video_capture(self):
-        self.session_controller.setup_camera(camera_device="/dev/video0", mode="video_capture")
-        self.camera = self.session_controller.camera
+        self.session.setup_camera(camera_device="/dev/video0", mode="video_capture")
+        self.camera = self.session.camera
         self.video_timer = QTimer(self)
         self.video_timer.timeout.connect(self.update_video_feed)
         self.video_timer.start(int(1000 / 30))
@@ -525,26 +525,23 @@ class MultiTrialGUI(QMainWindow):
 
     def toggle_recording(self):
         if self.is_recording:
-            self.session_controller.stop_recording()
+            self.session.stop_recording()
             self.is_recording = False
             self.record_toggle_button.setText("Start Recording")
         else:
             options = QFileDialog.Options()
 
-            config_recording_dir = ""
-            if "recording_dir" in self.config:
-                config_recording_dir = self.config["recording_dir"]
+            config_recording_dir = self.session.load_from_config("recording_dir")
 
             filepath, _ = QFileDialog.getSaveFileName(
                 self, "Save Video", config_recording_dir, "Video Files (*.avi);;Video Files (*.mp4)", options=options
             )
             if not filepath:
                 return
+            
+            self.session.save_to_config("recording_dir", os.path.dirname(filepath))
 
-            self.config["recording_dir"] = os.path.dirname(filepath)
-            self.session_controller.write_config_file()
-
-            if self.session_controller.start_recording(filepath):
+            if self.session.start_recording(filepath):
                 self.is_recording = True
                 self.record_toggle_button.setText("Stop Recording")
 
@@ -562,45 +559,40 @@ class MultiTrialGUI(QMainWindow):
             # if self.camera.video_recorder.start_recording(filepath, livestream=livestream, stream_url=rtmp_url):
 
     
-    def on_load_csv(self):
-        config_seq_csv_dir = ""
-        if "seq_csv_dir" in self.config:
-            config_seq_csv_dir = self.config["seq_csv_dir"]
+    def on_load_seq_csv(self):
+        config_seq_csv_dir = self.session.load_from_config("seq_csv_dir")
 
         fname, _ = QFileDialog.getOpenFileName(
-            self, "Open Seq CSV", config_seq_csv_dir, "CSV Files (*.csv)"
+            self, "Open Sequence CSV", config_seq_csv_dir, "CSV Files (*.csv)"
         )
         if fname:
             self.csv_file = fname
             print(f"CSV loaded: {fname}")
 
-            self.config["seq_csv_dir"] = os.path.dirname(fname)
-            self.session_controller.write_config_file()
+            self.session.save_to_config("seq_csv_dir", os.path.dirname(fname))
+            self.session.save_to_config("seq_csv_file", fname)
 
-    def on_export_csv(self):
+    def on_export_data_csv(self):
         if not self.trainer:
             print("No trainer object to export from.")
             return
         
-        config_data_csv_dir = ""
-        if "data_csv_dir" in self.config:
-            config_data_csv_dir = self.config["data_csv_dir"]
+        config_data_csv_dir = self.session.load_from_config("data_csv_dir")
 
         fname, _ = QFileDialog.getSaveFileName(
-            self, "Save CSV", config_data_csv_dir, "CSV Files (*.csv)"
+            self, "Save Data CSV", config_data_csv_dir, "CSV Files (*.csv)"
         )
         if fname:
             self.trainer.rodent_id = self.rodent_name
             self.trainer.export_results_csv(fname)
             print(f"Exported trial data to {fname}")
 
-            self.config["data_csv_dir"] = os.path.dirname(fname)
-            self.session_controller.write_config_file()
+            self.session.save_to_config("data_csv_dir", os.path.dirname(fname))
         else:
             print("Export canceled.")
 
     def on_start_training(self):
-        self.trainer = self.session_controller.trainer
+        self.trainer = self.session.trainer
         if not self.trainer:
             print("No trainer object available.")
             return
@@ -681,7 +673,7 @@ class MultiTrialGUI(QMainWindow):
         name = self.rodent_name_input.text().strip()
         if name:
             self.rodent_name = name
-            self.session_controller.rodent_id = name
+            self.session.rodent_name = name
             if self.trainer:
                 self.trainer.rodent_id = name
             self.rodent_name_label.setText(f"Current Rodent Name: {name}")

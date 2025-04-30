@@ -13,12 +13,8 @@ from BeamBreak import BeamBreak
 from Buzzer import Buzzer
 from Camera import Camera
 
-class SessionController:
+class Session:
     def __init__(self):
-        # CSV info
-        self.rodent_id = None
-        self.csv_file = None
-
         # pigpio/peripherals/trainer
         self.pi = None
         self.peripherals = None
@@ -71,6 +67,22 @@ class SessionController:
                 self.config = yaml.safe_load(file)
         else:
             self.config = {}
+    
+    def load_from_config(self, key):
+        if key in self.config:
+            return self.config[key]
+        else:
+            print(f"Key '{key}' not found in config.")
+            return ""
+            return None
+    
+    def save_to_config(self, key, value):
+        self.config[key] = value
+        self.write_config_file()
+
+    def write_config_file(self):
+        with open(self.config_file, 'w') as f:
+            yaml.dump(self.config, f)
 
     # ---------------- Hardware/Trainer Init ----------------
     def init_hardware(self):
@@ -97,9 +109,6 @@ class SessionController:
         #self.trainer = Main.MultiPhaseTraining(self.pi, self.peripherals, default_board_map)
         #self.trainer.open_realtime_csv("FullSession")
 
-    def write_config_file(self):
-        with open(self.config_file, 'w') as f:
-            yaml.dump(self.config, f)
 
     # ---------------- SESSION CONTROL ----------------
     def discover_m0s(self):

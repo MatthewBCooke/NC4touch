@@ -1,5 +1,5 @@
 import time
-from SessionController import SessionController
+from Controller.Session import Session
 import curses
 import os
 
@@ -11,23 +11,23 @@ class TUI:
         self.notouch_count = 0
         self.trial_count = 0
 
-        self.session_controller = SessionController()
-        self.config = self.session_controller.config
+        self.session = Session()
         self.camera = None
         self.trainer = None
         self.is_recording = False
         self.rodent_names = []
 
         # Setup camera
-        self.session_controller.setup_camera(camera_device="/dev/video0", mode="video_capture")
-        self.camera = self.session_controller.camera
-        self.camera.initialize_network_stream()
+        self.session.setup_camera(camera_device="/dev/video0", mode="video_capture")
+        self.session.camera.initialize_network_stream()
         self.is_recording = False
 
-        self.phase_name = None
-        self.rodent_name = None
-        self.iti_duration = None
-        self.csv_file = None
+        self.phase_name = self.session.load_from_config("phase_name")
+        self.rodent_name = self.session.load_from_config("rodent_name")
+        self.iti_duration = self.session.load_from_config("iti_duration")
+        self.seq_csv_dir = self.session.load_from_config("seq_csv_dir")
+        self.seq_csv_file = self.session.load_from_config("seq_csv_file")
+        self.data_csv_dir = self.session.load_from_config("data_csv_dir")
 
         self.stdscr = None
         self.run_loop = True
@@ -35,7 +35,7 @@ class TUI:
 
     def start_recording(self):
         if not self.is_recording:
-            self.session_controller.start_recording()
+            self.session.start_recording()
             self.is_recording = True
             print("Recording started.")
         else:
@@ -43,14 +43,14 @@ class TUI:
 
     def stop_recording(self):
         if self.is_recording:
-            self.session_controller.stop_recording()
+            self.session.stop_recording()
             self.is_recording = False
             print("Recording stopped.")
         else:
             print("No recording in progress to stop.")
 
     def start_training(self):
-        self.trainer = self.session_controller.trainer
+        self.trainer = self.session.trainer
         if not self.trainer:
             print("Trainer not initialized.")
             return
@@ -63,22 +63,23 @@ class TUI:
         self.trainer.rodent_id = self.rodent_name
         self.trainer.trial_data = []
         self.session_start_time = time.time()
+        csv_file = os.path.join(self.seq_csv_dir, self.seq_csv_file)
 
         print(f"Starting phase: {self.phase_name}, rodent={self.rodent_name}")
         if self.phase_name == "Habituation":
             self.trainer.Habituation()
         elif self.phase_name == "Initial Touch":
-            self.trainer.initial_touch_phase(self.csv_file)
+            self.trainer.initial_touch_phase(csv_file)
         elif self.phase_name == "Must Touch":
-            self.trainer.must_touch_phase(self.csv_file)
+            self.trainer.must_touch_phase(csv_file)
         elif self.phase_name == "Must Initiate":
-            self.trainer.must_initiate_phase(self.csv_file)
+            self.trainer.must_initiate_phase(csv_file)
         elif self.phase_name == "Punish Incorrect":
-            self.trainer.punish_incorrect_phase(self.csv_file)
+            self.trainer.punish_incorrect_phase(csv_file)
         elif self.phase_name == "Simple Discrimination":
-            self.trainer.simple_discrimination_phase(self.csv_file)
+            self.trainer.simple_discrimination_phase(csv_file)
         elif self.phase_name == "Complex Discrimination":
-            self.trainer.complex_discrimination_phase(self.csv_file)
+            self.trainer.complex_discrimination_phase(csv_file)
         print("Phase run finished.")
 
     def stop_training(self):
@@ -102,6 +103,19 @@ class TUI:
         print("Stopping priming.")
         self.trainer.peripherals['reward'].stop_priming()
     
+    def export_data(self):
+        if not self.trainer:
+            print("No trainer to export data from.")
+            return
+        if not self.trainer.trial_data:
+            print("No trial data to export.")
+            return
+        
+        datetime_str = time.strftime("%Y%m%d_%H%M%S")
+        csv_file = os.path.join(self.data_csv_dir, f"{datetime_str}_{self.rodent_name}_data.csv")
+        self.trainer.export_results_csv(csv_file)
+        print(f"Data exported to {csv_file}.")
+    
     def tui_init(self):
         # Create ncurses window
         self.stdscr = curses.initscr()
@@ -119,19 +133,37 @@ class TUI:
         if rodent_name:
             self.rodent_name = rodent_name
             print(f"Rodent name set to: {self.rodent_name}")
+            self.session.save_to_config("rodent_name", rodent_name)
         else:
             print("No Rodent name entered.")
     
     def tui_set_phase_name(self):
+        phases = [
+            "Habituation",
+            "Initial Touch",
+            "Must Touch",
+            "Must Initiate",
+            "Punish Incorrect",
+            "Simple Discrimination",
+            "Complex Discrimination"
+        ]
+
         self.stdscr.clear()
-        self.stdscr.addstr(0, 0, "Enter Phase name: ")
+        self.lineIdx = 0
+        self.stdscr.addstr(self.lineIdx, 0, "Select Phase:")
+        self.lineIdx += 1
+        for i, phase in enumerate(phases):
+            self.stdscr.addstr(self.lineIdx, 0, f"{i + 1}. {phase}")
+            self.lineIdx += 1
+        self.stdscr.addstr(self.lineIdx, 0, "Enter your choice: ")
         self.stdscr.refresh()
-        phase_name = self.stdscr.getstr(1, 0).decode("utf-8")
-        if phase_name:
-            self.phase_name = phase_name
+        key = self.stdscr.getstr(self.lineIdx + 1, 0).decode("utf-8")
+        if key.isdigit() and 1 <= int(key) <= len(phases):
+            self.phase_name = phases[int(key) - 1]
             print(f"Phase name set to: {self.phase_name}")
+            self.session.save_to_config("phase_name", self.phase_name)
         else:
-            print("No Phase name entered.")
+            print("Invalid option entered.")
     
     def tui_set_iti_duration(self):
         self.stdscr.clear()
@@ -141,19 +173,45 @@ class TUI:
         if iti_duration.isdigit():
             self.iti_duration = int(iti_duration)
             print(f"ITI Duration set to: {self.iti_duration} seconds")
+            self.session.save_to_config("iti_duration", self.iti_duration)
         else:
             print("Invalid ITI Duration entered.")
     
-    def tui_set_csv_file(self):
+    def tui_set_seq_csv_dir(self):
         self.stdscr.clear()
-        self.stdscr.addstr(0, 0, "Enter CSV file path: ")
+        self.stdscr.addstr(0, 0, "Enter Sequence CSV directory: ")
+        self.stdscr.refresh()
+        csv_dir = self.stdscr.getstr(1, 0).decode("utf-8")
+        if os.path.isdir(csv_dir):
+            self.seq_csv_dir = csv_dir
+            print(f"Seq CSV directory set to: {self.seq_csv_dir}")
+            self.session.save_to_config("seq_csv_dir", self.seq_csv_dir)
+        else:
+            print("Invalid Sequence directory entered.")
+    
+    def tui_set_seq_csv_file(self):
+        self.stdscr.clear()
+        self.stdscr.addstr(0, 0, "Enter Sequence CSV file: ")
         self.stdscr.refresh()
         csv_file = self.stdscr.getstr(1, 0).decode("utf-8")
-        if os.path.isfile(csv_file):
-            self.csv_file = csv_file
-            print(f"CSV file set to: {self.csv_file}")
+        if os.path.isfile(os.path.join(self.seq_csv_dir, csv_file)):
+            self.seq_csv_file = csv_file
+            print(f"Seq CSV file set to: {self.seq_csv_file}")
+            self.session.save_to_config("seq_csv_file", self.seq_csv_file)
         else:
-            print("Invalid CSV file path entered.")
+            print("Invalid Sequence CSV file entered.")
+    
+    def tui_set_data_csv_dir(self):
+        self.stdscr.clear()
+        self.stdscr.addstr(0, 0, "Enter Data CSV directory: ")
+        self.stdscr.refresh()
+        csv_dir = self.stdscr.getstr(1, 0).decode("utf-8")
+        if os.path.isdir(csv_dir):
+            self.data_csv_dir = csv_dir
+            print(f"Data CSV directory set to: {self.data_csv_dir}")
+            self.session.save_to_config("data_csv_dir", self.data_csv_dir)
+        else:
+            print("Invalid Data directory entered.")
     
     def tui_exit(self):
         self.stdscr.addstr(0, 0, "Exiting TUI...")
@@ -170,7 +228,7 @@ class TUI:
         self.lineIdx = 0
         # Option dictionary
         options = {
-            "Discover M0s": self.session_controller.discover_m0s,
+            "Discover M0s": self.session.discover_m0s,
             "Start Recording": self.start_recording,
             "Stop Recording": self.stop_recording,
             "Start Training": self.start_training,
@@ -180,7 +238,10 @@ class TUI:
             f"Set Rodent Name ({self.rodent_name})": self.tui_set_rodent_name,
             f"Set Phase Name ({self.phase_name})": self.tui_set_phase_name,
             f"Set ITI Duration ({self.iti_duration})": self.tui_set_iti_duration,
-            f"Set CSV File ({self.csv_file})": self.tui_set_csv_file,
+            f"Set Sequence CSV Directory ({self.seq_csv_dir})": self.tui_set_seq_csv_dir,
+            f"Set Sequence CSV File ({self.seq_csv_file})": self.tui_set_seq_csv_file,
+            f"Set Data CSV Directory ({self.data_csv_dir})": self.tui_set_data_csv_dir,
+            "Export Data": self.export_data,
             "Exit": exit,
         }
 
@@ -209,8 +270,6 @@ class TUI:
             self.stdscr.refresh()
             time.sleep(1)
 
-
-    
 if __name__ == "__main__":
     tui = TUI()
     tui.tui_init()

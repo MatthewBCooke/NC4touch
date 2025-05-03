@@ -3,6 +3,7 @@ import time
 import pigpio
 import yaml
 import netifaces
+import importlib
 
 # Local modules
 from Chamber import Chamber
@@ -22,12 +23,12 @@ class Session:
             self.session_config_file = session_config_file
         
         if not chamber_config_file:
-            chamber_config_file = os.path.join(code_dir, 'chamber_config.yaml')
+            self.chamber_config_file = os.path.join(code_dir, 'chamber_config.yaml')
         else:
             self.chamber_config_file = chamber_config_file
         
         if not trainer_config_file:
-            trainer_config_file = os.path.join(code_dir, 'trainer_config.yaml')
+            self.trainer_config_file = os.path.join(code_dir, 'trainer_config.yaml')
         else:
             self.trainer_config_file = trainer_config_file
 
@@ -140,8 +141,9 @@ class Session:
         if trainer_name:
             try:
                 # Dynamically load the trainer class based on the name
-                exec(f"from {trainer_name} import {trainer_name}")
-                self.trainer = exec(trainer_name)(self.trainer_config, self.chamber)
+                module = importlib.import_module(f"{trainer_name}")
+                trainer_class = getattr(module, trainer_name)
+                self.trainer = trainer_class(self.trainer_config, self.chamber)
                 self.trainer_name = trainer_name
             except ImportError as e:
                 print(f"Error loading trainer {trainer_name}: {e}")

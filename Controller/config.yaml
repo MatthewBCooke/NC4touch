@@ -1,0 +1,8 @@
+data_csv_dir: /mnt/shared
+iti_duration: 10
+phase_name: Simple Discrimination
+recording_dir: /mnt/shared
+rodent_name: foo
+seq_csv_dir: /mnt/shared
+seq_csv_file: Sequences_30.csv
+video_dir: /mnt/shared

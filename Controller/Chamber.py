@@ -14,8 +14,6 @@ import time
 import serial
 import serial.tools.list_ports
 from helpers import wait_for_dmesg
-import os
-import yaml
 
 class Chamber:
   def __init__(self, chamber_config = {}):
@@ -88,8 +86,8 @@ class Chamber:
     self.reward.setup_reward()
 
 if __name__ == "__main__":
-  chamber = Chamber()
-  [m0.initialize() for m0 in chamber.m0s]
+  # chamber = Chamber()
+  # [m0.initialize() for m0 in chamber.m0s]
 
   # [m0.sync_image_folder() for m0 in chamber.m0s]
 

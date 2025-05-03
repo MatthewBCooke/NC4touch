@@ -18,7 +18,7 @@ class Trainer(ABC):
     and pigpio-based hardware for reward, LED, beam break, etc.
     """
 
-    def __init__(self, trainer_config = {}, chamber = Chamber()):
+    def __init__(self, trainer_config = {}, chamber = None):
         if not isinstance(chamber, Chamber):
             raise ValueError("chamber must be an instance of Chamber")
 
@@ -172,7 +172,7 @@ class Trainer(ABC):
         raise NotImplementedError("run_training() must be implemented in subclasses.")
     
     @abstractmethod
-    def end_training(self):
+    def stop_training(self):
         """
         Ends the training session.
         This should be overridden in subclasses to implement specific training logic.

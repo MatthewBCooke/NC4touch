@@ -4,9 +4,23 @@ import pigpio
 import yaml
 import netifaces
 import importlib
+import threading
+import logging
 
 # Local modules
 from Chamber import Chamber
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# Set format
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# Create console handler
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(formatter)
+# Add the handler to the logger
+logger.addHandler(ch)
 
 class Session:
     """
@@ -47,14 +61,18 @@ class Session:
 
         self.chamber = Chamber(self.chamber_config)
 
+
         self.set_trainer_name('DoNothingTrainer')
+        self.training_timer_interval = 0.1
+        self.training_timer = None
+        self.trainer = None
 
         # Video Recording
         self.is_video_recording = False
 
     def start_training(self):
         if not self.trainer:
-            print("Trainer not initialized.")
+            logger.error("No trainer set. Cannot start training.")
             return
         
         self.trainer.rodent_name = self.rodent_name
@@ -62,7 +80,9 @@ class Session:
         self.trainer.seq_csv_dir = self.seq_csv_dir
         self.trainer.seq_csv_file = self.seq_csv_file
         self.trainer.start_training()
-        print("Training session started.")
+        self.training_timer = threading.Timer(self.training_timer_interval, self.trainer.run_training)
+        logger.info("Starting training session...")
+        self.training_timer.start()
 
     def stop_video_recording(self):
         if self.is_video_recording:
@@ -182,6 +202,10 @@ class Session:
     def stop_training(self):
         if self.trainer:
             self.trainer.end_training()
+            if self.training_timer:
+                self.training_timer.cancel()
+                self.training_timer = None
+            self.trainer = None
             print("Training stopped.")
         else:
             print("No training session to stop.")

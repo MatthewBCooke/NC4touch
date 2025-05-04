@@ -40,6 +40,8 @@ class Trainer(ABC):
         self.data_csv_writer = None
         self.data_csv_filename = None
 
+        self.is_running = False
+
     def _init_csv_fields(self):
         return [
             "Training Stage", "ID", "TrialNumber",

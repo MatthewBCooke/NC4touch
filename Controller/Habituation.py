@@ -43,7 +43,6 @@ class Habituation(Trainer):
     def __init__(self, trainer_config = {}, chamber = None):
         super().__init__(trainer_config, chamber)
         self.trainer_name = "Habituation"
-        self.is_session_active = False
         self.trial_data = []
 
         self.num_trials = 30
@@ -57,6 +56,7 @@ class Habituation(Trainer):
         self.last_beam_break_time = time.time()
         self.current_trial_iti = self.iti_duration
         self.max_iti_duration = 30  # Maximum ITI duration
+        self.is_running = False
 
         self.state = HabituationState.IDLE
 
@@ -69,11 +69,13 @@ class Habituation(Trainer):
         self.chamber.reward.stop()
 
         # Initialize the training session
+        self.is_running = True
         self.state = HabituationState.START_TRAINING
 
     def run_training(self):
         """Main loop for running the training session."""
         current_time = time.time()
+        print(f"Current time: {current_time}")
 
         if self.state == HabituationState.IDLE:
             # IDLE state, waiting for the start signal
@@ -82,7 +84,6 @@ class Habituation(Trainer):
         elif self.state == HabituationState.START_TRAINING:
             # START_TRAINING state, initializing the training session
             print("Starting training session...")
-            self.is_session_active = True
             self.current_trial_start_time = datetime.now().strftime("%H:%M:%S")
             self.open_realtime_csv(phase_name=self.trainer_name)
             self.current_trial = 0
@@ -180,7 +181,7 @@ class Habituation(Trainer):
         elif self.state == HabituationState.END_TRAINING:
             # End the training session
             print("Ending training session...")
-            self.is_session_active = False
+            self.is_running = False
             # self.close_realtime_csv()
             self.state = HabituationState.IDLE
             self.stop_training()

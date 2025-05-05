@@ -41,7 +41,7 @@ class Trainer(ABC):
         self.current_trial_end_time = None
 
         # In-memory trial data + persistent CSV tracking
-        self.session_data = []
+        self.training_data = []
         self.data_csv_file = None
         self.data_csv_writer = None
         self.data_csv_filename = None
@@ -153,7 +153,7 @@ class Trainer(ABC):
         # self.flush_message_queues()
         
         # Optionally, clear trial data if you want a fresh start for the next phase.
-        self.trial_data.clear()
+        self.training_data.clear()
         
         # Deactivate peripherals
         # self.peripherals['reward_led'].deactivate()

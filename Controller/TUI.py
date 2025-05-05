@@ -3,6 +3,9 @@ import curses
 
 from Session import Session
 from Trainer import get_trainers
+
+import logging
+logger = logging.getLogger('session_logger')
 class TUI:
     def __init__(self):
         # Counters for tracking progress
@@ -97,7 +100,7 @@ class TUI:
         if iti_duration.isdigit():
             self.session.set_iti_duration(int(iti_duration))
         else:
-            print("Invalid ITI Duration entered.")
+            logger.error("Invalid ITI Duration entered.")
     
     def tui_set_seq_csv_dir(self):
         self.stdscr.clear()
@@ -200,4 +203,3 @@ if __name__ == "__main__":
         tui.tui_exit()
     finally:
         tui.tui_exit()
-

@@ -5,6 +5,7 @@ import yaml
 import netifaces
 import importlib
 import logging
+import threading
 
 # Local modules
 from Chamber import Chamber
@@ -48,6 +49,8 @@ class Session:
         # Video Recording
         self.is_video_recording = False
 
+        self.session_timer = threading.Timer(0.1, self.trainer.run_training)
+
     def start_training(self):
         if not self.trainer:
             logger.error("Trainer not initialized.")
@@ -61,6 +64,7 @@ class Session:
         self.trainer.seq_csv_dir = self.seq_csv_dir
         self.trainer.seq_csv_file = self.seq_csv_file
         self.trainer.start_training()
+        self.session_timer.start()
         logger.info("Training session started.")
 
     def stop_video_recording(self):
@@ -180,7 +184,8 @@ class Session:
 
     def stop_training(self):
         if self.trainer:
-            self.trainer.end_training()
+            self.session_timer.cancel()
+            self.trainer.stop_training()
             logger.info("Training session ended.")
         else:
             logger.warning("No training session to stop.")

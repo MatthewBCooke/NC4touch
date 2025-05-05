@@ -4,7 +4,11 @@ from enum import Enum
 
 from Trainer import Trainer
 from Chamber import Chamber
-from Session import logger
+
+import logging
+session_logger = logging.getLogger('session_logger')
+logger = session_logger.getChild(__name__)
+logger.setLevel(logging.DEBUG)
 
 class HabituationState(Enum):
     """Enum for different states in the habituation phase."""
@@ -76,7 +80,7 @@ class Habituation(Trainer):
     def run_training(self):
         """Main loop for running the training session."""
         current_time = time.time()
-        print(f"Current time: {current_time}")
+        logger.debug(f"Current time: {current_time}")
 
         if self.state == HabituationState.IDLE:
             # IDLE state, waiting for the start signal
@@ -189,7 +193,7 @@ class Habituation(Trainer):
 
     def stop_training(self):
         # Stop the training session
-        print("Stopping training session...")
+        logger.info("Stopping training session...")
         self.chamber.reward.stop()
         self.chamber.reward_led.deactivate()
         self.chamber.beambreak.deactivate()

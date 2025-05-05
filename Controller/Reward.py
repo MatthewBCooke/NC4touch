@@ -1,9 +1,15 @@
 import pigpio
 import time
 
+import logging
+session_logger = logging.getLogger('session_logger')
+logger = session_logger.getChild(__name__)
+logger.setLevel(logging.DEBUG)
+
 class Reward:
     def __init__(self, pi=pigpio.pi(), pin=27):
         if not isinstance(pi, pigpio.pi):
+            logger.error("pi must be an instance of pigpio.pi")
             raise ValueError("pi must be an instance of pigpio.pi")
 
         self.pi = pi
@@ -24,32 +30,32 @@ class Reward:
         Turn on the pump (max duty cycle).
         If duration_s is given, the main code is responsible for timing and stopping the pump.
         """
-        print(f"Dispensing reward{' (duration_s=' + str(duration_s) + ')' if duration_s else ''}")
+        logger.debug(f"Dispensing reward for {duration_s} seconds" if duration_s else "Dispensing reward indefinitely")
         self.pi.set_PWM_dutycycle(self.pin, 255)
 
     def stop(self):
         self.pi.set_PWM_dutycycle(self.pin, 0)
-        print("Reward dispensing stopped.")
+        logger.debug("Stopping reward dispensing")
 
     def prime_feeding_tube(self):
         self.is_priming = True
         start_time = time.time()
-        print("Priming started")
+        logger.debug("Priming started")
         try:
             while self.is_priming and (time.time() - start_time) < 20:  # ~20 seconds max
                 self.pi.set_PWM_dutycycle(self.pin, 255)
                 time.sleep(0.1)
             self.pi.set_PWM_dutycycle(self.pin, 0)
             if self.is_priming:
-                print("Priming finished.")
+                logger.debug("Priming finished")
         except Exception as e:
             self.stop_priming()
-            print(f"Error during priming: {e}")
+            logger.error(f"Error during priming: {e}")
 
     def stop_priming(self):
         self.pi.set_PWM_dutycycle(self.pin, 0)
         self.is_priming = False
-        print("Priming stopped.")
+        logger.debug("Priming stopped")
 
     def cleanup(self):
         self.stop()  

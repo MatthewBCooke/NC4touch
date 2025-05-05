@@ -1,6 +1,11 @@
 import os
 import subprocess
-import netifaces
+from helpers import get_ip_address
+
+import logging
+session_logger = logging.getLogger('session_logger')
+logger = session_logger.getChild(__name__)
+logger.setLevel(logging.DEBUG)
 
 class Camera:
     def __init__(self, camera_device="/dev/video0", stream_port=8080):
@@ -39,12 +44,7 @@ class Camera:
             print(f"Error killing ffmpeg processes: {e}")
     
     def start_video_stream(self):
-        # Use ustreamer to stream video
-        # Get the local IP address
-        ip = netifaces.ifaddresses('eth0')
-        local_ip = ip[netifaces.AF_INET][0]['addr']
-
-        print(f"Local IP address: {local_ip}")
+        local_ip = get_ip_address()
         cmd = f"ustreamer --device={self.camera_device} --host={local_ip} --port={self.stream_port} --sink=demo::ustreamer::sink --sink-mode=660 --sink-rm"
         print(f"Starting ustreamer with command: {cmd}")
         

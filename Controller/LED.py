@@ -1,10 +1,13 @@
 import pigpio
+import logging
+session_logger = logging.getLogger('session_logger')
+logger = session_logger.getChild(__name__)
+logger.setLevel(logging.DEBUG)
 
 class LED:
-    def __init__(self, pi, pin=21, r_pin=None, g_pin=None, b_pin=None, frequency=5000, range=255, brightness=140):
-        if pi is None:
-            pi = pigpio.pi()
+    def __init__(self, pi=pigpio.pi(), pin=21, r_pin=None, g_pin=None, b_pin=None, frequency=5000, range=255, brightness=140):
         if not isinstance(pi, pigpio.pi):
+            logger.error("pi must be an instance of pigpio.pi")
             raise ValueError("pi must be an instance of pigpio.pi")
 
         self.pi = pi
@@ -30,10 +33,13 @@ class LED:
             self.pi.set_PWM_dutycycle(self.g_pin, g)
         if self.b_pin is not None:
             self.pi.set_PWM_dutycycle(self.b_pin, b)
+        logger.debug(f"LED color set to {self.color}")
 
 
     def activate(self):
         self.pi.set_PWM_dutycycle(self.pin, self.brightness)
+        logger.debug(f"LED activated")
 
     def deactivate(self):
         self.pi.set_PWM_dutycycle(self.pin, 0)
+        logger.debug(f"LED deactivated")

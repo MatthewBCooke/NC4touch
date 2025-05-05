@@ -4,6 +4,7 @@ from enum import Enum
 
 from Trainer import Trainer
 from Chamber import Chamber
+from Session import logger
 
 class HabituationState(Enum):
     """Enum for different states in the habituation phase."""
@@ -81,7 +82,7 @@ class Habituation(Trainer):
 
         elif self.state == HabituationState.START_TRAINING:
             # START_TRAINING state, initializing the training session
-            print("Starting training session...")
+            logger.info("Starting training session...")
             self.is_session_active = True
             self.current_trial_start_time = datetime.now().strftime("%H:%M:%S")
             self.open_realtime_csv(phase_name=self.trainer_name)
@@ -92,18 +93,18 @@ class Habituation(Trainer):
             # START_TRIAL state, preparing for the next trial
             self.current_trial += 1
             if self.current_trial < self.num_trials:
-                print(f"Running trial {self.current_trial}...")
+                logger.info(f"Starting trial {self.current_trial}...")
                 self.current_trial_start_time = datetime.now().strftime("%H:%M:%S")
                 self.state = HabituationState.DELIVER_REWARD_START
             else:
                 # All trials completed, move to end training state
-                print("All trials completed.")
+                logger.info("All trials completed.")
                 self.state = HabituationState.END_TRAINING
 
         elif self.state == HabituationState.DELIVER_REWARD_START:
             # DELIVER_REWARD_START state, preparing to deliver the reward
             self.reward_start_time = current_time
-            print(f"Delivering reward for trial {self.current_trial}...")
+            logger.info(f"Preparing to deliver reward for trial {self.current_trial}...")
             self.chamber.reward.dispense()
             self.chamber.reward_led.activate()
             self.chamber.beambreak.activate()
@@ -115,12 +116,12 @@ class Habituation(Trainer):
                 if self.chamber.beambreak.sensor_state==False and not self.reward_collected:
                     # Beam break detected during reward dispense
                     self.reward_collected = True
-                    print(f"Beam broken during reward dispense.")
+                    logger.info("Beam broken during reward dispense")
                     self.chamber.beambreak.deactivate()
                     self.chamber.reward_led.deactivate()
             else:
-                # Reward dispensing time is over
-                print(f"Reward delivered for trial {self.current_trial}.")
+                # Reward finished dispensing
+                logger.info(f"Reward dispense time of {self.pump_secs} seconds completed")
                 self.chamber.reward.stop()
                 self.state = HabituationState.POST_REWARD
 
@@ -130,17 +131,17 @@ class Habituation(Trainer):
                 if not self.reward_collected and self.chamber.beambreak.sensor_state==False:
                     # Beam break detected after reward dispense
                     self.reward_collected = True
-                    print("Beam broken after reward dispense")
+                    logger.info("Beam broken after reward dispense")
                     self.chamber.reward_led.deactivate()
                     self.state = HabituationState.ITI_START
             else:
-                    print(f"Beam break wait time exceeded for trial {self.current_trial}.")
+                    logger.info(f"Beam break wait time of {self.beam_break_wait_time} seconds exceeded")
                     self.chamber.reward_led.deactivate()
                     self.state = HabituationState.ITI_START
         
         elif self.state == HabituationState.ITI_START:
             # ITI_START state, preparing for the ITI period
-            print(f"Starting ITI for trial {self.current_trial}...")
+            logger.info(f"Preparing for ITI for trial {self.current_trial}...")
             self.chamber.beambreak.activate()
             self.chamber.reward_led.deactivate()
             self.current_trial_iti = self.iti_duration
@@ -152,16 +153,16 @@ class Habituation(Trainer):
             if current_time - self.iti_start_time < self.current_trial_iti
                 # Check if beam break is detected during ITI
                 if self.chamber.beambreak.sensor_state==False:
-                    print("Beam broken during ITI. Adding 1 second to ITI duration.")
+                    logger.info("Beam broken during ITI. Adding 1 second to ITI duration.")
                     if self.current_trial_iti < self.max_iti_duration:
                         self.current_trial_iti += 1
             else:
-                print(f"ITI of {self.current_trial_iti} seconds completed")
+                logger.info(f"ITI duration of {self.current_trial_iti} seconds completed")
                 self.state = HabituationState.END_TRIAL
         
         elif self.state == HabituationState.END_TRIAL:
             # END_TRIAL state, finalizing the trial
-            print(f"Ending trial {self.current_trial}...")
+            logger.info(f"Ending trial {self.current_trial}...")
             self.current_trial_end_time = datetime.now().strftime("%H:%M:%S")
             self.trial_data.append({
                 "ID": self.trainer_name,
@@ -176,10 +177,9 @@ class Habituation(Trainer):
             self._write_realtime_csv_row(self.trial_data[-1])
             self.state = HabituationState.START_TRIAL
 
-
         elif self.state == HabituationState.END_TRAINING:
             # End the training session
-            print("Ending training session...")
+            logger.info("Ending training session...")
             self.is_session_active = False
             # self.close_realtime_csv()
             self.state = HabituationState.IDLE

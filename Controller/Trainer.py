@@ -3,6 +3,11 @@ from Chamber import Chamber
 from datetime import datetime
 from abc import ABC, abstractmethod
 
+import logging
+session_logger = logging.getLogger('session_logger')
+logger = session_logger.getChild(__name__)
+logger.setLevel(logging.DEBUG)
+
 def get_trainers():
     """
     Returns a list of available trainers.
@@ -20,13 +25,15 @@ class Trainer(ABC):
 
     def __init__(self, trainer_config = {}, chamber = Chamber()):
         if not isinstance(chamber, Chamber):
+            logger.error("chamber must be an instance of Chamber")
             raise ValueError("chamber must be an instance of Chamber")
 
         if not isinstance(trainer_config, dict):
+            logger.error("trainer_config must be a dictionary")
             raise ValueError("trainer_config must be a dictionary")
 
-        self.chamber = chamber
 
+        self.chamber = chamber
         self.trainer_config = trainer_config
 
         self.num_trials = 0  # Number of trials
@@ -58,7 +65,7 @@ class Trainer(ABC):
         if self.data_csv_file is None:
             date_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             self.data_csv_filename = f"{date_str}_{phase_name}.csv"
-            print(f"Opening persistent CSV file: {self.data_csv_filename}")
+            logger.info(f"Creating persistent CSV file: {self.data_csv_filename}")
 
             self.data_csv_file = open(self.data_csv_filename, "w", newline="")
             fieldnames = self._init_csv_fields()
@@ -68,7 +75,7 @@ class Trainer(ABC):
 
             self.session_start_time = datetime.now().strftime("%H:%M:%S")
         else:
-            print(f"Persistent CSV already open: {self.data_csv_filename}")
+            logger.warning("Persistent CSV file already open. Skipping creation.")
 
     def _write_realtime_csv_row(self, row_data):
         """
@@ -86,7 +93,7 @@ class Trainer(ABC):
         """
         if self.data_csv_file:
             self.session_end_time = datetime.now().strftime("%H:%M:%S")
-            print(f"Closing persistent CSV file: {self.data_csv_filename}")
+            logger.info(f"Closing persistent CSV file: {self.data_csv_filename}")
             self.data_csv_file.close()
             self.data_csv_file = None
             self.data_csv_writer = None
@@ -99,7 +106,7 @@ class Trainer(ABC):
             last_row = self.trial_data[-1]
             last_row["EndTraining"] = self.session_end_time
             self._write_realtime_csv_row(last_row)
-        print(f"Training finished at {self.session_end_time}.")
+        logger.info(f"Training finished at {self.session_end_time}.")
 
 
     def export_results_csv(self, filename):
@@ -108,7 +115,7 @@ class Trainer(ABC):
         (This is separate from the persistent CSV.)
         """
         if not self.trial_data:
-            print("No trial data to export.")
+            logger.warning("No trial data to export.")
             return
         fieldnames = self._init_csv_fields()
         with open(filename, "w", newline="") as f:
@@ -119,7 +126,7 @@ class Trainer(ABC):
                 if "Training Stage" not in row:
                     row["Training Stage"] = self.current_phase if self.current_phase else "N/A"
                 writer.writerow(row)
-        print(f"Trial data exported to {filename}.")
+        logger.info(f"Exported trial data to {filename}.")
 
     # def flush_message_queues(self):
     #     """Flush out any remaining messages in each M0 device's message queue."""
@@ -136,7 +143,7 @@ class Trainer(ABC):
         When called manually, this also updates the EndTraining timestamp in the CSV.
         """
         if self.is_session_active:
-            print("Forcing session to stop.")
+            logger.info("Stopping session...")
             self.is_session_active = False
             # Record the manual stop time in the EndTraining column.
             self.finalize_training_timestamp()
@@ -152,7 +159,7 @@ class Trainer(ABC):
         # self.peripherals['reward'].stop_reward_dispense()
         # self.peripherals['beam_break'].deactivate_beam_break()
         
-        print("Session stopped and EndTraining timestamp logged.")
+        logger.info("Session stopped.")
 
     
     @abstractmethod

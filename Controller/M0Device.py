@@ -14,6 +14,11 @@ from helpers import wait_for_dmesg
 from enum import Enum
 import os
 
+import logging
+session_logger = logging.getLogger('session_logger')
+logger = session_logger.getChild(__name__)
+logger.setLevel(logging.DEBUG)
+
 class M0Mode(Enum):
     UNINITIALIZED = 0
     PORT_OPEN = 1
@@ -29,6 +34,7 @@ class M0Device:
     def __init__(self, pi=pigpio.pi(), id=None, reset_pin=None,
                  port=None, baudrate=115200, location=None):
         if not isinstance(pi, pigpio.pi):
+            logger.error("pi must be an instance of pigpio.pi")
             raise ValueError("pi must be an instance of pigpio.pi")
 
         self.id = id
@@ -56,8 +62,8 @@ class M0Device:
         self.stop_flag.set()
         if self.ser and self.ser.is_open:
             self.ser.close()
-            print(f"[{self.id}] Closed port {self.port}.")
-        print(f"[{self.id}] Stopped.")
+            logger.info(f"[{self.id}] Closed port {self.port}.")
+        logger.info(f"[{self.id}] Stopped.")
         self.mode = M0Mode.UNINITIALIZED
 
     def initialize(self):
@@ -73,7 +79,7 @@ class M0Device:
         """
         Finds the port and device ID of the M0 board connected to the given reset pin.
         """
-        print(f"Finding M0 board on pin {self.reset_pin}.")
+        logger.info(f"[{self.id}] Finding M0 board on pin {self.reset_pin}.")
         try:
             self.reset()
             time.sleep(1)
@@ -84,42 +90,42 @@ class M0Device:
             if tty_line:
                 self.port = "/dev/ttyACM" + tty_line.split("ttyACM")[1].split(":")[0]
 
-                print(f"Found device on port /dev/ttyACM{self.port}")
+                logger.info(f"[{self.id}] Found device on port {self.port}.")
 
                 self.mode = M0Mode.PORT_CLOSED
             else:
-                print(f"[{self.id}] Error: No ttyACM device found.")
+                logger.error(f"[{self.id}] Error: No ttyACM device found.")
         except Exception as e:
-            print(f"[{self.id}] Error finding device: {e}")
+            logger.error(f"[{self.id}] Error finding device: {e}")
     
     def open_serial(self):
         """
         Opens the serial port.
         """
         if self.port is None:
-            print(f"[{self.id}] Port not found. Finding device...")
+            logger.error(f"[{self.id}] Port not found. Finding device...")
             self.find_device()
         
         if not self.mode == M0Mode.PORT_CLOSED:
-            print(f"[{self.id}] Port not closed; cannot open serial port.")
+            logger.error(f"[{self.id}] Port not closed; cannot open serial port.")
             return
 
         try:
             self.ser = serial.Serial(self.port, self.baudrate, timeout=5)
-            print(f"[{self.id}] Opened port {self.port} at {self.baudrate}.")
+            logger.info(f"[{self.id}] Opened port {self.port} at {self.baudrate}.")
             self.mode = M0Mode.PORT_OPEN
         except Exception as e:
-            print(f"[{self.id}] Failed to open {self.port}: {e}")
+            logger.error(f"[{self.id}] Failed to open {self.port}: {e}")
     
     def start_read_thread(self):
         """
         Starts the read thread.
         """
         if not self.mode == M0Mode.PORT_OPEN:
-            print(f"[{self.id}] Port not open; cannot start read thread.")
+            logger.error(f"[{self.id}] Port not open; cannot start read thread.")
             return
         if self.ser is None:
-            print(f"[{self.id}] Serial port not initialized; cannot start read thread.")
+            logger.error(f"[{self.id}] Serial port not initialized; cannot start read thread.")
             return
         
         self.thread = threading.Thread(target=self.read_loop, daemon=True)
@@ -127,31 +133,31 @@ class M0Device:
         self.mode = M0Mode.SERIAL_COMM
     
     def read_loop(self):
-        print(f"[{self.id}] read_loop started.")
+        logger.info(f"[{self.id}] Starting read loop.")
         while not self.stop_flag.is_set():
             try:
                 if self.ser and self.ser.is_open:
                     line = self.ser.readline().decode("utf-8", errors="ignore").strip()
                     if line:
-                        print(f"[{self.id}] <- {line}")
+                        logger.info(f"[{self.id}] {line}")
                         self.message_queue.put((self.id, line))
                 else:
                     time.sleep(0.5)
             except Exception as e:
-                print(f"[{self.id}] read_loop error: {e}")
+                logger.error(f"[{self.id}] read_loop error: {e}")
                 # re-open self.ser here
                 self._attempt_reopen()
-        print(f"[{self.id}] read_loop ending.")
+        logger.info(f"[{self.id}] Stopping read loop.")
     
     def stop_read_thread(self):
         """
         Stops the read thread.
         """
         if not self.mode == M0Mode.SERIAL_COMM:
-            print(f"[{self.id}] Port not in serial communication mode; cannot stop read thread.")
+            logger.error(f"[{self.id}] Port not in serial communication mode; cannot stop read thread.")
             return
         
-        print(f"[{self.id}] Stopping read thread.")
+        logger.info(f"[{self.id}] Stopping read thread.")
         self.stop_flag.set()
         self.mode = M0Mode.PORT_OPEN
     
@@ -161,7 +167,7 @@ class M0Device:
         """
         
         if not self.mode == M0Mode.SERIAL_COMM:
-            print(f"[{self.id}] Port not in serial communication mode; cannot send command.")
+            logger.error(f"[{self.id}] Port not in serial communication mode; cannot send command.")
             return
 
         with self.write_lock:
@@ -170,12 +176,12 @@ class M0Device:
                 self.ser.reset_input_buffer()
                 self.ser.reset_output_buffer()
                 self.ser.write(msg)
-                print(f"[{self.id}] -> {cmd}")
+                logger.info(f"[{self.id}] -> {cmd}")
             except Exception as e:
-                print(f"[{self.id}] Error writing '{cmd}': {e}")
+                logger.error(f"[{self.id}] Error writing to serial port: {e}")
     
     def reset(self):
-        print(f"Resetting M0 board on pin {self.reset_pin}.")
+        logger.info(f"[{self.id}] Resetting M0 board on pin {self.reset_pin}.")
 
         if self.mode == M0Mode.SERIAL_COMM:
             self.stop_read_thread()
@@ -193,14 +199,14 @@ class M0Device:
 
             self.mode = M0Mode.PORT_CLOSED
         except Exception as e:
-            print(f"[{self.id}] Error resetting M0 board: {e}")
+            logger.error(f"[{self.id}] Error resetting M0 board: {e}")
     
     def mount_ud(self):
         """
         Mounts the UD drive connected to the M0 board by double clicking the reset pin.
         Currently this assumes only one UD drive is mounted at a time.
         """
-        print(f"[{self.id}] Mounting UD drive on pin {self.reset_pin}.")
+        logger.info(f"[{self.id}] Mounting UD drive on pin {self.reset_pin}.")
 
         try:
             self.reset()
@@ -218,13 +224,13 @@ class M0Device:
                     lsblk = [line for line in lsblk.split("\n") if line.startswith("/media")]
                     if lsblk:
                         self.ud_mount_loc = lsblk[0]
-                        print(f"Found mount location: {self.ud_mount_loc}")
+                        logger.info(f"[{self.id}] Found mount location: {self.ud_mount_loc}")
                         waiting = False
             
             self.mode = M0Mode.UD
         
         except Exception as e:
-            print(f"[{self.id}] Error mounting UD drive: {e}")
+            logger.error(f"[{self.id}] Error mounting UD drive: {e}")
     
     def upload_sketch(self, sketch_path="../M0Touch/M0Touch.ino"):
         """
@@ -237,47 +243,51 @@ class M0Device:
         if self.mode == M0Mode.UD or self.port is None:
             self.find_device()
 
-        print(f"[{self.id}] Uploading sketch to {self.port}.")
+        logger.info(f"[{self.id}] Uploading sketch to {self.port}.")
         try:
             # Run arduino-cli upload
             upload = subprocess.check_output(f"arduino-cli upload --port {self.port} --fqbn DFRobot:samd:mzero_bl {sketch_path}", shell=True).decode("utf-8")
-            print(upload)
+            logger.info(f"[{self.id}] Upload output: {upload}")
+            
+            if "error" in upload.lower():
+                logger.error(f"[{self.id}] Error uploading sketch: {upload}")
+            else:
+                logger.info(f"[{self.id}] Sketch uploaded successfully.")
 
-            print(f"[{self.id}] Sketch uploaded successfully.")
             self.mode = M0Mode.PORT_CLOSED
         except Exception as e:
-            print(f"[{self.id}] Error uploading sketch: {e}")
+            logger.error(f"[{self.id}] Error uploading sketch: {e}")
     
     def sync_image_folder(self, image_folder="../data/images"):
         """
         Syncs the image folder to the UD drive connected to the M0 board.
         """
-        print(f"Syncing image folder to UD drive.")
+        logger.info(f"[{self.id}] Syncing image folder to UD drive.")
 
         # Mount the UD drive
         self.mount_ud()
 
         if not self.mode == M0Mode.UD:
-            print(f"[{self.id}] Port not in UD mode; cannot sync image folder.")
+            logger.error(f"[{self.id}] Port not in UD mode; cannot sync image folder.")
             return
         if self.ud_mount_loc is None:
-            print(f"[{self.id}] UD mount location not found; cannot sync image folder.")
+            logger.error(f"[{self.id}] UD mount location not found; cannot sync image folder.")
             return
         # Check if the image folder exists
         if not os.path.exists(image_folder):
-            print(f"[{self.id}] Image folder {image_folder} does not exist.")
+            logger.error(f"[{self.id}] Image folder {image_folder} does not exist.")
             return
         # Check if the image folder is empty
         if not os.listdir(image_folder):
-            print(f"[{self.id}] Image folder {image_folder} is empty.")
+            logger.error(f"[{self.id}] Image folder {image_folder} is empty.")
             return
 
         # Sync the image folder
         try:
             subprocess.run(["rsync", "-av", image_folder, self.ud_mount_loc])
-            print("Synced image folder.")
+            logger.info(f"[{self.id}] Synced image folder to {self.ud_mount_loc}.")
         except Exception as e:
-            print(f"Error syncing image folder: {e}")
+            logger.error(f"[{self.id}] Error syncing image folder: {e}")
             return
 
         # Unmount the UD drive
@@ -288,7 +298,7 @@ class M0Device:
         """
         Attempts to reopen the serial port.
         """
-        print(f"[{self.id}] Attempting to reinitialize the port {self.port}...")
+        logger.info(f"[{self.id}] Attempting to reinitialize the port {self.port}...")
 
         try:
             if self.ser:
@@ -299,9 +309,9 @@ class M0Device:
             # Reopen the serial connection
             self.ser = serial.Serial(self.port, self.baudrate, timeout=1)
 
-            print(f"[{self.id}] Reinitialized port {self.port} successfully.")
+            logger.info(f"[{self.id}] Reinitialized port {self.port} successfully.")
         except Exception as e:
-            print(f"[{self.id}] Failed to reinitialize port: {e}")
+            logger.error(f"[{self.id}] Failed to reinitialize port: {e}")
             self.stop_read_thread()
             time.sleep(1)
     
@@ -312,8 +322,8 @@ class M0Device:
         self.stop_flag.set()
         if self.ser and self.ser.is_open:
             self.ser.close()
-            print(f"[{self.id}] Closed port {self.port}.")
-        print(f"[{self.id}] Stopped.")
+            logger.info(f"[{self.id}] Closed port {self.port}.")
+        logger.info(f"[{self.id}] Stopped.")
         self.mode = M0Mode.PORT_OPEN
 
 # Test the M0Device class
@@ -328,6 +338,4 @@ if __name__ == "__main__":
     time.sleep(2)
     m0.send_command("WHOAREYOU?")
     time.sleep(5)
-    print("M0 device test complete.")
-    input("Press Enter to exit.")
-    print("M0 device stopped.")
+    logger.info("M0 device test complete.")

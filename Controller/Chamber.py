@@ -17,10 +17,16 @@ from helpers import wait_for_dmesg
 import os
 import yaml
 
+import logging
+session_logger = logging.getLogger('session_logger')
+logger = session_logger.getChild(__name__)
+logger.setLevel(logging.DEBUG)
+
 class Chamber:
   def __init__(self, chamber_config = {}):
     if not isinstance(chamber_config, dict):
-      raise ValueError("chamber_config must be a dictionary")
+      logger.error("chamber_config must be a dictionary")
+      chamber_config = {}
 
     self.chamber_config = chamber_config
     self.chamber_name = self.chamber_config.get("chamber_name", "Chamber0")
@@ -74,9 +80,9 @@ class Chamber:
                     if line.startswith("ID:"):
                         board_id = line.split(":", 1)[1]
                         board_map[board_id] = p.device
-                        print(f"Discovered {board_id} on {p.device}")
+                        logger.debug(f"Discovered {board_id} on {p.device}")
             except Exception as e:
-                print(f"Could not open {p.device}: {e}")
+                logger.error(f"Could not open {p.device}: {e}")
 
     return board_map
 
@@ -93,6 +99,4 @@ if __name__ == "__main__":
 
   # [m0.sync_image_folder() for m0 in chamber.m0s]
 
-  print("Chamber initialized.")
-  input("Press Enter to exit.")
-  print("Chamber stopped.")
+  logger.info("Chamber initialized.")

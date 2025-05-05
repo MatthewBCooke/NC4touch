@@ -2,9 +2,7 @@ import os
 import time
 import pigpio
 import yaml
-import netifaces
 import importlib
-import logging
 import threading
 
 # Local modules
@@ -15,8 +13,9 @@ from DoNothingTrainer import DoNothingTrainer
 import logging
 session_logger = logging.getLogger('session_logger')
 session_logger.setLevel(logging.DEBUG)
-logger = session_logger.getChild(__name__)
-logger.setLevel(logging.DEBUG)
+logger = session_logger
+# logger = session_logger.getChild(__name__)
+# logger.setLevel(logging.DEBUG)
 
 class Session:
     """
@@ -141,6 +140,7 @@ class Session:
             logger.error("Invalid Data directory entered.")
     
     def set_trainer_name(self, trainer_name):
+        logger.info(f"Setting trainer name to: {trainer_name}")
         if trainer_name:
             try:
                 # Dynamically load the trainer class based on the name
@@ -148,6 +148,7 @@ class Session:
                 trainer_class = getattr(module, trainer_name)
                 self.trainer = trainer_class(self.chamber, {})
                 self.trainer_name = trainer_name
+                logger.debug(f"Trainer initialized: {self.trainer_name}")
             except ImportError as e:
                 logger.error(f"Error loading trainer {trainer_name}: {e}")
                 return

@@ -32,14 +32,14 @@ class WebUI:
     def __init__(self):
         # Initialize session and chamber
         self.session = Session()
-        # self.chamber = Chamber(self.session.chamber_config)
-
-        # Initialize UI
-        self.init_ui()
 
         self.ip = get_ip_address()
         self.video_port = 8080
         self.ui_port = 8081
+
+        # Initialize UI
+        self.init_ui()
+
 
     def init_ui(self):
         ui.label('Chamber Control Panel').style('font-size: 24px; font-weight: bold; text-align: center; margin-top: 20px;')
@@ -78,10 +78,10 @@ class WebUI:
                 
                 with ui.row():
                     ui.label('Trainer:').style('width: 200px;')
-                    self.trainer_select = ui.select(get_trainers()).style('width: 200px;')
-                    self.trainer_select.on('change', lambda e: self.session.set_trainer_name(e.value))
+                    self.trainer_select = ui.select(get_trainers(), on_change = lambda e: self.session.set_trainer_name(e.value)).style('width: 200px;')
 
-            with ui.column().style('width: 400px; margin: auto; padding: 20px;'):
+
+            with ui.column().style('width: 800px; margin: auto; padding: 20px;'):
                 with ui.row():
                     log = ui.log(max_lines=10).classes('w-full')
                     handler = LogElementHandler(log)
@@ -90,12 +90,13 @@ class WebUI:
                     ui.label('Log Level:').style('width: 200px;')
                     self.log_level_input = ui.select(['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'], value='DEBUG').style('width: 200px;')
                     self.log_level_input.on('change', lambda e: logger.setLevel(getattr(logging, e.value)))
+
                 with ui.row():
                     # Show video stream from the camera
-                    ui.label('Camera Stream:').style('width: 200px;')
-                    self.camera_stream = ui.video(src=f"{self.ip}:{self.video_port}/stream").style('width: 640; height: 480px;')
+                    ui.label('Camera Stream:').style('width: 800px;')
+                    ui.image(source=f"http://{self.ip}:{self.video_port}/stream").style('width: 640px; height: 480px;')
 
-        with ui.row():
+        with ui.row().style('justify-content: center; margin-top: 20px;'):
             self.start_training_button = ui.button("Start Training").on_click(self.session.start_training)
             self.stop_training_button = ui.button("Stop Training").on_click(self.session.stop_training)
             self.start_video_recording_button = ui.button("Start Video Recording").on_click(self.session.start_video_recording)
@@ -103,4 +104,4 @@ class WebUI:
 
 if __name__ in {'__main__', '__mp_main__'}:
     web_ui = WebUI()
-    ui.run(title='Chamber Control Panel', host=web_ui.ip, port=8080)
+    ui.run(title='Chamber Control Panel', host=web_ui.ip, port=web_ui.ui_port, show=False)

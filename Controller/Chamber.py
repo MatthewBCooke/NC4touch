@@ -26,6 +26,8 @@ class Chamber:
   def __init__(self, chamber_config = {}):
     if not isinstance(chamber_config, dict):
       logger.error("chamber_config must be a dictionary")
+    
+    print("Initializing Chamber...")
       chamber_config = {}
 
     self.chamber_config = chamber_config
@@ -94,8 +96,8 @@ class Chamber:
     self.reward.setup_reward()
 
 if __name__ == "__main__":
-  chamber = Chamber()
-  [m0.initialize() for m0 in chamber.m0s]
+  # chamber = Chamber()
+  # [m0.initialize() for m0 in chamber.m0s]
 
   # [m0.sync_image_folder() for m0 in chamber.m0s]
 

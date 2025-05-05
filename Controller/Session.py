@@ -3,6 +3,9 @@ import time
 import pigpio
 import yaml
 import netifaces
+import importlib
+import threading
+import logging
 
 # Local modules
 from Chamber import Chamber
@@ -42,6 +45,9 @@ class Session:
 
         self.chamber = Chamber()
         self.set_trainer_name('DoNothingTrainer')
+        self.training_timer_interval = 0.1
+        self.training_timer = None
+        self.trainer = None
 
         # Video Recording
         self.is_video_recording = False
@@ -135,8 +141,9 @@ class Session:
         if trainer_name:
             try:
                 # Dynamically load the trainer class based on the name
-                exec(f"from {trainer_name} import {trainer_name}")
-                self.trainer = exec(trainer_name)(self.trainer_config, self.chamber)
+                module = importlib.import_module(f"{trainer_name}")
+                trainer_class = getattr(module, trainer_name)
+                self.trainer = trainer_class(self.trainer_config, self.chamber)
                 self.trainer_name = trainer_name
             except ImportError as e:
                 logger.error(f"Error loading trainer {trainer_name}: {e}")

@@ -41,10 +41,9 @@ class Habituation(Trainer):
     State machine:
     IDLE -> START_TRAINING -> START_TRIAL -> DELIVER_REWARD_START -> DELIVERING_REWARD -> POST_REWARD -> ITI_START -> ITI -> END_TRIAL -> END_TRAINING
     """
-    def __init__(self, trainer_config = {}, chamber = Chamber()):
+    def __init__(self, trainer_config = {}, chamber = None):
         super().__init__(trainer_config, chamber)
         self.trainer_name = "Habituation"
-        self.is_session_active = False
         self.trial_data = []
 
         self.num_trials = 30
@@ -58,6 +57,7 @@ class Habituation(Trainer):
         self.last_beam_break_time = time.time()
         self.current_trial_iti = self.iti_duration
         self.max_iti_duration = 30  # Maximum ITI duration
+        self.is_running = False
 
         self.state = HabituationState.IDLE
 
@@ -65,16 +65,18 @@ class Habituation(Trainer):
         # Starting state
         # Turn screens off
         self.chamber.beambreak.deactivate()
-        self.chamber.reward_led.deactivate()
+        self.chamber.reward_led.activate()
         self.chamber.punishment_led.deactivate()
         self.chamber.reward.stop()
 
         # Initialize the training session
+        self.is_running = True
         self.state = HabituationState.START_TRAINING
 
     def run_training(self):
         """Main loop for running the training session."""
         current_time = time.time()
+        print(f"Current time: {current_time}")
 
         if self.state == HabituationState.IDLE:
             # IDLE state, waiting for the start signal
@@ -150,7 +152,7 @@ class Habituation(Trainer):
         
         elif self.state == HabituationState.ITI:
             # ITI state, waiting for the ITI duration
-            if current_time - self.iti_start_time < self.current_trial_iti
+            if current_time - self.iti_start_time < self.current_trial_iti:
                 # Check if beam break is detected during ITI
                 if self.chamber.beambreak.sensor_state==False:
                     logger.info("Beam broken during ITI. Adding 1 second to ITI duration.")
@@ -183,3 +185,12 @@ class Habituation(Trainer):
             self.is_session_active = False
             # self.close_realtime_csv()
             self.state = HabituationState.IDLE
+            self.stop_training()
+
+    def stop_training(self):
+        # Stop the training session
+        print("Stopping training session...")
+        self.chamber.reward.stop()
+        self.chamber.reward_led.deactivate()
+        self.chamber.beambreak.deactivate()
+        self.state = HabituationState.IDLE

@@ -5,7 +5,7 @@ class DoNothingTrainer(Trainer):
     """
     A trainer that does nothing. This is useful for testing purposes.
     """
-    def __init__(self, trainer_config = {}, chamber = Chamber()):
+    def __init__(self, trainer_config = {}, chamber = None):
         super().__init__(trainer_config, chamber)
         self.trainer_name = "DoNothingTrainer"
 

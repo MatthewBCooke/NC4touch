@@ -23,6 +23,9 @@ class LED:
         self.pi.set_PWM_range(self.pin, self.range)
         self.pi.set_PWM_dutycycle(self.pin, 0)  
     
+    def __del__(self):
+        self.deactivate()
+    
     def set_color(self, r, g, b):
         self.color = (r, g, b)
         if self.r_pin is not None:

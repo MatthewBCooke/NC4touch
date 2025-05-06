@@ -99,14 +99,16 @@ class WebUI:
                 
                 with ui.row():
                     # Reinitialize the camera
-                    self.reinitialize_camera_button = ui.button("Reinitialize Camera").on_click(self.session.chamber.camera.reinitialize)
+                    self.reinitialize_camera_button = ui.button("Reinitialize").on_click(self.session.chamber.camera.reinitialize)
                     self.reinitialize_camera_button.style('width: 200px; margin-top: 20px;')
+                    self.start_video_recording_button = ui.button("Start Video Recording").on_click(self.session.start_video_recording)
+                    self.stop_video_recording_button = ui.button("Stop Video Recording").on_click(self.session.stop_video_recording)
 
         with ui.row().style('justify-content: center; margin-top: 20px;'):
             self.start_training_button = ui.button("Start Training").on_click(self.session.start_training)
             self.stop_training_button = ui.button("Stop Training").on_click(self.session.stop_training)
-            self.start_video_recording_button = ui.button("Start Video Recording").on_click(self.session.start_video_recording)
-            self.stop_video_recording_button = ui.button("Stop Video Recording").on_click(self.session.stop_video_recording)
+            self.start_priming_button = ui.button("Start Priming").on_click(self.session.start_priming)
+            self.stop_priming_button = ui.button("Stop Priming").on_click(self.session.stop_priming)
 
 if __name__ in {'__main__', '__mp_main__'}:
     web_ui = WebUI()

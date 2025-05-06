@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 import sys
 import os
-import cv2
-import subprocess
 import time
 from datetime import datetime
-import threading
+import cv2
 
-from Camera import Camera
+import logging
+logger = logging.getLogger(f"session_logger.{__name__}")
 
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -21,7 +20,9 @@ from PyQt5.QtGui import QImage, QPixmap
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from Controller.Session import Session
+from Trainer import get_trainers
+from helpers import get_ip_address
+from Session import Session
 
 class EmittingStream(QObject):
     """
@@ -34,8 +35,7 @@ class EmittingStream(QObject):
     def flush(self):
         pass
 
-
-class MultiTrialGUI(QMainWindow):
+class GUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("NC4Touch GUI")
@@ -65,9 +65,6 @@ class MultiTrialGUI(QMainWindow):
         self.trial_count = 0
 
         self.session = Session()
-        self.config = self.session.session_config
-        self.camera = None
-        self.trainer = None
         self.is_recording = False
         self.rodent_names = []
 
@@ -80,7 +77,7 @@ class MultiTrialGUI(QMainWindow):
         self.init_graph_ui()
 
         self.init_discover_button()
-        self.init_phase_ui()
+        self.init_trainer_ui()
         self.init_parameters_ui()  # Parameters UI for ITI
         self.init_session_controls()
         self.init_serial_monitor()
@@ -251,19 +248,19 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #FFAE00;
             }
         """)
-        self.discover_button.clicked.connect(self.session.discover_m0s)
+        self.discover_button.clicked.connect(self.session.chamber.discover_m0_boards)
         self.right_column.addWidget(self.discover_button)
 
-    def init_phase_ui(self):
-        phase_layout = QHBoxLayout()
-        phase_layout.setSpacing(10)
+    def init_trainer_ui(self):
+        trainer_layout = QHBoxLayout()
+        trainer_layout.setSpacing(10)
 
-        phase_label = QLabel("Select Phase:")
-        phase_label.setStyleSheet("font-weight: bold;")
+        trainer_label = QLabel("Select Trainer:")
+        trainer_label.setStyleSheet("font-weight: bold;")
 
-        self.phase_combo = QComboBox()
-        self.phase_combo.addItems(["Habituation", "Initial Touch", "Must Touch", "Must Initiate", "Punish Incorrect", "Simple Discrimination", "Complex Discrimination"])
-        self.phase_combo.setStyleSheet("""
+        self.trainer_combo = QComboBox()
+        self.trainer_combo.addItems(get_trainers())
+        self.trainer_combo.setStyleSheet("""
             QComboBox {
                 background-color: #FFF7E0;
                 font-weight: bold;
@@ -271,8 +268,8 @@ class MultiTrialGUI(QMainWindow):
             }
         """)
 
-        self.load_csv_btn = QPushButton("Load CSV")
-        self.load_csv_btn.setStyleSheet("""
+        self.load_seq_csv_btn = QPushButton("Load Sequence CSV")
+        self.load_seq_csv_btn.setStyleSheet("""
             QPushButton {
                 background-color: #F0E442;
                 color: black;
@@ -283,12 +280,12 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #F4E97E;
             }
         """)
-        self.load_csv_btn.clicked.connect(self.on_load_seq_csv)
+        self.load_seq_csv_btn.clicked.connect(self.on_load_seq_csv)
 
-        phase_layout.addWidget(phase_label)
-        phase_layout.addWidget(self.phase_combo)
-        phase_layout.addWidget(self.load_csv_btn)
-        self.right_column.addLayout(phase_layout)
+        trainer_layout.addWidget(trainer_label)
+        trainer_layout.addWidget(self.trainer_combo)
+        trainer_layout.addWidget(self.load_seq_csv_btn)
+        self.right_column.addLayout(trainer_layout)
 
     def init_parameters_ui(self):
         self.param_group = QGroupBox("Parameters")
@@ -341,8 +338,8 @@ class MultiTrialGUI(QMainWindow):
         session_layout = QHBoxLayout()
         session_layout.setSpacing(10)
 
-        self.export_csv_btn = QPushButton("Export CSV")
-        self.export_csv_btn.setStyleSheet("""
+        self.export_data_csv_btn = QPushButton("Export Data CSV")
+        self.export_data_csv_btn.setStyleSheet("""
             QPushButton {
                 background-color: #0072B2;
                 color: white;
@@ -353,8 +350,8 @@ class MultiTrialGUI(QMainWindow):
                 background-color: #1082C2;
             }
         """)
-        self.export_csv_btn.clicked.connect(self.on_export_data_csv)
-        session_layout.addWidget(self.export_csv_btn)
+        self.export_data_csv_btn.clicked.connect(self.on_export_data_csv)
+        session_layout.addWidget(self.export_data_csv_btn)
 
         self.start_training_btn = QPushButton("Start Training")
         self.start_training_btn.setStyleSheet("""
@@ -500,14 +497,16 @@ class MultiTrialGUI(QMainWindow):
 
     # ---------------- VIDEO CAPTURE ----------------
     def initialize_video_capture(self):
-        self.session.setup_camera(camera_device="/dev/video0", mode="video_capture")
-        self.camera = self.session.camera
+        self.ip = get_ip_address()
+        self.video_capture = cv2.VideoCapture(f"http://{self.ip}:8080/stream")
+
         self.video_timer = QTimer(self)
         self.video_timer.timeout.connect(self.update_video_feed)
         self.video_timer.start(int(1000 / 30))
 
     def update_video_feed(self):
-        if not self.camera.video_capture or not self.camera.video_capture.isOpened():
+        if not self.video_capture.isOpened():
+            logger.warning("Video capture not opened.")
             return
         ret, frame = self.camera.video_capture.read()
         if not ret or frame is None:
@@ -516,9 +515,6 @@ class MultiTrialGUI(QMainWindow):
         h, w, ch = frame_rgb.shape
         q_img = QImage(frame_rgb.data, w, h, ch * w, QImage.Format_RGB888)
         self.video_feed_label.setPixmap(QPixmap.fromImage(q_img))
-        # Send frame to VideoRecorder for recording (local or livestream mode)
-        if self.is_recording and self.camera.video_recorder:
-            self.camera.video_recorder.update_recording(frame)
 
     def toggle_recording(self):
         if self.is_recording:
@@ -528,123 +524,67 @@ class MultiTrialGUI(QMainWindow):
         else:
             options = QFileDialog.Options()
 
-            config_recording_dir = self.session.load_from_config("recording_dir")
-
             filepath, _ = QFileDialog.getSaveFileName(
-                self, "Save Video", config_recording_dir, "Video Files (*.avi);;Video Files (*.mp4)", options=options
+                self, "Save Video", self.session.video_dir, "Video Files (*.avi);;Video Files (*.mp4)", options=options
             )
             if not filepath:
                 return
             
-            self.session.save_to_session_config("recording_dir", os.path.dirname(filepath))
+            self.session.set_video_dir(os.path.dirname(filepath))
 
             if self.session.start_video_recording(filepath):
                 self.is_recording = True
                 self.record_toggle_button.setText("Stop Recording")
 
-            # reply = QMessageBox.question(
-            #     self,
-            #     "Livestream Option",
-            #     "Would you like to livestream your recording?",
-            #     QMessageBox.Yes | QMessageBox.No
-            # )
-            # livestream = (reply == QMessageBox.Yes)
-            # rtmp_url = ""
-            # if livestream:
-            #     # Replace YOUR_STREAM_KEY with your actual YouTube stream key.
-            #     rtmp_url = "rtmp://x.rtmp.youtube.com/live2/myxg-tayp-8cwx-wecv-ftv9"
-            # if self.camera.video_recorder.start_recording(filepath, livestream=livestream, stream_url=rtmp_url):
-
-    
     def on_load_seq_csv(self):
-        config_seq_csv_dir = self.session.load_from_config("seq_csv_dir")
-
         fname, _ = QFileDialog.getOpenFileName(
-            self, "Open Sequence CSV", config_seq_csv_dir, "CSV Files (*.csv)"
+            self, "Open Sequence CSV", self.session.seq_csv_dir, "CSV Files (*.csv)"
         )
         if fname:
-            self.csv_file = fname
-            print(f"CSV loaded: {fname}")
+            self.seq_csv_file = fname
+            logger.info(f"CSV file loaded: {fname}")
 
-            self.session.save_to_session_config("seq_csv_dir", os.path.dirname(fname))
-            self.session.save_to_session_config("seq_csv_file", fname)
+            self.session.set_seq_csv_dir(os.path.dirname(fname))
+            self.session.set_seq_csv_file(fname)
 
     def on_export_data_csv(self):
         if not self.trainer:
-            print("No trainer object to export from.")
+            logger.warning("No trainer object to export from.")
             return
         
-        config_data_csv_dir = self.session.load_from_config("data_csv_dir")
-
         fname, _ = QFileDialog.getSaveFileName(
-            self, "Save Data CSV", config_data_csv_dir, "CSV Files (*.csv)"
+            self, "Save Data CSV", self.session.data_csv_dir, "CSV Files (*.csv)"
         )
         if fname:
-            self.trainer.rodent_id = self.rodent_name
+            self.session.set_data_csv_dir(os.path.dirname(fname))
             self.trainer.export_results_csv(fname)
-            print(f"Exported trial data to {fname}")
-
-            self.session.save_to_session_config("data_csv_dir", os.path.dirname(fname))
+            logger.info(f"Exported trial data to {fname}")
         else:
-            print("Export canceled.")
+            logger.warning("Export canceled by user.")
 
     def on_start_training(self):
-        self.trainer = self.session.trainer
-        if not self.trainer:
-            print("No trainer object available.")
-            return
-        if not self.rodent_name:
-            print("Please set rodent name first.")
-            return
-
-        phase_sel = self.phase_combo.currentText()
-        self.trainer.current_phase = phase_sel
-        self.trainer.iti_duration = self.iti_input.value()
+        self.trainer_name = self.trainer_combo.currentText()
+        self.session.set_trainer_name(self.trainer_name)
 
         reply = QMessageBox.question(
             self,
             "Confirm Training Phase",
-            f"You have selected the '{phase_sel}' training for rodent '{self.rodent_name}'.\n\nPress OK to proceed.",
+            f"You have selected the '{self.trainer_name}' trainer for rodent '{self.rodent_name}'.\n\nPress OK to proceed.",
             QMessageBox.Ok | QMessageBox.Cancel
         )
         if reply == QMessageBox.Cancel:
-            print("Training canceled by user.")
+            logger.info("Training canceled by user.")
             return
 
         self.start_priming_btn.setEnabled(False)
         self.stop_priming_btn.setEnabled(False)
-
-        self.trainer.trial_data = []
         self.clear_graph()
 
-        if phase_sel != "Habituation" and not self.csv_file:
-            print("No CSV loaded; cannot start training for this phase.")
-            return
-
-        self.session_start_time = time.time()
-        self.session_timer.start(1000)
-
-        print(f"Starting phase: {phase_sel}, rodent={self.rodent_name}")
-        if phase_sel == "Habituation":
-            self.trainer.Habituation()
-        elif phase_sel == "Initial Touch":
-            self.trainer.initial_touch_phase(self.csv_file)
-        elif phase_sel == "Must Touch":
-            self.trainer.must_touch_phase(self.csv_file)
-        elif phase_sel == "Must Initiate":
-            self.trainer.must_initiate_phase(self.csv_file)
-        elif phase_sel == "Punish Incorrect":
-            self.trainer.punish_incorrect_phase(self.csv_file)
-        elif phase_sel == "Simple Discrimination":
-            self.trainer.simple_discrimination_phase(self.csv_file)
-        elif phase_sel == "Complex Discrimination":
-            self.trainer.complex_discrimination_phase(self.csv_file)
-        print("Phase run finished.")
+        self.session.start_training()
 
     def on_stop_training(self):
-        print("Stopping training now.")
-        if self.trainer:
-            self.trainer.stop_session()
+        logger.info("Stopping training session...")
+        self.session.stop_training()
         self.clear_graph()
         self.session_timer.stop()
         self.session_start_time = None
@@ -653,28 +593,20 @@ class MultiTrialGUI(QMainWindow):
         self.stop_priming_btn.setEnabled(True)
 
     def on_start_priming(self):
-        if not self.trainer or 'reward' not in self.trainer.peripherals:
-            print("No trainer or reward object to prime.")
-            return
-        print("Starting to prime feeding tube.")
-        self.trainer.peripherals['reward'].prime_feeding_tube()
+        logger.info("Priming feeding tube...")
+        self.session.start_priming()
 
     def on_stop_priming(self):
-        if not self.trainer or 'reward' not in self.trainer.peripherals:
-            print("No trainer or reward object to stop priming.")
-            return
-        print("Stopping priming.")
-        self.trainer.peripherals['reward'].stop_priming()
+        logger.info("Stopping priming...")
+        self.session.stop_priming()
 
     def save_rodent_name(self):
         name = self.rodent_name_input.text().strip()
         if name:
             self.rodent_name = name
-            self.session.rodent_name = name
-            if self.trainer:
-                self.trainer.rodent_id = name
+            self.session.set_rodent_name(name)
             self.rodent_name_label.setText(f"Current Rodent Name: {name}")
-            print(f"Rodent ID set to: {name}")
+            logger.info(f"Rodent ID set to: {name}")
             self.rodent_names.append(name)
             if len(self.rodent_names) == 1:
                 self.rodent_name_history_label.setText(f"Trained Rodents:\n - {name}")
@@ -685,7 +617,7 @@ class MultiTrialGUI(QMainWindow):
             self.rodent_name_input.clear()
             self.start_training_btn.setEnabled(True)
         else:
-            print("No rodent name entered.")
+            logger.warning("No rodent name entered.")
 
     # ---------------- SESSION TIMER WITH 60-MINUTE CHECK ----------------
     def update_session_timer(self):
@@ -710,15 +642,15 @@ class MultiTrialGUI(QMainWindow):
 
     def handle_termination_response(self, button):
         if button.text() == "&Yes":
-            print("User chose to terminate the session after 60 minutes.")
+            logger.info("User chose to terminate the session after 60 minutes.")
             self.on_stop_training()  # Stop training as if the Stop Training button was pressed
         else:
-            print("User chose to continue training.")
+            logger.info("User chose to continue training after 60 minutes.")
 
 def main():
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create("Fusion"))
-    gui = MultiTrialGUI()
+    gui = GUI()
     gui.show()
     sys.exit(app.exec_())
 

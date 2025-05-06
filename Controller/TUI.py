@@ -45,12 +45,12 @@ class TUI:
     
     def tui_start_priming(self):
         self.tui_exit()
-        self.session.chamber.reward.prime_feeding_tube()
+        self.session.start_priming()
         self.tui_init()
     
     def tui_stop_priming(self):
         self.tui_exit()
-        self.session.chamber.reward.stop_priming()
+        self.session.stop_priming()
         self.tui_init()
     
     def tui_export_data(self):

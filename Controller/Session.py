@@ -47,11 +47,15 @@ class Session:
         self.data_csv_dir = self.session_config.get("data_csv_dir", os.path.join(code_dir, "data"))
         self.video_dir = self.session_config.get("video_dir", os.path.join(code_dir, "videos"))
         self.run_interval = self.session_config.get("run_interval", 0.1)
+        self.priming_duration = self.session_config.get("priming_duration", 20)
 
         self.chamber = Chamber()
         self.set_trainer_name('DoNothingTrainer')
         self.trainer = DoNothingTrainer(self.chamber, {})
         self.session_timer = threading.Timer(0.1, self.trainer.run_training)
+
+        self.priming_timer = threading.Timer(0.1, self.trainer.run_priming)
+        self.priming_start_time = time.time()
 
         # Video Recording
         self.is_video_recording = False
@@ -208,3 +212,17 @@ class Session:
             logger.info("Training session ended.")
         else:
             logger.warning("No training session to stop.")
+
+    def start_priming(self):
+        self.priming_start_time = time.time()
+        self.priming_timer.start()
+        logger.info("Priming started.")
+    
+    def run_priming(self):
+        self.priming_timer.cancel()
+        if time.time() - self.priming_start_time < self.priming_duration:
+            self.priming_timer = threading.Timer(self.run_interval, self.run_priming)
+            self.priming_timer.start()
+
+    def stop_priming(self):
+        self.priming_timer.cancel()

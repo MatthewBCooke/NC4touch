@@ -66,7 +66,6 @@ class Camera:
             logger.info(f"Network stream started on {local_ip}:{self.stream_port}")
         else:
             logger.error("Failed to start network stream.")
-            print("Failed to start network stream.")
     
     def stop_video_stream(self):
         self.stop_recording()
@@ -86,7 +85,7 @@ class Camera:
             self.video_recorder = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
             logger.info(f"Recording started: {output_file}")
         else:
-            print("Already recording.")
+            logger.warning("Recording is already in progress.")
     
     def stop_recording(self):
         if self.video_recorder:

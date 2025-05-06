@@ -54,7 +54,7 @@ class Session:
         self.trainer = DoNothingTrainer(self.chamber, {})
         self.session_timer = threading.Timer(0.1, self.trainer.run_training)
 
-        self.priming_timer = threading.Timer(0.1, self.trainer.run_priming)
+        self.priming_timer = threading.Timer(0.1, self.run_priming)
         self.priming_start_time = time.time()
 
         # Video Recording
@@ -79,6 +79,8 @@ class Session:
         self.trainer.seq_csv_dir = self.seq_csv_dir
         self.trainer.seq_csv_file = self.seq_csv_file
         self.trainer.start_training()
+
+        self.session_timer.cancel()
         self.session_timer = threading.Timer(self.run_interval, self.run_training)
         self.session_timer.start()
         logger.info("Training session started.")
@@ -215,7 +217,10 @@ class Session:
 
     def start_priming(self):
         self.priming_start_time = time.time()
+        self.priming_timer.cancel()
+        self.priming_timer = threading.Timer(0.1, self.run_priming)
         self.priming_timer.start()
+        self.chamber.reward.dispense()
         logger.info("Priming started.")
     
     def run_priming(self):
@@ -226,3 +231,5 @@ class Session:
 
     def stop_priming(self):
         self.priming_timer.cancel()
+        self.chamber.reward.stop()
+        logger.info("Priming stopped.")

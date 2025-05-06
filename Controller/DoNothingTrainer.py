@@ -1,7 +1,8 @@
-from time import time
-
 from Trainer import Trainer
 from Chamber import Chamber
+
+from enum import Enum
+import time
 
 import logging
 logger = logging.getLogger(f"session_logger.{__name__}")

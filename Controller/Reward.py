@@ -12,7 +12,6 @@ class Reward:
 
         self.pi = pi
         self.pin = pin
-        self.setup_reward()
 
         """PWM set up"""
         self.pi.set_mode(self.pin, pigpio.OUTPUT)

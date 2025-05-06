@@ -15,9 +15,10 @@ from DoNothingTrainer import DoNothingTrainer
 import logging
 session_logger = logging.getLogger('session_logger')
 session_logger.setLevel(logging.DEBUG)
-logger = session_logger.getChild(__name__)
-logger.setLevel(logging.DEBUG)
-
+handler = logging.StreamHandler()
+handler.setLevel(logging.DEBUG)
+session_logger.addHandler(handler)
+logger = logging.getLogger(f"session_logger.{__name__}")
 class Session:
     """
     This class manages the session configuration, hardware initialization, and training phases.

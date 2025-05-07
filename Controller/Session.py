@@ -34,6 +34,7 @@ logger = logging.getLogger(f"session_logger.{__name__}")
 
 #TODO: Fix camera reinitialization
 #TODO: Browse buttons for directories in WebUI
+#TODO: Remove autofocus from camera
 
 class Session:
     """
@@ -44,6 +45,7 @@ class Session:
         """
         Initializes the session with the given configuration.
         """
+        logger.info("Initializing session...")
         code_dir = os.path.dirname(os.path.abspath(__file__))
         self.config = Config(config=session_config, config_file=session_config_file)
         
@@ -53,18 +55,18 @@ class Session:
         self.config.ensure_param("iti_duration", 10)
         self.config.ensure_param("seq_csv_dir", os.path.join(code_dir, "sequences"))
         self.config.ensure_param("seq_csv_file", "sequences.csv")
-        self.config.ensure_param("data_dir", "~/data")
-        self.config.ensure_param("video_dir", "~/videos")
+        self.config.ensure_param("data_dir", "/mnt/shared/data")
+        self.config.ensure_param("video_dir", "/mnt/shared/videos")
         self.config.ensure_param("run_interval", 0.1)
         self.config.ensure_param("priming_duration", 20)
         self.config.ensure_param("chamber_name", "Chamber0")
         
         # Initialize directories in case they don't exist
-        os.makedirs(self.data_dir, exist_ok=True)
-        os.makedirs(self.video_dir, exist_ok=True)
+        os.makedirs(self.config["data_dir"], exist_ok=True)
+        os.makedirs(self.config["video_dir"], exist_ok=True)
 
         chamber_config = {
-            "chamber_name": self.chamber_name,
+            "chamber_name": self.config["chamber_name"],
             }
         self.chamber = Chamber(chamber_config=chamber_config)
         self.set_trainer_name(self.config["trainer_name"])
@@ -104,22 +106,24 @@ class Session:
             logger.error("Trainer is not an instance of Trainer.")
             return
         
-        self.trainer.rodent_name = self.rodent_name
-        self.trainer.iti_duration = self.iti_duration
-        self.trainer.seq_csv_dir = self.trainer_seq_dir
-        self.trainer.seq_csv_file = self.trainer_seq_file
-        self.trainer.data_dir = self.data_dir
+        trainer_config = {"rodent_name": self.config["rodent_name"],
+                          "chamber_name": self.config["chamber_name"],
+                          "iti_duration": self.config["iti_duration"],
+                          "seq_csv_dir": self.config["seq_csv_dir"],
+                          "seq_csv_file": self.config["seq_csv_file"],
+                          "data_dir": self.config["data_dir"]}
+        self.trainer.config.update_with_dict(trainer_config)
         self.trainer.start_training()
 
         self.session_timer.cancel()
-        self.session_timer = threading.Timer(self.run_interval, self.run_training)
+        self.session_timer = threading.Timer(self.config["run_interval"], self.run_training)
         self.session_timer.start()
         logger.info("Training session started.")
     
     def run_training(self):
         self.session_timer.cancel()
         self.trainer.run_training()
-        self.session_timer = threading.Timer(self.run_interval, self.run_training)
+        self.session_timer = threading.Timer(self.config["run_interval"], self.run_training)
         self.session_timer.start()
     
     def toggle_video_recording(self):
@@ -139,7 +143,12 @@ class Session:
     def start_video_recording(self):
         if not self.is_video_recording:
             datetime_str = time.strftime("%Y%m%d_%H%M%S")
-            video_file = os.path.join(self.video_dir, f"{datetime_str}_{self.chamber.chamber_name}_{self.rodent_name}.mp4")
+
+            chamber_name = self.config["chamber_name"]
+            rodent_name = self.config["rodent_name"]
+            video_dir = self.config["video_dir"]
+                        
+            video_file = os.path.join(video_dir, f"{datetime_str}_{chamber_name}_{rodent_name}.mp4")
 
             self.chamber.camera.start_recording(video_file)
             self.is_video_recording = True

@@ -36,13 +36,18 @@ class Trainer(ABC):
         self.config.ensure_param("trainer_name", "DoNothingTrainer")
         self.config.ensure_param("rodent_name", "TestRodent")
 
+        self.data_file = None
+
     def open_data_file(self):
         """
         Opens a json file for writing trial data.
         """
         if self.data_file is None:
             date_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            self.data_filename = f"{date_str}_{self.chamber.config["name"]}_{self.config["trainer_name"]}_{self.config["rodent_name"]}_data.json"
+            chamber_name = self.chamber.config["name"]
+            rodent_name = self.config["rodent_name"]
+            trainer_name = self.config["trainer_name"]
+            self.data_filename = f"{date_str}_{chamber_name}_{trainer_name}_{rodent_name}_data.json"
             
             logger.info(f"Creating data file: {self.data_filename}")
             self.data_file = open(self.data_filename, "w")

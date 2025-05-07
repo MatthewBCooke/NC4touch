@@ -6,8 +6,8 @@ import logging
 logger = logging.getLogger(f"session_logger.{__name__}")
 
 class Camera:
-    def __init__(self, camera_device="/dev/video0", stream_port=8080):
-        self.camera_device = camera_device
+    def __init__(self, device="/dev/video0", stream_port=8080):
+        self.device = device
 
         self.network_stream = None
         self.stream_port = stream_port
@@ -56,7 +56,7 @@ class Camera:
     
     def start_video_stream(self):
         local_ip = get_ip_address()
-        cmd = f"ustreamer --device={self.camera_device} --host={local_ip} --port={self.stream_port} --sink=demo::ustreamer::sink --sink-mode=660 --sink-rm"
+        cmd = f"ustreamer --device={self.device} --host={local_ip} --port={self.stream_port} --sink=demo::ustreamer::sink --sink-mode=660 --sink-rm"
         logger.debug(f"Starting ustreamer with command: {cmd}")
         
         # Start the ustreamer process in the background

@@ -16,6 +16,7 @@ class Config:
         
         # Construct config by loading parameters from config argument > config_file
         self.config = {}
+        self.config_file = config_file
         self.update_with_file(config_file)
         self.config.update(config)
     
@@ -53,10 +54,10 @@ class Config:
     def ensure_param(self, param, default_value):
         if param not in self.config:
             self.config[param] = default_value
-            logger.debug(f"Config parameter {param} not found. Setting to default value: {default_value}")
+            # logger.debug(f"Config parameter {param} not found. Setting to default value: {default_value}")
             self.save_config_file()
-        else:
-            logger.debug(f"Config parameter {param} already exists with value: {self.config[param]}")
+        # else:
+            # logger.debug(f"Config parameter {param} already exists with value: {self.config[param]}")
         
     def save_config_file(self):
         if self.config_file:

@@ -44,7 +44,7 @@ class Habituation(Trainer):
     IDLE -> START_TRAINING -> START_TRIAL -> DELIVER_REWARD_START -> DELIVERING_REWARD -> POST_REWARD -> ITI_START -> ITI -> END_TRIAL -> END_TRAINING
     """
     def __init__(self, chamber, trainer_config = {}, trainer_config_file = '~/trainer_Habituation_config.yaml'):
-        super().__init__(trainer_config, chamber)
+        super().__init__(chamber=chamber, trainer_config=trainer_config, trainer_config_file=trainer_config_file)
 
         self.config.ensure_param("trainer_name", "Habituation")
         self.config.ensure_param("num_trials", 30)  # Number of trials to run
@@ -120,7 +120,7 @@ class Habituation(Trainer):
             # DELIVERING_REWARD state, dispensing the reward
             logger.debug("Current state: DELIVERING_REWARD")
             if current_time - self.reward_start_time < self.config["reward_pump_secs"]:
-                if self.chamber.beambreak.sensor_state==False and not self.reward_collected:
+                if self.chamber.beambreak.state==False and not self.reward_collected:
                     # Beam break detected during reward dispense
                     self.reward_collected = True
                     logger.info("Beam broken during reward dispense")
@@ -129,7 +129,7 @@ class Habituation(Trainer):
                     self.chamber.reward_led.deactivate()
             else:
                 # Reward finished dispensing
-                logger.info(f"Reward dispense time of {self.config["reward_pump_secs"]} seconds completed")
+                logger.info(f"Reward dispense completed")
                 self.write_event("RewardDispenseComplete", self.current_trial)
                 self.chamber.reward.stop()
                 self.state = HabituationState.POST_REWARD
@@ -138,7 +138,7 @@ class Habituation(Trainer):
             # POST_REWARD state, waiting for beam break or timeout
             logger.debug("Current state: POST_REWARD")
             if (current_time - self.reward_start_time) < self.config["beam_break_wait_time"]:
-                if not self.reward_collected and self.chamber.beambreak.sensor_state==False:
+                if not self.reward_collected and self.chamber.beambreak.state==False:
                     # Beam break detected after reward dispense
                     self.reward_collected = True
                     logger.info("Beam broken after reward dispense")
@@ -146,8 +146,8 @@ class Habituation(Trainer):
                     self.chamber.reward_led.deactivate()
                     self.state = HabituationState.ITI_START
             else:
-                    logger.info(f"Beam break wait time of {self.config["beam_break_wait_time"]} seconds exceeded")
-                    self.write_event("BeamBreakWaitTimeout", self.current_trial)
+                    logger.info(f"Beam break timeout")
+                    self.write_event("BeamBreakTimeout", self.current_trial)
                     self.chamber.reward_led.deactivate()
                     self.state = HabituationState.ITI_START
         
@@ -166,7 +166,7 @@ class Habituation(Trainer):
             logger.debug("Current state: ITI")
             if current_time - self.iti_start_time < self.current_trial_iti:
                 # Check if beam break is detected during ITI
-                if self.chamber.beambreak.sensor_state==False:
+                if self.chamber.beambreak.state==False:
                     logger.info("Beam broken during ITI. Adding 1 second to ITI duration.")
                     self.write_event("BeamBreakDuringITI", self.current_trial)
                     if self.current_trial_iti < self.config["max_iti_duration"]:

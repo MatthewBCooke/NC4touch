@@ -12,6 +12,8 @@ import logging
 session_logger = logging.getLogger('session_logger')
 logger = logging.getLogger(f"session_logger.{__name__}")
 
+#TODO: Work on the UI to make it more user friendly and visually appealing
+
 class LogElementHandler(logging.Handler):
     """A logging handler that emits messages to a log element.
         https://nicegui.io/documentation/log    
@@ -90,9 +92,19 @@ class WebUI:
                 
                 with ui.card():
                     ui.label('M0 Board Control').style('font-size: 18px; font-weight: bold; text-align: center; margin-top: 20px;')
-                    self.initialize_button = ui.button("Initialize").on_click(self.session.chamber.m0_initialize)
-                    self.sync_images_button = ui.button("Sync Images").on_click(self.session.chamber.m0_sync_images)
-                    self.upload_code_button = ui.button("Upload Code").on_click(self.session.chamber.m0_upload_sketches)
+                    with ui.column():
+                        # Buttons to control M0 boards
+                        self.discover_button = ui.button("Discover").on_click(self.session.chamber.m0_discover)
+                        self.reset_button = ui.button("Reset").on_click(self.session.chamber.m0_reset)
+                        self.reinitialize_button = ui.button("Re-Initialize").on_click(self.session.chamber.m0_initialize)
+                        self.sync_images_button = ui.button("Sync Images").on_click(self.session.chamber.m0_sync_images)
+                        self.upload_code_button = ui.button("Upload Code").on_click(self.session.chamber.m0_upload_sketches)
+                    with ui.column():
+                        # Status labels for M0 boards
+                        self.m0_status_labels = []
+                        for m0 in self.session.chamber.m0s:
+                            label = ui.label(f"{m0.id}: {m0.port}").style('width: 200px;')
+                            self.m0_status_labels.append(label)
 
             with ui.column().style('width: 800px; margin: auto; padding: 20px;'):
                 with ui.row():

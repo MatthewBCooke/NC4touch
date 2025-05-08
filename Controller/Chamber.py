@@ -55,10 +55,7 @@ class Chamber:
     self.pi.stop()
     [m0.stop() for m0 in self.m0s]
   
-  def reset_m0_boards(self):
-    [m0.reset() for m0 in self.m0s]
-  
-  def discover_m0_boards(self):
+  def m0_discover(self):
     """
     Searches /dev/ttyACM*, /dev/ttyUSB* for boards that respond with "ID:M0_x"
     when we send "WHOAREYOU?".
@@ -81,8 +78,21 @@ class Chamber:
                         logger.debug(f"Discovered {board_id} on {p.device}")
             except Exception as e:
                 logger.error(f"Could not open {p.device}: {e}")
+      
+    if len(board_map) == 0:
+        logger.error("No M0 boards found. Please check the connections.")
+    else:
+        logger.info(f"Discovered M0 boards: {board_map}")
+        for m0 in self.m0s:
+            if m0.id in board_map:
+                m0.port = board_map[m0.id])
+                logger.info(f"Set {m0.id} serial port to {board_map[m0.id]}")
+            else:
+                logger.error(f"{m0.id} not found in discovered boards. Please check the connections.")
 
-    return board_map
+  def m0_reset(self):
+    # Reset all the M0 boards
+    [m0.reset() for m0 in self.m0s]
   
   def m0_initialize(self):
     # Initialize all the devices
@@ -96,7 +106,6 @@ class Chamber:
     # Upload sketches to all M0s
     [m0.upload_sketch() for m0 in self.m0s]
 
-  
   def default_state(self):
     #TODO: Turn screens off
     self.reward_led.deactivate()

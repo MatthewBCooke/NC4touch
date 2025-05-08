@@ -90,6 +90,12 @@ class Chamber:
             else:
                 logger.error(f"{m0.id} not found in discovered boards. Please check the connections.")
 
+  def m0_send_command(self, command):
+    """
+    Sends a command to all M0 boards
+    """
+    [m0.send_command(command) for m0 in self.m0s]
+
   def m0_reset(self):
     # Reset all the M0 boards
     [m0.reset() for m0 in self.m0s]
@@ -105,9 +111,17 @@ class Chamber:
   def m0_upload_sketches(self):
     # Upload sketches to all M0s
     [m0.upload_sketch() for m0 in self.m0s]
+  
+  def m0_clear(self):
+    # Send the blank command to all M0s
+    [m0.send_command("BLACK") for m0 in self.m0s]
+  
+  def m0_show_image(self):
+    # Send the show image command to all M0s
+    [m0.send_command("SHOW") for m0 in self.m0s]
 
   def default_state(self):
-    #TODO: Turn screens off
+    self.m0_send_command("BLACK")
     self.reward_led.deactivate()
     self.punishment_led.deactivate()
     self.buzzer.deactivate()

@@ -49,6 +49,9 @@ class M0Device:
         self.stop_flag = threading.Event()
         self.message_queue = queue.Queue()  # to store lines: (id, text)
         self.write_lock = threading.Lock()
+        self.read_loop_interval = 0.1  # seconds
+
+        self.is_touched = False
 
         self.mode = M0Mode.UNINITIALIZED
     
@@ -137,12 +140,18 @@ class M0Device:
         while not self.stop_flag.is_set():
             try:
                 if self.ser and self.ser.is_open:
+                    # Read a line from the serial port
                     line = self.ser.readline().decode("utf-8", errors="ignore").strip()
                     if line:
                         logger.info(f"[{self.id}] {line}")
                         self.message_queue.put((self.id, line))
+                        if line.startswith("TOUCH"):
+                            self.is_touched = True
+                            logger.debug(f"[{self.id}] Touch detected.")
+                        else:
+                            self.is_touched = False
                 else:
-                    time.sleep(0.5)
+                    time.sleep(self.read_loop_interval)
             except Exception as e:
                 logger.error(f"[{self.id}] read_loop error: {e}")
                 # re-open self.ser here
@@ -165,7 +174,6 @@ class M0Device:
         """
         Sends 'cmd' + newline to the M0 board. Thread-safe via self.write_lock.
         """
-        
         if not self.mode == M0Mode.SERIAL_COMM:
             logger.error(f"[{self.id}] Port not in serial communication mode; cannot send command.")
             return
@@ -293,6 +301,16 @@ class M0Device:
         # Unmount the UD drive
         time.sleep(0.1)
         self.reset()
+    
+    def flush_message_queue(self):
+        """
+        Flushes the message queue.
+        """
+        while not self.message_queue.empty():
+            try:
+                self.message_queue.get_nowait()
+            except queue.Empty:
+                break
     
     def _attempt_reopen(self):
         """

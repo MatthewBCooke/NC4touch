@@ -1,4 +1,5 @@
 import json
+import csv
 from Chamber import Chamber
 from datetime import datetime
 from abc import ABC, abstractmethod
@@ -37,6 +38,25 @@ class Trainer(ABC):
         self.config.ensure_param("rodent_name", "TestRodent")
 
         self.data_file = None
+    
+    def read_trainer_seq_file(self, csv_file_path, num_columns):
+        """
+        Reads a CSV file containing trial sequences.
+        """
+        trials = []
+        try:
+            with open(csv_file_path, 'r') as f:
+                reader = csv.reader(f)
+                # Skip the header row
+                next(reader, None)
+                # Read the rest of the rows into a list of trials
+                trials = [row for row in reader if len(row) >= num_columns]
+        except FileNotFoundError:
+            logger.error(f"File not found: {csv_file_path}")
+        except Exception as e:
+            logger.error(f"Error reading file {csv_file_path}: {e}")
+        
+        return trials
 
     def open_data_file(self):
         """

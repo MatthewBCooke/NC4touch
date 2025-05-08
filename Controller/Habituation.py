@@ -1,9 +1,7 @@
 import time
-from datetime import datetime
 from enum import Enum, auto
 
 from Trainer import Trainer
-from Chamber import Chamber
 
 import logging
 logger = logging.getLogger(f"session_logger.{__name__}")
@@ -62,6 +60,7 @@ class Habituation(Trainer):
         self.reward_start_time = time.time()
         self.reward_collected = False
         self.last_beam_break_time = time.time()
+        self.iti_start_time = time.time()
 
         self.current_trial = 0
         self.current_trial_iti = self.config["iti_duration"]

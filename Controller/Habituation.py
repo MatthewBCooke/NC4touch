@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from enum import Enum
+from enum import Enum, auto
 
 from Trainer import Trainer
 from Chamber import Chamber
@@ -10,16 +10,16 @@ logger = logging.getLogger(f"session_logger.{__name__}")
 
 class HabituationState(Enum):
     """Enum for different states in the habituation trainer."""
-    IDLE = -1
-    START_TRAINING = 0
-    START_TRIAL = 1
-    DELIVER_REWARD_START = 2
-    DELIVERING_REWARD = 3
-    POST_REWARD = 4
-    ITI_START = 5
-    ITI = 6
-    END_TRIAL = 7
-    END_TRAINING = 8
+    IDLE = auto()
+    START_TRAINING = auto()
+    START_TRIAL = auto()
+    DELIVER_REWARD_START = auto()
+    DELIVERING_REWARD = auto()
+    POST_REWARD = auto()
+    ITI_START = auto()
+    ITI = auto()
+    END_TRIAL = auto()
+    END_TRAINING = auto()
 
 class Habituation(Trainer):
     """
@@ -46,6 +46,11 @@ class Habituation(Trainer):
     def __init__(self, chamber, trainer_config = {}, trainer_config_file = '~/trainer_Habituation_config.yaml'):
         super().__init__(chamber=chamber, trainer_config=trainer_config, trainer_config_file=trainer_config_file)
 
+        # Initialize the trainer configuration.
+        # All variables used by the trainer are recommended to be set in the config file.
+        # This allows for easy modification of the trainer parameters without changing the code.
+        # The trainer will also reinitialize with these parameters.
+        # self.config.ensure_param("param_name", default_value)  # Example of setting a parameter
         self.config.ensure_param("trainer_name", "Habituation")
         self.config.ensure_param("num_trials", 30)  # Number of trials to run
         self.config.ensure_param("reward_pump_secs", 3.5)  # Duration for which the reward pump is activated
@@ -53,6 +58,7 @@ class Habituation(Trainer):
         self.config.ensure_param("iti_duration", 10) # Duration of the inter-trial interval (ITI)
         self.config.ensure_param("max_iti_duration", 30) # Maximum ITI duration
 
+        # Local variables used by the trainer during the training session and not set in the config file.
         self.reward_start_time = time.time()
         self.reward_collected = False
         self.last_beam_break_time = time.time()

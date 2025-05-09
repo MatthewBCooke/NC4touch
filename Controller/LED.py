@@ -4,7 +4,7 @@ logger = logging.getLogger(f"session_logger.{__name__}")
 
 class LED:
     """Class to control an LED using PWM on a Raspberry Pi."""
-    def __init__(self, pi=pigpio.pi(), pin=21, rgb_pins = (None, None, None), frequency=5000, range=255, brightness=140):
+    def __init__(self, pi=pigpio.pi(), pin=21, rgb_pins = None, frequency=5000, range=255, brightness=140):
         """
         Initialize the LED with the given parameters.
         :param pi: pigpio.pi() instance

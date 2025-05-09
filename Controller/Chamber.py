@@ -85,7 +85,7 @@ class Chamber:
         logger.info(f"Discovered M0 boards: {board_map}")
         for m0 in self.m0s:
             if m0.id in board_map:
-                m0.port = board_map[m0.id])
+                m0.port = board_map[m0.id]
                 logger.info(f"Set {m0.id} serial port to {board_map[m0.id]}")
             else:
                 logger.error(f"{m0.id} not found in discovered boards. Please check the connections.")

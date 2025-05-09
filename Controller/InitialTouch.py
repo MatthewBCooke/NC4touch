@@ -263,3 +263,21 @@ class InitialTouch(Trainer):
                 self.write_event("ITIComplete", self.current_trial)
                 self.current_trial += 1
                 self.state = InitialTouchState.START_TRIAL
+
+        elif self.state == InitialTouchState.END_TRAINING:
+            # End the training session
+            logger.debug("Current state: END_TRAINING")
+            logger.info("Ending training session...")
+            self.write_event("EndTraining", 1)
+            self.state = InitialTouchState.IDLE
+            self.stop_training()
+
+    def stop_training(self):
+        # Stop the training session
+        logger.info("Stopping training session...")
+        self.chamber.reward.stop()
+        self.chamber.reward_led.deactivate()
+        self.chamber.punishment_led.deactivate()
+        self.chamber.beambreak.deactivate()
+        self.close_data_file()
+        self.state = InitialTouchState.IDLE

@@ -6,7 +6,7 @@ import logging
 from Trainer import get_trainers
 from helpers import get_ip_address
 from Session import Session
-from Controller.path_picker import file_picker, dir_picker
+from path_picker import file_picker, dir_picker
 
 import logging
 session_logger = logging.getLogger('session_logger')

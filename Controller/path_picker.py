@@ -72,7 +72,7 @@ class dir_picker(path_picker):
         :param upper_limit: The directory to stop at (None: no limit, default: same as the starting directory).
         :param show_hidden_files: Whether to show hidden files.
         """
-        super().__init__()
+        super().__init__(path=directory)
 
         self.path = Path(directory).expanduser()
         if upper_limit is None:
@@ -105,7 +105,7 @@ class file_picker(path_picker):
         :param multiple: Whether to allow multiple files to be selected.
         :param show_hidden_files: Whether to show hidden files.
         """
-        super().__init__()
+        super().__init__(path=directory)
 
         self.path = Path(directory).expanduser()
         if upper_limit is None:

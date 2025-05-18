@@ -1,5 +1,5 @@
 # Create a WebUI using NiceUI that replicates the functionality of TUI
-from nicegui import ui
+from nicegui import ui, app
 from datetime import datetime
 import logging
 
@@ -11,6 +11,12 @@ from path_picker import file_picker, dir_picker
 import logging
 session_logger = logging.getLogger('session_logger')
 logger = logging.getLogger(f"session_logger.{__name__}")
+
+async def choose_file():
+    files = await app.native.main_window.create_file_dialog(allow_multiple=True)
+    for file in files:
+        ui.notify(file)
+
 
 #TODO: Work on the UI to make it more user friendly and visually appealing
 
@@ -83,6 +89,7 @@ class WebUI:
                 
                 with ui.row():
                     self.video_dir_picker = ui.button("Select Video Dir").on_click(lambda e: file_picker(directory=self.session.config["video_dir"]))
+                    ui.button('choose file', on_click=choose_file)
 
                 with ui.row():
                     ui.label('Video Directory:').style('width: 200px;')
@@ -140,4 +147,4 @@ class WebUI:
             self.stop_priming_button = ui.button("Stop Priming").on_click(self.session.stop_priming)
 
 web_ui = WebUI()
-ui.run(host=web_ui.ip, port=web_ui.ui_port, title="Chamber Control Panel", show=False)
+ui.run(host=web_ui.ip, port=web_ui.ui_port, title="Chamber Control Panel", show=False, native=True)

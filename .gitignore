@@ -8,7 +8,8 @@
 *.mod.c
 *~
 *.csv
-Controller/venv/
+.venv
+.vscode
 *.yaml
 *.json
 *.mp4

@@ -166,35 +166,35 @@ class Session:
     def set_iti_duration(self, iti_duration):
         if isinstance(iti_duration, int) and iti_duration > 0:
             self.config["iti_duration"] = iti_duration
-            logger.debug(f"ITI Duration set to: {self.iti_duration} seconds")
+            logger.debug(f"ITI Duration set to: {iti_duration} seconds")
         else:
             logger.error("Invalid ITI Duration entered. Must be a positive integer.")
 
     def set_trainer_seq_dir(self, trainer_seq_dir):
         if os.path.isdir(trainer_seq_dir):
             self.config["trainer_seq_dir"] = trainer_seq_dir
-            logger.debug(f"Trainer Seq directory set to: {self.trainer_seq_dir}")
+            logger.debug(f"Trainer Seq directory set to: {trainer_seq_dir}")
         else:
             logger.error("Invalid Sequence directory entered.")
 
     def set_trainer_seq_file(self, trainer_seq_file):
         if os.path.isfile(os.path.join(self.config["trainer_seq_dir"], trainer_seq_file)):
             self.config["trainer_seq_file"] = trainer_seq_file
-            logger.debug(f"Trainer Seq file set to: {self.trainer_seq_file}")
+            logger.debug(f"Trainer Seq file set to: {trainer_seq_file}")
         else:
             logger.error("Invalid Sequence file entered.")
 
     def set_video_dir(self, video_dir):
         if os.path.isdir(video_dir):
             self.config["video_dir"] = video_dir
-            logger.debug(f"Video directory set to: {self.video_dir}")
+            logger.debug(f"Video directory set to: {video_dir}")
         else:
             logger.error("Invalid Video directory entered.")
 
     def set_data_dir(self, data_dir):
         if os.path.isdir(data_dir):
             self.config["data_dir"] = data_dir
-            logger.debug(f"Data CSV directory set to: {self.data_dir}")
+            logger.debug(f"Data CSV directory set to: {data_dir}")
         else:
             logger.error("Invalid Data directory entered.")
     
@@ -215,9 +215,8 @@ class Session:
 
     def set_rodent_name(self, rodent_name):
         if rodent_name:
-            self.rodent_name = rodent_name
-            logger.debug(f"Rodent name set to: {self.rodent_name}")
-            self.save_to_session_config("rodent_name", rodent_name)
+            self.config["rodent_name"] = rodent_name
+            logger.debug(f"Rodent name set to: {rodent_name}")
         else:
             logger.error("No Rodent name entered.")
 

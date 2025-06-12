@@ -6,7 +6,7 @@ import logging
 from Trainer import get_trainers
 from helpers import get_ip_address
 from Session import Session
-from Controller.file_picker import file_picker
+from file_picker import file_picker
 
 import logging
 session_logger = logging.getLogger('session_logger')
@@ -69,11 +69,15 @@ class WebUI:
 
                 with ui.row():
                     ui.label('Trainer Sequence File:').style('width: 200px;')
-                    self.trainer_seq_file_button = ui.button("Select File").on_click(
-                        lambda: self.pick_file(self.session.set_trainer_seq_file, directory=self.session.config["trainer_seq_dir"], multiple=False)).style('width: 200px;')
+                    self.trainer_seq_file_button = ui.button("Select File").on_click(self.pick_trainer_seq_file).style('width: 200px;')
                     
                     self.trainer_seq_file_input = ui.input(self.session.config["trainer_seq_file"],
                                                           on_change=lambda e: self.session.set_trainer_seq_file(e.value)).style('width: 200px;')
+
+                with ui.row():
+                    self.trainer_seq_file_uploader = ui.upload(auto_upload=True, multiple=False, label="Trainer sequence file",
+                                                               on_upload=lambda e: self.session.set_trainer_seq_file(e.name)).classes('max-w-full')
+
             
             with ui.column().style('width: 400px; margin: auto; padding: 20px;'):
                 with ui.row():
@@ -136,12 +140,15 @@ class WebUI:
             self.start_priming_button = ui.button("Start Priming").on_click(self.session.start_priming)
             self.stop_priming_button = ui.button("Stop Priming").on_click(self.session.stop_priming)
     
-    async def pick_file(self, call_func, directory = '.', multiple = False) -> None:
-        result = await file_picker(directory = directory, multiple = multiple)
+    async def pick_trainer_seq_file(self) -> None:
+        result = await file_picker(directory = self.session.config["trainer_seq_dir"], multiple = False)
         if result is None:
-            logger.warning("File picker cancelled")
+            logger.info("No file selected")
             return
-        call_func(result)
+        
+        logger.info(f"File selected: {result[0]}")
+        self.session.set_trainer_seq_file(result[0])
+        self.trainer_seq_file_input.set_value(result[0])
 
 web_ui = WebUI()
-ui.run(host=web_ui.ip, port=web_ui.ui_port, title="Chamber Control Panel", show=False, native=True)
+ui.run(host=web_ui.ip, port=web_ui.ui_port, title="Chamber Control Panel", show=False)

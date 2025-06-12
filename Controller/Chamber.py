@@ -20,6 +20,8 @@ from Config import Config
 import logging
 logger = logging.getLogger(f"session_logger.{__name__}")
 
+#TODO: Add pigpiod to startup script
+
 class Chamber:
   def __init__(self, chamber_config = {}, chamber_config_file = '~/chamber_config.yaml'):
     """

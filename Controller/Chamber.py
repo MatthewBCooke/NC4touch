@@ -112,6 +112,7 @@ class Chamber:
 
   def m0_upload_sketches(self):
     # Upload sketches to all M0s
+    self.m0s[0].compile_sketch()
     [m0.upload_sketch() for m0 in self.m0s]
   
   def m0_clear(self):

@@ -239,6 +239,22 @@ class M0Device:
         
         except Exception as e:
             logger.error(f"[{self.id}] Error mounting UD drive: {e}")
+
+    def compile_sketch(self, sketch_path="../M0Touch/M0Touch.ino"):
+        logger.info(f"Compiling sketch.")
+        try:
+            # Run arduino-cli compile
+            compile = subprocess.check_output(f"arduino-cli compile --b DFRobot:samd:mzero_bl {sketch_path}", shell=True).decode("utf-8")
+            logger.info(f"Compile output: {compile}")
+            
+            if "error" in compile.lower():
+                logger.error(f"Error compiling sketch: {compile}")
+            else:
+                logger.info(f"Sketch compiled successfully.")
+
+        except Exception as e:
+            logger.error(f"Error compiling sketch: {e}")
+
     
     def upload_sketch(self, sketch_path="../M0Touch/M0Touch.ino"):
         """

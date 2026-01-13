@@ -1,0 +1,24 @@
+# Virtual Chamber Example Configuration
+
+# Enable virtual mode
+virtual_mode: true
+
+# Trainer configuration
+trainer_name: "InitialTouch"  # Or MustTouch, Simple_Discrimination, etc.
+rodent_name: "VirtualRat001"
+
+# Chamber configuration
+chamber_name: "VirtualChamber"
+
+# Session parameters
+iti_duration: 5
+priming_duration: 10
+run_interval: 0.1
+
+# Data directories (will be created if they don't exist)
+data_dir: "./virtual_data"
+video_dir: "./virtual_videos"
+
+# Trainer sequence files
+trainer_seq_dir: "./sequences"
+trainer_seq_file: "sequences.csv"

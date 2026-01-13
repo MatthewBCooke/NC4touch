@@ -9,6 +9,7 @@ import threading
 from Chamber import Chamber
 from Trainer import Trainer
 from Config import Config
+from Virtual.VirtualChamber import VirtualChamber
 
 import logging
 session_logger = logging.getLogger('session_logger')
@@ -57,6 +58,7 @@ class Session:
         self.config.ensure_param("run_interval", 0.1)
         self.config.ensure_param("priming_duration", 20)
         self.config.ensure_param("chamber_name", "Chamber0")
+        self.config.ensure_param("virtual_mode", False)  # Enable virtual chamber for testing
         
         # Initialize directories in case they don't exist
         os.makedirs(self.config["data_dir"], exist_ok=True)
@@ -64,8 +66,17 @@ class Session:
 
         chamber_config = {
             "chamber_name": self.config["chamber_name"],
-            }
-        self.chamber = Chamber(chamber_config=chamber_config)
+        }
+        
+        # Initialize chamber (virtual or physical)
+        if self.config["virtual_mode"]:
+            logger.info("=" * 60)
+            logger.info("VIRTUAL MODE ENABLED - Using virtual chamber")
+            logger.info("=" * 60)
+            self.chamber = VirtualChamber(chamber_config=chamber_config)
+        else:
+            self.chamber = Chamber(chamber_config=chamber_config)
+        
         self.set_trainer_name(self.config["trainer_name"])
         self.session_timer = threading.Timer(0.1, self.trainer.run_training)
 

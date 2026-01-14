@@ -139,29 +139,31 @@ def main():
     # )
 
     # Example 4: Test PRL
-    # from PRL import PRL
-    # test_trainer_with_gui(PRL, 
-    #     trainer_config={
-    #         "trainer_name": "PRL",
-    #         "rodent_name": "VirtualRat",
-    #         "num_trials": 20,
-    #     },
-    #     chamber_config=chamber_config
-    # )
-    
-    # Example 5: Test punish incorrect
-    from Punish_Incorrect import PunishIncorrect
-    test_trainer_with_gui(PunishIncorrect, 
+    from PRL import PRL
+    test_trainer_with_gui(PRL, 
         trainer_config={
-            "trainer_name": "PunishIncorrect",
+            "trainer_name": "PRL",
             "rodent_name": "VirtualRat",
             "num_trials": 10,
-            "initiation_timeout": 15,
             "iti_duration": 5,
-            "trainer_seq_file": "scripts/seq_file.csv",
+            "reward_duration": 0.5,
         },
         chamber_config=chamber_config
     )
+    
+    # Example 5: Test punish incorrect
+    # from Punish_Incorrect import PunishIncorrect
+    # test_trainer_with_gui(PunishIncorrect, 
+    #     trainer_config={
+    #         "trainer_name": "PunishIncorrect",
+    #         "rodent_name": "VirtualRat",
+    #         "num_trials": 10,
+    #         "initiation_timeout": 15,
+    #         "iti_duration": 5,
+    #         "trainer_seq_file": "scripts/seq_file.csv",
+    #     },
+    #     chamber_config=chamber_config
+    # )
 
 
 

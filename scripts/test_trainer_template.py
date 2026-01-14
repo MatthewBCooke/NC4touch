@@ -31,11 +31,12 @@ from Virtual.VirtualChamberGUI import VirtualChamberGUI
 # Import your trainer here
 # from Habituation import Habituation
 # from InitialTouch import InitialTouch
-from MustTouch import MustTouch
+# from MustTouch import MustTouch
+# from PRL import PRL
 # etc.
 
 
-def test_trainer_with_gui(TrainerClass, trainer_config=None):
+def test_trainer_with_gui(TrainerClass, trainer_config=None, chamber_config=None):
     """Test any trainer with the GUI."""
     print("\n" + "="*70)
     print(f"  {TrainerClass.__name__.upper()} - VIRTUAL CHAMBER TEST")
@@ -43,7 +44,7 @@ def test_trainer_with_gui(TrainerClass, trainer_config=None):
     
     # Setup chamber
     print("Creating virtual chamber...")
-    chamber = VirtualChamber()
+    chamber = VirtualChamber(chamber_config=chamber_config or {})
     chamber.initialize_m0s()
     chamber.beambreak.activate()
     
@@ -94,32 +95,74 @@ def test_trainer_with_gui(TrainerClass, trainer_config=None):
 def main():
     """Just uncomment whichever trainer you wanna test."""
     
+    # Configure image directory (where your BMP files are stored)
+    # By default, it looks in: <project_root>/data/images/
+    # You can override it like this:
+    chamber_config = {
+        # \"image_dir\": \"/path/to/your/bmp/files\",  # Uncomment to use custom path
+    }
+    
     # Example 1: Test Habituation
     # from Habituation import Habituation
-    # test_trainer_with_gui(Habituation, trainer_config={
-    #     "trainer_name": "Habituation",
-    #     "rodent_name": "VirtualRat",
-    #     "num_trials": 5,
-    #     "reward_duration": 0.5,
-    #     "iti_duration": 5,
-    # })
+    # test_trainer_with_gui(Habituation, 
+    #     trainer_config={
+    #         \"trainer_name\": \"Habituation\",
+    #         \"rodent_name\": \"VirtualRat\",
+    #         \"num_trials\": 5,
+    #         \"reward_duration\": 0.5,
+    #         \"iti_duration\": 5,
+    #     },
+    #     chamber_config=chamber_config
+    # )
     
     # Example 2: Test InitialTouch
     # from InitialTouch import InitialTouch
-    # test_trainer_with_gui(InitialTouch, trainer_config={
-    #     "trainer_name": "InitialTouch",
-    #     "rodent_name": "VirtualRat",
-    #     "num_trials": 10,
-    #     "touch_timeout": 30,
-    # })
+    # test_trainer_with_gui(InitialTouch, 
+    #     trainer_config={
+    #         "trainer_name": "InitialTouch",
+    #         "rodent_name": "VirtualRat",
+    #         "num_trials": 10,
+    #         "touch_timeout": 30,
+    #     },
+    #     chamber_config=chamber_config
+    # )
     
     # Example 3: Test MustTouch
-    from MustTouch import MustTouch
-    test_trainer_with_gui(MustTouch, trainer_config={
-        "trainer_name": "MustTouch",
-        "rodent_name": "VirtualRat",
-        "num_trials": 20,
-    })
+    # from MustTouch import MustTouch
+    # test_trainer_with_gui(MustTouch, 
+    #     trainer_config={
+    #         "trainer_name": "MustTouch",
+    #         "rodent_name": "VirtualRat",
+    #         "num_trials": 20,
+    #     },
+    #     chamber_config=chamber_config
+    # )
+
+    # Example 4: Test PRL
+    # from PRL import PRL
+    # test_trainer_with_gui(PRL, 
+    #     trainer_config={
+    #         "trainer_name": "PRL",
+    #         "rodent_name": "VirtualRat",
+    #         "num_trials": 20,
+    #     },
+    #     chamber_config=chamber_config
+    # )
+    
+    # Example 5: Test punish incorrect
+    from Punish_Incorrect import PunishIncorrect
+    test_trainer_with_gui(PunishIncorrect, 
+        trainer_config={
+            "trainer_name": "PunishIncorrect",
+            "rodent_name": "VirtualRat",
+            "num_trials": 10,
+            "initiation_timeout": 15,
+            "iti_duration": 5,
+            "trainer_seq_file": "scripts/seq_file.csv",
+        },
+        chamber_config=chamber_config
+    )
+
 
 
 if __name__ == "__main__":

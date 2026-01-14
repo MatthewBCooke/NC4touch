@@ -198,13 +198,19 @@ class PunishIncorrect(Trainer):
             # Waiting during inter-trial interval
             logger.debug("Current state: ITI")
             if current_time - self.iti_start_time >= self.config["iti_duration"]:
+                self.initiation_start_time = current_time
                 self.state = PunishIncorrectState.WAIT_FOR_INITIATION
 
         elif self.state == PunishIncorrectState.WAIT_FOR_INITIATION:
-            # Placeholder for initiation logic
+            #  initiation logic
             logger.debug("Current state: WAIT_FOR_INITIATION")
             self.load_images(self.current_trial - 1)
-            self.state = PunishIncorrectState.SHOW_IMAGES
+            if self.chamber.beambreak.state==False:
+                logger.info(f"Trial {self.current_trial} initiated by beam break") 
+                self.state = PunishIncorrectState.SHOW_IMAGES
+            elif current_time - self.initiation_start_time >= self.config["initiation_timeout"]:
+                logger.info(f"Initiation timeout on trial {self.current_trial}")
+                self.state = PunishIncorrectState.SHOW_IMAGES
 
         elif self.state == PunishIncorrectState.SHOW_IMAGES:
             # Display images for the trial

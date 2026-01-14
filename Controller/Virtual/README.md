@@ -203,6 +203,54 @@ The Virtual Chamber GUI provides:
 
 ## Advanced Usage
 
+### Image Files for Stimulus Presentation
+
+The virtual M0 devices mimic how physical M0 controllers store BMP files in local memory. When you run a trainer, image commands work automatically:
+
+```python
+# Trainer code (works for both physical and virtual)
+chamber.left_m0.send_command("IMG:A01")   # Load A01.bmp
+chamber.left_m0.send_command("SHOW")       # Display it
+chamber.left_m0.send_command("BLACK")      # Clear screen
+```
+
+**Default Image Directory**: `<project_root>/data/images/`
+
+Your BMP files should be placed there:
+```
+NC4touch/
+  data/
+    images/
+      A01.bmp
+      B01.bmp
+      C01.bmp
+```
+
+**Custom Image Directory**:
+
+```python
+# Option 1: Via chamber config
+chamber = VirtualChamber(chamber_config={
+    "image_dir": "/path/to/your/bmp/files"
+})
+
+# Option 2: Via config file
+# chamber_config.yaml:
+# image_dir: /absolute/path/to/images
+chamber = VirtualChamber(chamber_config_file='chamber_config.yaml')
+```
+
+**Supported Commands**:
+- `IMG:filename` - Load image (e.g., `IMG:A01` loads `A01.bmp`)
+- `SHOW` - Display the loaded image
+- `BLACK` - Clear screen to black
+- `DISPLAY:path` - Legacy: display image directly (still supported)
+
+The virtual system automatically:
+- Resolves image names to `.bmp` files
+- Logs warnings if images aren't found
+- Stores current image state for GUI display
+
 ### State Tracking
 
 ```python

@@ -50,8 +50,13 @@ class VirtualChamber:
         self.config.ensure_param("buzzer_pin", 16)
         self.config.ensure_param("reset_pins", [25, 5, 6])
         self.config.ensure_param("camera_device", "/dev/video0")
-
+        
         self.code_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Image directory for stimulus BMPs (mimics M0 internal storage)
+        # Default: <project_root>/data/images/
+        default_image_dir = os.path.join(os.path.dirname(os.path.dirname(self.code_dir)), 'data', 'images')
+        self.config.ensure_param("image_dir", default_image_dir)
 
         # No pigpio needed for virtual
         self.pi = None
@@ -61,19 +66,22 @@ class VirtualChamber:
             pi=self.pi,
             id="M0_0",
             reset_pin=self.config["reset_pins"][0],
-            location="left"
+            location="left",
+            image_dir=self.config["image_dir"]
         )
         self.middle_m0 = VirtualM0Device(
             pi=self.pi,
             id="M0_1",
             reset_pin=self.config["reset_pins"][1],
-            location="middle"
+            location="middle",
+            image_dir=self.config["image_dir"]
         )
         self.right_m0 = VirtualM0Device(
             pi=self.pi,
             id="M0_2",
             reset_pin=self.config["reset_pins"][2],
-            location="right"
+            location="right",
+            image_dir=self.config["image_dir"]
         )
 
         self.m0s = [self.left_m0, self.middle_m0, self.right_m0]

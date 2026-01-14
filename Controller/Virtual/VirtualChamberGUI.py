@@ -12,6 +12,13 @@ import tkinter as tk
 from tkinter import ttk
 import threading
 import time
+import os
+
+try:
+    from PIL import Image, ImageTk
+    HAS_PIL = True
+except ImportError:
+    HAS_PIL = False
 
 import logging
 logger = logging.getLogger(f"session_logger.{__name__}")
@@ -40,6 +47,10 @@ class VirtualChamberGUI:
 
         # State tracking
         self._running = False
+        
+        # Image cache for PhotoImage objects
+        self._image_cache = {}
+        self._canvas_images = {'left': None, 'middle': None, 'right': None}
 
         self._create_ui()
         self._start_update_loop()
@@ -242,6 +253,30 @@ class VirtualChamberGUI:
         self._log(f"  Total rewards: {state['reward']['total_dispensed']}")
         self._log("="*50)
 
+    def _display_image_on_canvas(self, canvas, image_path, screen_name):
+        """Load and display a BMP image on a canvas."""
+        try:
+            # Check cache first
+            if image_path not in self._image_cache:
+                # Load and resize image to fit canvas (160x240)
+                pil_image = Image.open(image_path)
+                pil_image = pil_image.resize((160, 240), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(pil_image)
+                self._image_cache[image_path] = photo
+            else:
+                photo = self._image_cache[image_path]
+            
+            # Display on canvas
+            canvas.delete('all')
+            self._canvas_images[screen_name] = canvas.create_image(80, 120, image=photo)
+            
+        except Exception as e:
+            logger.warning(f"Could not load image {image_path}: {e}")
+            # Fallback display
+            canvas.delete('all')
+            canvas.create_rectangle(10, 10, 150, 230, fill='darkgray', outline='red')
+            canvas.create_text(80, 120, text="Error\nloading\nimage", fill='white', justify='center')
+    
     def _update_ui(self):
         """Update UI elements based on current chamber state."""
         state = self.chamber.get_state()
@@ -262,12 +297,26 @@ class VirtualChamberGUI:
             else:
                 canvas.config(highlightbackground='gray', highlightthickness=2)
 
-            # Update image label
-            img = m0_state['current_image']
-            if img:
-                label.config(text=f"Image: {img.split('/')[-1]}", foreground='white')
+            # Update image display and label
+            img_name = m0_state['current_image']
+            img_path = getattr(self.chamber.m0s[['left', 'middle', 'right'].index(screen_name)], '_current_image_path', None)
+            
+            if img_name:
+                # Update label
+                display_name = img_name if '/' not in img_name else img_name.split('/')[-1]
+                label.config(text=f"Image: {display_name}", foreground='white')
+                
+                # Try to display actual image on canvas
+                if HAS_PIL and img_path and os.path.exists(img_path):
+                    self._display_image_on_canvas(canvas, img_path, screen_name)
+                else:
+                    # Fallback: show white rectangle to indicate image present
+                    canvas.delete('all')
+                    canvas.create_rectangle(10, 10, 150, 230, fill='white', outline='gray')
+                    canvas.create_text(80, 120, text=display_name, fill='black', width=130)
             else:
                 label.config(text="No image", foreground='gray')
+                canvas.delete('all')  # Clear canvas
 
         # Update beam break
         if state['beambreak']['state'] == 0:

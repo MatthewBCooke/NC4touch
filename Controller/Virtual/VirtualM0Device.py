@@ -29,12 +29,13 @@ class VirtualM0Device:
     """
 
     def __init__(self, pi=None, id=None, reset_pin=None,
-                 port=None, baudrate=115200, location=None):
+                 port=None, baudrate=115200, location=None, image_dir=None):
         self.id = id
         self.reset_pin = reset_pin
         self.port = port or f"VIRTUAL_{id}"
         self.baudrate = baudrate
         self.location = location
+        self.image_dir = image_dir or os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'data', 'images')
 
         self.ser = None
         self.ud_mount_loc = None
@@ -47,8 +48,10 @@ class VirtualM0Device:
         # Virtual touchscreen state
         self._is_touched = False  # Internal attribute
         self._touch_coordinates = (0, 0)
-        self._current_image = None
+        self._current_image = None  # Stores image name (e.g., "A01")
+        self._current_image_path = None  # Stores full path to BMP file
         self._display_enabled = True
+        self._loaded_image = None  # Image loaded but not yet shown
 
         self.code_dir = os.path.dirname(os.path.abspath(__file__))
         self.mode = M0Mode.UNINITIALIZED
@@ -107,12 +110,39 @@ class VirtualM0Device:
             # Simulate responses for known commands
             if command == "WHOAREYOU?":
                 self.message_queue.put((self.id, f"ID:{self.id}"))
+            elif command.startswith("IMG:"):
+                # Load image (like real M0: IMG:A01 loads A01.bmp)
+                image_name = command.split(":", 1)[1]
+                image_path = self._resolve_image_path(image_name)
+                if image_path:
+                    self._loaded_image = image_name
+                    logger.debug(f"[{self.id}] Loaded image: {image_name} from {image_path}")
+                else:
+                    logger.warning(f"[{self.id}] Image not found: {image_name}")
+            elif command == "SHOW":
+                # Display the loaded image
+                if self._loaded_image:
+                    self._current_image = self._loaded_image
+                    self._current_image_path = self._resolve_image_path(self._loaded_image)
+                    logger.debug(f"[{self.id}] Showing image: {self._current_image}")
+                else:
+                    logger.warning(f"[{self.id}] SHOW called but no image loaded")
+            elif command == "BLACK":
+                # Clear display to black
+                self._current_image = None
+                self._current_image_path = None
+                self._loaded_image = None
+                logger.debug(f"[{self.id}] Display cleared (BLACK)")
             elif command.startswith("DISPLAY:"):
+                # Legacy support: DISPLAY:path displays directly
                 image_path = command.split(":", 1)[1]
                 self._current_image = image_path
+                self._current_image_path = image_path
                 logger.debug(f"[{self.id}] Displaying image: {image_path}")
             elif command == "CLEAR":
+                # Legacy support
                 self._current_image = None
+                self._current_image_path = None
                 logger.debug(f"[{self.id}] Display cleared")
             elif command == "SCREENSHARE":
                 logger.debug(f"[{self.id}] Screenshare mode activated")
@@ -175,9 +205,32 @@ class VirtualM0Device:
 
         threading.Thread(target=release_touch, daemon=True).start()
 
+    def _resolve_image_path(self, image_name):
+        """Resolve image name to full file path."""
+        # If already a full path, return as-is
+        if os.path.isabs(image_name) or '/' in image_name:
+            return image_name
+        
+        # Try with .bmp extension
+        bmp_path = os.path.join(self.image_dir, f"{image_name}.bmp")
+        if os.path.exists(bmp_path):
+            return bmp_path
+        
+        # Try without extension (in case it's included)
+        direct_path = os.path.join(self.image_dir, image_name)
+        if os.path.exists(direct_path):
+            return direct_path
+        
+        logger.warning(f"[{self.id}] Image file not found: {image_name} in {self.image_dir}")
+        return None
+
     def get_current_image(self):
-        """Get the currently displayed image path."""
+        """Get the currently displayed image name."""
         return self._current_image
+    
+    def get_current_image_path(self):
+        """Get the full path to the currently displayed image file."""
+        return self._current_image_path
 
     def get_touch_coordinates(self):
         """Get the last touch coordinates."""

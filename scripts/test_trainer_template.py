@@ -142,11 +142,9 @@ def main():
     from PRL import PRL
     test_trainer_with_gui(PRL, 
         trainer_config={
-            "trainer_name": "PRL",
+            "trainer_name": "ProbabilisticReversalLearning",
             "rodent_name": "VirtualRat",
             "num_trials": 10,
-            "iti_duration": 5,
-            "reward_duration": 0.5,
         },
         chamber_config=chamber_config
     )

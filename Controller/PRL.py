@@ -30,6 +30,8 @@ class PRL(Trainer):
     In PRL , the animal is required to respond to a randomly assigned "high reward probability" 
     or "low reward probability" lever. 
 
+    ##GITHUB EXAMPLE TEST
+
     The trainer will dispense a reward for a set duration at 80%/20% (high/low) set in config, and the animal will
     interact with the reward system. The trainer will also monitor
     the beam break sensor to detect if the animal is interacting with the reward

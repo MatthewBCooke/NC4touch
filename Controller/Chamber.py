@@ -36,6 +36,7 @@ class Chamber:
     self.config.ensure_param("reward_pump_pin", 27)
     self.config.ensure_param("beambreak_pin", 4)
     self.config.ensure_param("punishment_LED_pin", 17)
+    self.config.ensure_param("house_LED_pin", 20)
     self.config.ensure_param("buzzer_pin", 16)
     self.config.ensure_param("reset_pins", [25, 5, 6])
     self.config.ensure_param("camera_device", "/dev/video0")
@@ -61,6 +62,7 @@ class Chamber:
 
     self.reward_led = LED(pi=self.pi, pin=self.config["reward_LED_pin"], brightness = 140)
     self.punishment_led = LED(pi=self.pi, pin=self.config["punishment_LED_pin"], brightness = 255)
+    self.house_led = LED(pi=self.pi, pin=self.config["house_LED_pin"], brightness = 255)
     self.beambreak = BeamBreak(pi=self.pi, pin=self.config["beambreak_pin"])
     self.buzzer = Buzzer(pi=self.pi, pin=self.config["buzzer_pin"])
     self.reward = Reward(pi=self.pi, pin=self.config["reward_pump_pin"])

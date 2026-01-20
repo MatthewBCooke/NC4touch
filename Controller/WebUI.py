@@ -133,6 +133,12 @@ class WebUI:
                     self.reinitialize_camera_button.style('width: 200px; margin-top: 20px;')
                     self.start_video_recording_button = ui.button("Start Video Recording").on_click(self.session.start_video_recording)
                     self.stop_video_recording_button = ui.button("Stop Video Recording").on_click(self.session.stop_video_recording)
+                
+                with ui.row():
+                    # Slider to control house LED brightness
+                    ui.label('House LED Brightness:').style('width: 200px;')
+                    self.house_led_brightness_slider = ui.slider(min=0, max=100, value=self.session.chamber.house_led.brightness,
+                                                                on_change=lambda e: self.session.chamber.house_led.set_brightness(e.value)).style('width: 400px;')
 
         with ui.row().style('justify-content: center; margin-top: 20px;'):
             self.start_training_button = ui.button("Start Training").on_click(self.session.start_training)

@@ -20,9 +20,11 @@ class Reward:
 
         """PWM set up"""
         self.pi.set_mode(self.pin, pigpio.OUTPUT)
-        self.pi.set_PWM_dutycycle(self.pin, 0)
+        # Explicitly write LOW immediately to override boot-time pull-up
+        self.pi.write(self.pin, 0)
         self.pi.set_PWM_range(self.pin, 255)
         self.pi.set_PWM_frequency(self.pin, 5000)
+        self.pi.set_PWM_dutycycle(self.pin, 0)
     
     def __del__(self):
         self.stop()

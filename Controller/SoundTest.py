@@ -12,9 +12,7 @@ class SoundTestState(Enum):
     HOUSE_LIGHT = auto()
     REWARD_LED = auto()
     PUNISHMENT_LED = auto()
-    BUZZER_FULL = auto()
-    BUZZER_50 = auto()
-    BUZZER_10 = auto()
+    BUZZER_60 = auto()
     IMAGES = auto()
     REWARD = auto()
     END_LOOP = auto()
@@ -55,6 +53,7 @@ class SoundTest(Trainer):
             pass
 
         elif self.state == SoundTestState.START_LOOP:
+            self.chamber.m0_clear()
             self.current_loop += 1
             if self.current_loop <= self.config["num_loops"]:
                 logger.info(f"Starting loop {self.current_loop}")
@@ -67,6 +66,7 @@ class SoundTest(Trainer):
             if not getattr(self, 'house_light_active', False):
                 logger.info("House Light ON")
                 self.write_event("HouseLight", "ON")
+                self.chamber.house_led.set_brightness(255)
                 self.chamber.house_led.activate()
                 self.house_light_active = True
                 self.state_start_time = current_time
@@ -106,55 +106,26 @@ class SoundTest(Trainer):
                 self.write_event("PunishmentLED", "OFF")
                 self.chamber.punishment_led.deactivate()
                 self.punishment_led_active = False
-                self.state = SoundTestState.BUZZER_FULL
+                self.state = SoundTestState.BUZZER_60
 
-        elif self.state == SoundTestState.BUZZER_FULL:
-            if not getattr(self, 'buzzer_full_active', False):
-                logger.info("Buzzer Full Volume ON")
-                self.write_event("BuzzerFull", "ON")
-                self.chamber.buzzer.volume = 100
+
+        elif self.state == SoundTestState.BUZZER_60:
+            if not getattr(self, 'buzzer_60_active', False):
+                logger.info("Buzzer 60% Volume ON")
+                self.write_event("Buzzer60", "ON")
+                self.chamber.buzzer.volume = 60
                 self.chamber.buzzer.activate()
-                self.buzzer_full_active = True
+                self.buzzer_60_active = True
                 self.state_start_time = current_time
 
             if self.check_duration(self.config["step_duration"]):
-                logger.info("Buzzer Full Volume OFF")
-                self.write_event("BuzzerFull", "OFF")
+                logger.info("Buzzer 60% Volume OFF")
+                self.write_event("Buzzer60", "OFF")
                 self.chamber.buzzer.deactivate()
-                self.buzzer_full_active = False
-                self.state = SoundTestState.BUZZER_50
-
-        elif self.state == SoundTestState.BUZZER_50:
-            if not getattr(self, 'buzzer_50_active', False):
-                logger.info("Buzzer 50% Volume ON")
-                self.write_event("Buzzer50", "ON")
-                self.chamber.buzzer.volume = 50
-                self.chamber.buzzer.activate()
-                self.buzzer_50_active = True
-                self.state_start_time = current_time
-
-            if self.check_duration(self.config["step_duration"]):
-                logger.info("Buzzer 50% Volume OFF")
-                self.write_event("Buzzer50", "OFF")
-                self.chamber.buzzer.deactivate()
-                self.buzzer_50_active = False
-                self.state = SoundTestState.BUZZER_10
-
-        elif self.state == SoundTestState.BUZZER_10:
-            if not getattr(self, 'buzzer_10_active', False):
-                logger.info("Buzzer 10% Volume ON")
-                self.write_event("Buzzer10", "ON")
-                self.chamber.buzzer.volume = 10
-                self.chamber.buzzer.activate()
-                self.buzzer_10_active = True
-                self.state_start_time = current_time
-
-            if self.check_duration(self.config["step_duration"]):
-                logger.info("Buzzer 10% Volume OFF")
-                self.write_event("Buzzer10", "OFF")
-                self.chamber.buzzer.deactivate()
-                self.buzzer_10_active = False
+                self.buzzer_60_active = False
                 self.state = SoundTestState.IMAGES
+
+
 
         elif self.state == SoundTestState.IMAGES:
             if not getattr(self, 'images_active', False):

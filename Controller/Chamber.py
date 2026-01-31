@@ -36,6 +36,7 @@ class Chamber:
     """
     Chamber class for the Touchscreen chamber.
     """
+    logger.info("Initializing Chamber...")
     self.config = Config(config = chamber_config, config_file = chamber_config_file)
     self.config.ensure_param("chamber_name", "Chamber0")
     self.config.ensure_param("reward_LED_pin", 21)
@@ -75,6 +76,8 @@ class Chamber:
     self.camera = Camera(device=self.config["camera_device"])
 
   def __del__(self):
+    """Clean up the chamber by stopping pigpio and M0s."""
+    logger.info("Cleaning up chamber...")
     self.pi.stop()
     [m0.stop() for m0 in self.m0s]
 
@@ -89,7 +92,7 @@ class Chamber:
 
       try:
           # Run arduino-cli compile
-          compile = subprocess.check_output(f"arduino-cli compile -b DFRobot:samd:mzero_bl {sketch_path}", shell=True).decode("utf-8")
+          compile = subprocess.check_output(f"~/bin/arduino-cli compile -b DFRobot:samd:mzero_bl {sketch_path}", capture_output=True, shell=True).decode("utf-8")
           logger.info(f"Compile output: {compile}")
           
           if "error" in compile.lower():
@@ -114,7 +117,7 @@ class Chamber:
     self.discovered_boards = []
 
     try:
-        result = subprocess.run(['arduino-cli', 'board', 'list', '--format', 'json'], capture_output=True, text=True)
+        result = subprocess.run([f"~/bin/arduino-cli board list --format json"], capture_output=True, shell=True)
         boards = json.loads(result.stdout)
 
         for board in boards['detected_ports']:

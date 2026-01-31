@@ -64,6 +64,8 @@ class M0Device:
         self.mode = M0Mode.UNINITIALIZED
     
     def __del__(self):
+        """Clean up the M0Device by stopping the read thread and closing the serial port."""
+        logger.info(f"Cleaning up M0Device {self.id}...")
         self.stop()
     
     def stop(self):
@@ -78,6 +80,11 @@ class M0Device:
         self.mode = M0Mode.UNINITIALIZED
 
     def initialize(self):
+        """
+        Initializes the M0 board by finding the device, opening the serial port,
+        starting the read thread, and sending the WHOAREYOU? command.
+        """
+        logger.info(f"[{self.id}] Initializing M0Device...")
         self.find_device()
         time.sleep(1)
         self.open_serial()

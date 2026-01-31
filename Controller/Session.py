@@ -87,6 +87,8 @@ class Session:
         self.is_video_recording = False
     
     def __del__(self):
+        """Clean up the session by stopping timers and copying log files."""
+        logger.info("Cleaning up session...")
         # Stop the session timer if it's running
         if self.session_timer.is_alive():
             self.session_timer.cancel()

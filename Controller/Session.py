@@ -22,13 +22,7 @@ formatter = logging.Formatter('[%(asctime)s:%(name)s:%(levelname)s] %(message)s'
 stream_handler.setFormatter(formatter)
 session_logger.addHandler(stream_handler)
 
-# Create a file handler for logging to a file
-current_time = time.strftime("%Y%m%d_%H%M%S")
-session_log_file = os.path.join(os.path.dirname(__file__), f"{current_time}_session_log.log")
-file_handler = logging.FileHandler(session_log_file)
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(formatter)
-session_logger.addHandler(file_handler)
+# File handler is configured in Session.__init__ once chamber_name is known
 
 logger = logging.getLogger(f"session_logger.{__name__}")
 
@@ -58,11 +52,32 @@ class Session:
         self.config.ensure_param("run_interval", 0.1)
         self.config.ensure_param("priming_duration", 20)
         self.config.ensure_param("chamber_name", "Chamber0")
+        self.config.ensure_param("session_start_time", None)
         self.config.ensure_param("virtual_mode", False)  # Enable virtual chamber for testing
         
         # Initialize directories in case they don't exist
         os.makedirs(self.config["data_dir"], exist_ok=True)
         os.makedirs(self.config["video_dir"], exist_ok=True)
+
+        # Create a file handler for logging to a file (include chamber name)
+        if not self.config["session_start_time"]:
+            self.config["session_start_time"] = time.strftime("%Y%m%d_%H%M%S")
+        current_time = self.config["session_start_time"]
+        log_dir = os.path.join(os.getcwd(), "log")
+        os.makedirs(log_dir, exist_ok=True)
+        self.session_log_file = os.path.join(
+            log_dir,
+            f"{current_time}_{self.config['chamber_name']}_session_log.log",
+        )
+
+        for handler in list(session_logger.handlers):
+            if isinstance(handler, logging.FileHandler):
+                session_logger.removeHandler(handler)
+
+        file_handler = logging.FileHandler(self.session_log_file)
+        file_handler.setLevel(logging.INFO)
+        file_handler.setFormatter(formatter)
+        session_logger.addHandler(file_handler)
 
         chamber_config = {
             "chamber_name": self.config["chamber_name"],
@@ -95,14 +110,16 @@ class Session:
         if hasattr(self, 'priming_timer') and self.priming_timer.is_alive():
             self.priming_timer.cancel()
         # Copy log file to data directory
-        if hasattr(self, 'config') and os.path.isfile(session_log_file):
+        if hasattr(self, 'config') and hasattr(self, 'session_log_file') and os.path.isfile(self.session_log_file):
             try:
                 data_dir = self.config["data_dir"] or "/mnt/shared/data"
-                new_log_file = os.path.join(data_dir, os.path.basename(session_log_file))
-                os.rename(session_log_file, new_log_file)
+                new_log_file = os.path.join(data_dir, os.path.basename(self.session_log_file))
+                os.rename(self.session_log_file, new_log_file)
                 logger.info(f"Log file copied to {new_log_file}")
             except Exception as e:
                 logger.error(f"Error copying log file: {e}")
+        if hasattr(self, 'config'):
+            self.config["session_start_time"] = None
     
     def set_chamber_name(self, chamber_name):
         if chamber_name:

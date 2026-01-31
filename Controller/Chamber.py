@@ -23,7 +23,6 @@ from BeamBreak import BeamBreak
 from Buzzer import Buzzer
 from M0Device import M0Device
 from Camera import Camera
-
 from Config import Config
 
 import logging
@@ -40,8 +39,8 @@ class Chamber:
     self.config = Config(config = chamber_config, config_file = chamber_config_file)
     self.config.ensure_param("chamber_name", "Chamber0")
     self.config.ensure_param("reward_LED_pin", 21)
-    self.config.ensure_param("reward_pump_pin", 4)
-    self.config.ensure_param("beambreak_pin", 27)
+    self.config.ensure_param("reward_pump_pin", 27)
+    self.config.ensure_param("beambreak_pin", 4)
     self.config.ensure_param("punishment_LED_pin", 17)
     self.config.ensure_param("house_LED_pin", 20)
     self.config.ensure_param("buzzer_pin", 16)
@@ -69,7 +68,7 @@ class Chamber:
 
     self.reward_led = LED(pi=self.pi, pin=self.config["reward_LED_pin"], brightness = 140)
     self.punishment_led = LED(pi=self.pi, pin=self.config["punishment_LED_pin"], brightness = 255)
-    self.house_led = LED(pi=self.pi, pin=self.config["house_LED_pin"], brightness = 255)
+    self.house_led = LED(pi=self.pi, pin=self.config["house_LED_pin"], brightness = 100) 
     self.beambreak = BeamBreak(pi=self.pi, pin=self.config["beambreak_pin"])
     self.buzzer = Buzzer(pi=self.pi, pin=self.config["buzzer_pin"])
     self.reward = Reward(pi=self.pi, pin=self.config["reward_pump_pin"])

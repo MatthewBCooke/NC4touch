@@ -137,8 +137,8 @@ class WebUI:
                 with ui.row():
                     # Slider to control house LED brightness
                     ui.label('House LED Brightness:').style('width: 200px;')
-                    self.house_led_brightness_slider = ui.slider(min=0, max=100, value=self.session.chamber.house_led.brightness,
-                                                                on_change=lambda e: self.session.chamber.house_led.set_brightness(e.value)).style('width: 400px;')
+                    self.house_led_brightness_slider = ui.slider(min=0, max=100, value=0,
+                                                                on_change=lambda e: self.adjust_house_led_brightness(e.value)).style('width: 400px;')
 
         with ui.row().style('justify-content: center; margin-top: 20px;'):
             self.start_training_button = ui.button("Start Training").on_click(self.session.start_training)
@@ -155,6 +155,16 @@ class WebUI:
         logger.info(f"File selected: {result[0]}")
         self.session.set_trainer_seq_file(result[0])
         self.trainer_seq_file_input.set_value(result[0])
+    
+    def adjust_house_led_brightness(self, value):
+        """Adjust house LED brightness based on slider value."""
+        if value == 0:
+            self.session.chamber.house_led.deactivate()
+        else:
+            # Convert 1-100 to 0-255 brightness value
+            brightness = int(0.01 * value * 255)
+            self.session.chamber.house_led.set_brightness(brightness)
+            self.session.chamber.house_led.activate()
 
 web_ui = WebUI()
 ui.run(host=web_ui.ip, port=web_ui.ui_port, title="Chamber Control Panel", show=False)

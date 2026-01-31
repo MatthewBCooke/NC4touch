@@ -7,7 +7,7 @@ logger = logging.getLogger(f"session_logger.{__name__}")
 
 class LED:
     """Class to control an LED using PWM on a Raspberry Pi."""
-    def __init__(self, pi=None, pin=21, rgb_pins = None, frequency=5000, range=255, brightness=140):
+    def __init__(self, pi=None, pin=21, rgb_pins = None, frequency=5000, range=255, brightness=140, color=(255, 255, 255)):
         if pi is None and pigpio is not None:
             pi = pigpio.pi()
         if pigpio is not None and not isinstance(pi, pigpio.pi):
@@ -41,6 +41,11 @@ class LED:
 
     def setup_pin(self, pin):
         """Set up the pin for PWM output."""
+        # If pigpio isn't available or wasn't initialized, skip hardware calls
+        if self.pi is None:
+            logger.warning(f"pigpio not available; skipping setup for pin {pin}")
+            return
+
         self.pi.set_mode(pin, pigpio.OUTPUT)
         self.pi.set_PWM_frequency(pin, self.frequency)
         self.pi.set_PWM_range(pin, self.range)
@@ -68,6 +73,12 @@ class LED:
 
     def activate(self):
         """Activate the LED with the current brightness and/or color."""
+        # If pigpio isn't available, simulate activation and log
+        if self.pi is None:
+            self.active = True
+            logger.warning("pigpio not available; LED.activate() simulated")
+            return
+
         if self.show_color:
             r, g, b = self.color
             self.pi.set_PWM_dutycycle(self.r_pin, r * self.brightness // 255)
@@ -77,10 +88,16 @@ class LED:
             self.pi.set_PWM_dutycycle(self.pin, self.brightness)
 
         self.active = True
-        logger.debug(f"LED activated")
+        logger.debug("LED activated")
     
     def deactivate(self):
         """Deactivate the LED."""
+        # If pigpio isn't available, simulate deactivation and log
+        if self.pi is None:
+            self.active = False
+            logger.warning("pigpio not available; LED.deactivate() simulated")
+            return
+
         if self.show_color:
             self.pi.set_PWM_dutycycle(self.r_pin, 0)
             self.pi.set_PWM_dutycycle(self.g_pin, 0)

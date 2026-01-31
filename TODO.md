@@ -1,4 +1,4 @@
-- Move logs into dedicated log folder and add to .gitignore
+- ~~Move logs into dedicated log folder and add to .gitignore~~
 - Fix M0 Initialization crashes upon re-initialize in boxes 2-4
 - Initialize M0 boards upon the startup of the WebUI - currently need to Re-initialize all boxes
 - ~~Ensure json output files get saved to the data directory with the correct name (Animal, Chamber, Date, Trainer)~~

@@ -1,9 +1,0 @@
-[    6.614066] systemd[1]: Created slice system-kmsconvt.slice - Slice /system/kmsconvt.
-[   60.866430] nc4_ili9488 spi0.0: [drm:drm_open_helper [drm]] comm="kmscon", pid=660, minor=0
-[   60.866948] nc4_ili9488 spi0.0: [drm:drm_ioctl [drm]] comm="kmscon" pid=660, dev=0xe200, auth=1, DRM_IOCTL_VERSION
-[   60.867059] nc4_ili9488 spi0.0: [drm:drm_ioctl [drm]] comm="kmscon" pid=660, dev=0xe200, auth=1, DRM_IOCTL_VERSION
-[   60.867275] nc4_ili9488 spi0.0: [drm:drm_file_free [drm]] comm="kmscon", pid=660, dev=0xe200, open_count=1
-[   61.817957] nc4_ili9488 spi0.1: [drm:drm_open_helper [drm]] comm="kmscon", pid=660, minor=1
-[   61.818451] nc4_ili9488 spi0.1: [drm:drm_ioctl [drm]] comm="kmscon" pid=660, dev=0xe201, auth=1, DRM_IOCTL_VERSION
-[   61.818534] nc4_ili9488 spi0.1: [drm:drm_ioctl [drm]] comm="kmscon" pid=660, dev=0xe201, auth=1, DRM_IOCTL_VERSION
-[   61.818677] nc4_ili9488 spi0.1: [drm:drm_file_free [drm]] comm="kmscon", pid=660, dev=0xe201, open_count=1

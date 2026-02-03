@@ -9,9 +9,16 @@ NC4touch is a touchscreen-based rodent training system built on Raspberry Pi. Th
 ```
 Session
 ├── Chamber (or VirtualChamber in virtual mode)
-│   ├── M0Device (left_m0)
-│   ├── M0Device (middle_m0)
-│   ├── M0Device (right_m0)
+│   ├── HardwareConfig (new centralized configuration)
+│   │   ├── GPIOPinConfig
+│   │   ├── PWMConfig
+│   │   ├── M0SerialConfig / M0I2CConfig
+│   │   ├── CameraConfig
+│   │   ├── DirectoryConfig
+│   │   └── BeamBreakConfig
+│   ├── M0Device (left_m0) or M0DeviceI2C
+│   ├── M0Device (middle_m0) or M0DeviceI2C
+│   ├── M0Device (right_m0) or M0DeviceI2C
 │   ├── LED (reward_led)
 │   ├── LED (punishment_led)
 │   ├── LED (house_led)
@@ -30,19 +37,32 @@ Session
     ├── PRL
     └── SoundTest
 
-Config (used by Session, Chamber, Trainer)
+Config (legacy, used by Session and Trainer)
 ```
 
 ## File Purposes
 
 ### Core System Files
 - **`Session.py`** - Top-level session manager; initializes chamber and trainer, manages video recording and logging
-- **`Chamber.py`** - Hardware abstraction layer; manages all physical components and M0 device discovery
+- **`Chamber.py`** - Hardware abstraction layer; manages all physical components and M0 device discovery. Uses HardwareConfig for centralized configuration.
 - **`Trainer.py`** - Abstract base class for all training protocols; defines interface for trial management and data recording
-- **`Config.py`** - Configuration management class; handles YAML config files and parameter defaults
+- **`Config.py`** - Legacy configuration management class; handles YAML config files (being phased out in favor of HardwareConfig)
+
+### Configuration Package (`config/`)
+- **`hardware_config.py`** - Centralized hardware configuration using Python dataclasses
+  - `HardwareConfig` - Root configuration class
+  - `GPIOPinConfig` - GPIO pin assignments
+  - `PWMConfig` - PWM settings for LEDs and pumps
+  - `M0SerialConfig` - Serial communication parameters
+  - `M0I2CConfig` - I2C communication parameters
+  - `CameraConfig` - Camera and video settings
+  - `DirectoryConfig` - File system paths
+  - `BeamBreakConfig` - Sensor parameters
+- See [CONFIG.md](CONFIG.md) for detailed documentation
 
 ### Hardware Component Files
-- **`M0Device.py`** - Interface to individual M0 touchscreen boards; handles serial communication and state management
+- **`M0Device.py`** - Interface to individual M0 touchscreen boards; handles serial communication and state management. Uses M0SerialConfig for all serial parameters.
+- **`M0DeviceI2C.py`** - I2C-based interface to M0 boards; alternative to serial communication. Uses M0I2CConfig for all I2C parameters.
 - **`m0_devices.py`** - Utilities for M0 device management
 - **`LED.py`** - PWM-based LED control (supports single-color and RGB)
 - **`Reward.py`** - Reward pump control via PWM
@@ -324,18 +344,72 @@ M0Device.message_queue (thread-safe queue.Queue)
 
 ## Configuration System
 
-All components use the `Config` class for flexible configuration:
+NC4touch uses a dual configuration system for backward compatibility:
+
+### New Configuration (Recommended)
+- **Package:** `config/hardware_config.py`
+- **Format:** Python dataclasses with type safety and validation
+- **Usage:** 
+  ```python
+  from config import get_default_config
+  hw_config = get_default_config()
+  chamber = Chamber(hw_config=hw_config)
+  ```
+- **Benefits:**
+  - Type checking and IDE autocomplete
+  - Centralized hardware parameters
+  - YAML import/export support
+  - Validation (e.g., duplicate pin detection)
+
+See [CONFIG.md](CONFIG.md) for complete documentation.
+
+### Legacy Configuration
+- **Class:** `Config.py`
+- **Format:** Dictionary-based with YAML persistence
+- **Usage:** 
+  ```python
+  config = Config(config={'param': value}, config_file='~/config.yaml')
+  ```
+- **Status:** Maintained for backward compatibility; gradually being replaced
+
+### Configuration Mapping
+
+The new HardwareConfig automatically maps to legacy Config for components that haven't been updated:
 
 ```python
-Config.__init__(config={}, config_file='~/config.yaml')
-├── Load from YAML file (if exists)
-├── Override with dict parameters
-├── Auto-save changes back to YAML
-└── Provide defaults via ensure_param()
+# Legacy (old)
+self.config.ensure_param("reward_LED_pin", 21)
+pin = self.config["reward_LED_pin"]
 
-Example usage:
-config.ensure_param("reward_pump_pin", 27)  # Use 27 if not in file
-config["reward_pump_pin"] = 22  # Update and save to YAML
+# New (current)
+pin = self.hw_config.gpio_pins.reward_led_pin
+```
+
+All components use the configuration pattern:
+
+All components accept configuration via constructor parameters:
+
+```python
+# Chamber with new config
+from config import get_default_config
+hw_config = get_default_config()
+chamber = Chamber(hw_config=hw_config)
+
+# Chamber with legacy config (backward compatible)
+chamber = Chamber(
+    chamber_config={'use_i2c': True},
+    chamber_config_file='~/chamber_config.yaml'
+)
+
+# M0Device with config
+from config import M0SerialConfig
+serial_config = M0SerialConfig(baudrate=115200, max_retries=5)
+m0 = M0Device(pi=pi, id="M0_0", reset_pin=25, config=serial_config)
+
+# M0DeviceI2C with config
+from config import M0I2CConfig
+i2c_config = M0I2CConfig(bus_number=1, timeout=3.0)
+m0 = M0DeviceI2C(pi=pi, id="M0_0", address=0x00, reset_pin=25, config=i2c_config)
 ```
 
 ## Error Handling and Recovery

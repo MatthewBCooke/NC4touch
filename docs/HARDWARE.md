@@ -434,14 +434,39 @@ M0 boards store images on an internal SD card. To update images:
 ## Hardware Modifications
 
 ### Changing Pin Assignments
-Edit default values in `Chamber.py`:
-```python
-self.config.ensure_param("reward_LED_pin", 21)  # Change 21 to desired pin
+
+**Recommended Method (New Config System):**
+
+Edit `~/chamber_config.yaml`:
+```yaml
+gpio_pins:
+  reward_led_pin: 22  # Changed from default 21
+  punishment_led_pin: 18
+  # ... other pins
 ```
-Or override via YAML config file:
+
+Or in Python:
+```python
+from config import get_default_config, GPIOPinConfig
+
+hw_config = get_default_config()
+hw_config.gpio_pins.reward_led_pin = 22
+chamber = Chamber(hw_config=hw_config)
+```
+
+**Legacy Method (Still Supported):**
+
+Edit `Chamber.py`:
+```python
+self.config.ensure_param("reward_LED_pin", 22)  # Changed default
+```
+
+Or override via legacy YAML:
 ```yaml
 reward_LED_pin: 22
 ```
+
+See [CONFIG.md](CONFIG.md) for complete configuration documentation.
 
 ### Adding New Peripherals
 1. Create new class (e.g., `NewPeripheral.py`) inheriting from base pattern

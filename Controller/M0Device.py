@@ -250,6 +250,7 @@ class M0Device:
             
             wait_for_dmesg("FireBeetle-UDisk")
             
+            
             # Find the mount location from lsblk
             waiting = True
             while waiting:
@@ -284,7 +285,7 @@ class M0Device:
         logger.info(f"[{self.id}] Uploading sketch to {self.port}.")
         try:
             # Run arduino-cli upload
-            upload = subprocess.check_output(f"arduino-cli upload --port {self.port} --fqbn DFRobot:samd:mzero_bl {sketch_path}", shell=True).decode("utf-8")
+            upload = subprocess.check_output(f"~/bin/arduino-cli upload --port {self.port} --fqbn DFRobot:samd:mzero_bl {sketch_path}", shell=True).decode("utf-8")
             logger.info(f"[{self.id}] Upload output: {upload}")
             
             if "error" in upload.lower():

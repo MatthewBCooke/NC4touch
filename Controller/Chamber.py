@@ -91,7 +91,7 @@ class Chamber:
 
       try:
           # Run arduino-cli compile
-          compile = subprocess.check_output(f"~/bin/arduino-cli compile -b DFRobot:samd:mzero_bl {sketch_path}", capture_output=True, shell=True).decode("utf-8")
+          compile = subprocess.check_output(f"~/bin/arduino-cli compile -b DFRobot:samd:mzero_bl {sketch_path}", shell=True).decode("utf-8")
           logger.info(f"Compile output: {compile}")
           
           if "error" in compile.lower():

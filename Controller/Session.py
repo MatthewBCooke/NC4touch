@@ -18,7 +18,7 @@ session_logger.setLevel(logging.DEBUG)
 # Create a stream handler for logging to the console
 stream_handler = logging.StreamHandler(stream=sys.stdout)
 stream_handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('[%(asctime)s:%(name)s:%(levelname)s] %(message)s')
+formatter = logging.Formatter('[%(asctime)s:%(filename)s@%(lineno)d:%(funcName)s:%(levelname)s] %(message)s')
 stream_handler.setFormatter(formatter)
 session_logger.addHandler(stream_handler)
 
@@ -78,6 +78,7 @@ class Session:
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(formatter)
         session_logger.addHandler(file_handler)
+        logger.info("Initializing session logger...")
 
         chamber_config = {
             "chamber_name": self.config["chamber_name"],
@@ -282,8 +283,8 @@ class Session:
     
     def run_priming(self):
         self.priming_timer.cancel()
-        if time.time() - self.priming_start_time < self.priming_duration:
-            self.priming_timer = threading.Timer(self.run_interval, self.run_priming)
+        if time.time() - self.priming_start_time < self.config["priming_duration"]:
+            self.priming_timer = threading.Timer(self.config["run_interval"], self.run_priming)
             self.priming_timer.start()
 
     def stop_priming(self):

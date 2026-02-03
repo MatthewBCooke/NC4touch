@@ -4,3 +4,16 @@
 - ~~Ensure json output files get saved to the data directory with the correct name (Animal, Chamber, Date, Trainer)~~
 - Fix buzzer noise
 - ~~Fix house LED brightness slider~~
+
+MANU
+- ~~C1 fully functional~~
+- 
+- C2
+- Unable to upload code to M0s
+- Middle (pin 5) M0 disk cannot be accessed (replace M0)
+- Pump not working
+
+- C3
+- Pump runs green LED instead, clearly a wiring problem
+
+- ~~C4 fully functional~~

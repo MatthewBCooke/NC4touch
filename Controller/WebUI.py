@@ -35,8 +35,8 @@ class WebUI:
         # Initialize session and chamber
         logger.info("Initializing WebUI...")
         self.ip = get_ip_address()
-        chamber_name = self.derive_chamber_name(self.ip)
-        session_config = {"chamber_name": chamber_name} if chamber_name else {}
+        self.chamber_name = self.derive_chamber_name(self.ip)
+        session_config = {"chamber_name": self.chamber_name} if self.chamber_name else {}
         self.session = Session(session_config=session_config)
         self.video_port = video_port
         self.ui_port = ui_port
@@ -62,7 +62,7 @@ class WebUI:
         return f"Chamber{chamber_number}"
 
     def init_ui(self):
-        ui.label('Chamber Control Panel').style('font-size: 24px; font-weight: bold; text-align: center; margin-top: 20px;')
+        ui.label(f"Chamber {self.chamber_name} Control Panel").style('font-size: 24px; font-weight: bold; text-align: center; margin-top: 20px;')
         with ui.row().style('justify-content: left; margin-top: 20px;'):
             with ui.column().style('width: 400px; margin: auto; padding: 20px;'):
                 with ui.row():

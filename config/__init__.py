@@ -13,7 +13,10 @@ from .hardware_config import (
     CameraConfig,
     DirectoryConfig,
     PWMConfig,
+    BeamBreakConfig,
     get_default_config,
+    load_config_from_yaml,
+    save_config_to_yaml,
 )
 
 __all__ = [
@@ -24,5 +27,8 @@ __all__ = [
     'CameraConfig',
     'DirectoryConfig',
     'PWMConfig',
+    'BeamBreakConfig',
     'get_default_config',
+    'load_config_from_yaml',
+    'save_config_to_yaml',
 ]

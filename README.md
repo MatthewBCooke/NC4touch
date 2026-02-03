@@ -1,3 +1,21 @@
+# NC4touch - Touchscreen-Based Rodent Training System
+
+NC4touch is a Raspberry Pi-based system for running touchscreen behavioral experiments with rodents. The system coordinates multiple M0 touchscreen displays, peripheral hardware (LEDs, reward pumps, sensors), and customizable training protocols.
+
+## Documentation
+
+### Core Documentation
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture, class hierarchy, core workflows, and data flow diagrams
+- **[HARDWARE.md](docs/HARDWARE.md)** - Hardware components, pin assignments, communication protocols, and setup instructions
+
+### Quick Links
+- **Getting Started:** See the setup sections below for Raspberry Pi installation
+- **Hardware Setup:** Refer to [HARDWARE.md](docs/HARDWARE.md) for pin assignments and connections
+- **Training Protocols:** See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for available trainers and how they work
+- **Virtual Mode:** Use `virtual_mode=True` in session config for hardware-free testing
+
+---
+
 # Raspberry Pi Project Setup: Required Packages and Verification
 
 This document outlines the required packages for your Raspberry Pi project, organized into logical groups. Each section includes installation commands, confirmation steps, and optional cleanup.

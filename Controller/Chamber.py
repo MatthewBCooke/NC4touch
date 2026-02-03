@@ -22,6 +22,7 @@ from Reward import Reward
 from BeamBreak import BeamBreak
 from Buzzer import Buzzer
 from M0Device import M0Device
+from M0DeviceI2C import M0DeviceI2C, discover_i2c_devices
 from Camera import Camera
 from Config import Config
 
@@ -46,25 +47,33 @@ class Chamber:
     self.config.ensure_param("buzzer_pin", 16)
     self.config.ensure_param("reset_pins", [25, 5, 6])
     self.config.ensure_param("camera_device", "/dev/video0")
+    self.config.ensure_param("use_i2c", False)  # Use I2C instead of serial
+    self.config.ensure_param("i2c_addresses", [0x00, 0x01, 0x02])  # I2C addresses for M0s
 
     self.code_dir = os.path.dirname(os.path.abspath(__file__))
 
     self.pi = pigpio.pi() if pigpio is not None else None
 
-    # Initialize M0s
-    self.left_m0 = M0Device(pi = self.pi, id = "M0_0", reset_pin = self.config["reset_pins"][0])
-    self.middle_m0 = M0Device(pi = self.pi, id = "M0_1", reset_pin = self.config["reset_pins"][1])
-    self.right_m0 = M0Device(pi = self.pi, id = "M0_2", reset_pin = self.config["reset_pins"][2])
-
-    self.m0s = [self.left_m0, self.middle_m0, self.right_m0]
-    self.arduino_cli_discover()
-
-    if len(self.discovered_boards) >= len(self.m0s):
-        for i, m0 in enumerate(self.m0s):
-            m0.port = self.discovered_boards[i]
-            logger.info(f"Set {m0.id} serial port to {m0.port}")
+    # Initialize M0s based on communication mode
+    if self.config["use_i2c"]:
+        logger.info("Using I2C communication mode")
+        self.i2c_discover()
     else:
-        logger.error("Not enough M0 boards discovered. Please check the connections.")
+        logger.info("Using serial communication mode")
+        # Initialize M0s with serial
+        self.left_m0 = M0Device(pi = self.pi, id = "M0_0", reset_pin = self.config["reset_pins"][0])
+        self.middle_m0 = M0Device(pi = self.pi, id = "M0_1", reset_pin = self.config["reset_pins"][1])
+        self.right_m0 = M0Device(pi = self.pi, id = "M0_2", reset_pin = self.config["reset_pins"][2])
+
+        self.m0s = [self.left_m0, self.middle_m0, self.right_m0]
+        self.arduino_cli_discover()
+
+        if len(self.discovered_boards) >= len(self.m0s):
+            for i, m0 in enumerate(self.m0s):
+                m0.port = self.discovered_boards[i]
+                logger.info(f"Set {m0.id} serial port to {m0.port}")
+        else:
+            logger.error("Not enough M0 boards discovered. Please check the connections.")
 
     self.reward_led = LED(pi=self.pi, pin=self.config["reward_LED_pin"], brightness = 140)
     self.punishment_led = LED(pi=self.pi, pin=self.config["punishment_LED_pin"], brightness = 255)
@@ -129,6 +138,56 @@ class Chamber:
         logger.error(f"Error discovering boards with arduino-cli: {e}")
 
   
+  
+  def i2c_discover(self):
+    """
+    Discover M0 boards via I2C and create M0DeviceI2C instances.
+    Queries each I2C address (0x00-0x07) for device identity and maps to M0Device objects.
+    """
+    logger.info("Discovering M0 boards via I2C...")
+    
+    try:
+        # Scan I2C bus for devices
+        devices = discover_i2c_devices(bus_num=1, address_range=range(0x00, 0x08))
+        
+        if len(devices) < 3:
+            logger.error(f"Only found {len(devices)} I2C devices, need 3 M0s")
+            return
+        
+        # Create device map: device_id -> (address, device_id)
+        device_map = {device_id: addr for addr, device_id in devices}
+        
+        # Initialize M0 devices based on their IDs
+        self.m0s = []
+        expected_ids = ["M0_0", "M0_1", "M0_2"]
+        
+        for i, expected_id in enumerate(expected_ids):
+            if expected_id in device_map:
+                addr = device_map[expected_id]
+                m0 = M0DeviceI2C(
+                    pi=self.pi,
+                    id=expected_id,
+                    address=addr,
+                    reset_pin=self.config["reset_pins"][i],
+                    location=["left", "middle", "right"][i]
+                )
+                self.m0s.append(m0)
+                logger.info(f"Mapped {expected_id} to I2C address {addr:#04x}")
+            else:
+                logger.error(f"{expected_id} not found on I2C bus")
+        
+        # Assign to named attributes for backward compatibility
+        if len(self.m0s) >= 3:
+            self.left_m0 = self.m0s[0]
+            self.middle_m0 = self.m0s[1]
+            self.right_m0 = self.m0s[2]
+        
+        logger.info(f"I2C discovery complete: {len(self.m0s)} devices found")
+        
+    except Exception as e:
+        logger.error(f"I2C discovery failed: {e}")
+        raise
+
   def m0_discover(self):
     """
     Searches /dev/ttyACM*, /dev/ttyUSB* for boards that respond with "ID:M0_x"

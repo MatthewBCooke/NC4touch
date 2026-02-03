@@ -5,6 +5,8 @@ This module provides I2C communication with DFRobot M0 boards as an alternative
 to the unreliable USB serial interface. I2C provides deterministic hardware
 addressing and eliminates USB enumeration race conditions.
 
+Refactored to use centralized hardware configuration.
+
 Author: OpenClaw Subagent
 Date: 2026-02-03
 """
@@ -26,6 +28,12 @@ from typing import Optional, Tuple, List
 import logging
 
 logger = logging.getLogger(f"session_logger.{__name__}")
+
+# Import configuration (optional - will use defaults if not provided)
+try:
+    from config import M0I2CConfig
+except ImportError:
+    M0I2CConfig = None
 
 
 class I2CError(Exception):
@@ -70,20 +78,15 @@ class M0DeviceI2C:
     timeout handling. Designed as a drop-in replacement for the serial-based
     M0Device class.
     
-    Attributes:
+    Args:
         pi: pigpio instance for GPIO control (reset pin)
         id: Device identifier (e.g., "M0_0")
         address: I2C address (0x00-0x07, determined by GPIO pins on M0)
         reset_pin: GPIO pin number for hardware reset
         bus_num: I2C bus number (default 1 for Raspberry Pi)
         location: Physical location identifier (e.g., "left", "middle", "right")
+        config: M0I2CConfig instance (optional, uses defaults if None)
     """
-    
-    # Protocol constants
-    MAX_RETRIES = 3
-    DEFAULT_TIMEOUT = 2.0  # seconds
-    I2C_BUS = 1  # Raspberry Pi I2C bus 1
-    RETRY_BACKOFF_BASE = 0.1  # seconds
     
     def __init__(self, 
                  pi, 
@@ -91,7 +94,8 @@ class M0DeviceI2C:
                  address: int = 0x00,
                  reset_pin: Optional[int] = None,
                  bus_num: int = 1,
-                 location: Optional[str] = None):
+                 location: Optional[str] = None,
+                 config: Optional['M0I2CConfig'] = None):
         """
         Initialize I2C M0 device.
         
@@ -102,6 +106,7 @@ class M0DeviceI2C:
             reset_pin: GPIO pin for hardware reset
             bus_num: I2C bus number (default 1)
             location: Physical location identifier
+            config: M0I2CConfig instance (optional)
             
         Raises:
             ValueError: If smbus2 is not available or address is invalid
@@ -127,6 +132,22 @@ class M0DeviceI2C:
         self.bus_num = bus_num
         self.location = location
         
+        # Load configuration
+        if config is not None:
+            self.config = config
+        elif M0I2CConfig is not None:
+            self.config = M0I2CConfig()
+        else:
+            # Fallback to hardcoded defaults if config not available
+            self.config = None
+            logger.warning("M0I2CConfig not available, using hardcoded defaults")
+        
+        # Apply config or fallback values
+        self.max_retries = 3 if config is None else self.config.max_retries
+        self.default_timeout = 2.0 if config is None else self.config.timeout
+        self.retry_backoff_base = 0.1 if config is None else self.config.retry_backoff_base
+        self.poll_interval = 0.1 if config is None else self.config.poll_interval
+        
         # I2C bus connection
         self.bus: Optional[smbus2.SMBus] = None
         self.bus_lock = threading.RLock()  # Recursive lock for nested calls
@@ -143,7 +164,6 @@ class M0DeviceI2C:
         # Touch polling thread
         self.stop_flag = threading.Event()
         self.poll_thread: Optional[threading.Thread] = None
-        self.poll_interval = 0.1  # seconds
         
         logger.info(f"[{self.id}] Initialized I2C device at address {self.address:#04x}")
     
@@ -234,6 +254,10 @@ class M0DeviceI2C:
         
         logger.info(f"[{self.id}] Resetting M0 via GPIO pin {self.reset_pin}")
         
+        # Get reset timing from config
+        pulse_duration = 0.1 if self.config is None else self.config.reset_pulse_duration
+        recovery_time = 0.5 if self.config is None else self.config.reset_recovery_time
+        
         try:
             # Stop polling thread during reset
             if self.poll_thread and self.poll_thread.is_alive():
@@ -243,13 +267,13 @@ class M0DeviceI2C:
             self.pi.set_mode(self.reset_pin, pigpio.OUTPUT)
             time.sleep(0.01)
             self.pi.write(self.reset_pin, 0)  # Pull low
-            time.sleep(0.1)  # Hold for 100ms
+            time.sleep(pulse_duration)
             self.pi.write(self.reset_pin, 1)  # Release
             time.sleep(0.01)
             self.pi.set_mode(self.reset_pin, pigpio.INPUT)  # High-Z
             
             # Wait for M0 to boot
-            time.sleep(0.5)
+            time.sleep(recovery_time)
             
             logger.info(f"[{self.id}] Reset complete")
             
@@ -304,14 +328,14 @@ class M0DeviceI2C:
     def _send_command_with_retry(self, 
                                   command: I2CCommand, 
                                   payload: Optional[bytes] = None,
-                                  timeout: float = DEFAULT_TIMEOUT) -> Optional[bytes]:
+                                  timeout: Optional[float] = None) -> Optional[bytes]:
         """
         Send I2C command with automatic retry and exponential backoff.
         
         Args:
             command: Command code
             payload: Optional payload bytes
-            timeout: Response timeout in seconds
+            timeout: Response timeout in seconds (uses default if None)
             
         Returns:
             Optional[bytes]: Response data or None if failed
@@ -319,27 +343,30 @@ class M0DeviceI2C:
         Raises:
             I2CError: If all retries fail
         """
-        for attempt in range(self.MAX_RETRIES):
+        if timeout is None:
+            timeout = self.default_timeout
+        
+        for attempt in range(self.max_retries):
             try:
                 response = self._send_command_raw(command, payload, timeout)
                 return response
                 
             except (OSError, IOError) as e:
-                if attempt < self.MAX_RETRIES - 1:
-                    backoff = self.RETRY_BACKOFF_BASE * (2 ** attempt)
-                    logger.warning(f"[{self.id}] I2C error (attempt {attempt + 1}/{self.MAX_RETRIES}): {e}, "
+                if attempt < self.max_retries - 1:
+                    backoff = self.retry_backoff_base * (2 ** attempt)
+                    logger.warning(f"[{self.id}] I2C error (attempt {attempt + 1}/{self.max_retries}): {e}, "
                                  f"retrying in {backoff:.2f}s...")
                     time.sleep(backoff)
                 else:
-                    logger.error(f"[{self.id}] All {self.MAX_RETRIES} retries failed")
-                    raise I2CError(f"I2C communication failed after {self.MAX_RETRIES} retries") from e
+                    logger.error(f"[{self.id}] All {self.max_retries} retries failed")
+                    raise I2CError(f"I2C communication failed after {self.max_retries} retries") from e
         
         return None
     
     def _send_command_raw(self, 
                           command: I2CCommand, 
                           payload: Optional[bytes] = None,
-                          timeout: float = DEFAULT_TIMEOUT) -> Optional[bytes]:
+                          timeout: Optional[float] = None) -> Optional[bytes]:
         """
         Send raw I2C command with framing and checksum.
         
@@ -349,7 +376,7 @@ class M0DeviceI2C:
         Args:
             command: Command code
             payload: Optional payload data
-            timeout: Response timeout
+            timeout: Response timeout (uses default if None)
             
         Returns:
             Optional[bytes]: Response data
@@ -358,6 +385,8 @@ class M0DeviceI2C:
             I2CChecksumError: If checksum validation fails
             I2CTimeoutError: If response times out
         """
+        if timeout is None:
+            timeout = self.default_timeout
         with self.bus_lock:
             try:
                 # Build command frame
@@ -386,12 +415,12 @@ class M0DeviceI2C:
                 logger.error(f"[{self.id}] I2C send error: {e}")
                 raise
     
-    def _read_response(self, timeout: float = DEFAULT_TIMEOUT) -> Optional[bytes]:
+    def _read_response(self, timeout: Optional[float] = None) -> Optional[bytes]:
         """
         Read response from I2C device with timeout.
         
         Args:
-            timeout: Maximum time to wait for response
+            timeout: Maximum time to wait for response (uses default if None)
             
         Returns:
             Optional[bytes]: Response data or None
@@ -400,6 +429,9 @@ class M0DeviceI2C:
             I2CTimeoutError: If no response within timeout
             I2CChecksumError: If checksum validation fails
         """
+        if timeout is None:
+            timeout = self.default_timeout
+        
         start_time = time.time()
         
         while time.time() - start_time < timeout:

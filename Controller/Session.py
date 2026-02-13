@@ -261,7 +261,7 @@ class Session:
             return
         
         datetime_str = time.strftime("%Y%m%d_%H%M%S")
-        data_csv_file = os.path.join(self.data_dir, f"{datetime_str}_{self.chamber.chamber_name}_{self.rodent_name}_data.csv")
+        data_csv_file = os.path.join(self.config["data_dir"], f"{datetime_str}_{self.config['chamber_name']}_{self.config['rodent_name']}_data.csv")
         self.trainer.export_results_csv(data_csv_file)
         logger.info(f"Data exported to {data_csv_file}")
 

@@ -18,6 +18,10 @@ class Reward:
         self.pi = pi
         self.pin = pin
 
+        if self.pi is None:
+            logger.warning("No pigpio instance provided; Reward operating in virtual mode")
+            return
+
         """PWM set up"""
         self.pi.set_mode(self.pin, pigpio.OUTPUT)
         # Explicitly write LOW immediately to override boot-time pull-up
@@ -31,9 +35,15 @@ class Reward:
 
     def dispense(self):
         # Turn on the pump
+        if self.pi is None:
+            logger.debug("Dispensing reward (virtual)")
+            return
         logger.debug("Dispensing reward")
         self.pi.set_PWM_dutycycle(self.pin, 255)
 
     def stop(self):
+        if self.pi is None:
+            logger.debug("Stopping reward (virtual)")
+            return
         logger.debug("Stopping reward")
         self.pi.set_PWM_dutycycle(self.pin, 0)

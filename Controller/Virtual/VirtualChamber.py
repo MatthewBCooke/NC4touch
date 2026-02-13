@@ -187,7 +187,7 @@ class VirtualChamber:
         """
         Reset chamber to default state (all hardware off/clear).
         """
-        self.m0_send_command("CLEAR")
+        self.m0_send_command("BLACK")
         self.reward_led.deactivate()
         self.punishment_led.deactivate()
         self.house_led.deactivate()

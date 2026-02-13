@@ -1,4 +1,5 @@
 import os
+import signal
 import subprocess
 from helpers import get_ip_address
 
@@ -74,7 +75,7 @@ class Camera:
         self.stop_recording()
         if self.network_stream:
             # self.network_stream.kill()
-            os.killpg(os.getpgid(self.network_stream.pid), subprocess.signal.SIGTERM)
+            os.killpg(os.getpgid(self.network_stream.pid), signal.SIGTERM)
             self.network_stream = None
             logger.info("Network stream terminated.")
         else:
@@ -93,7 +94,7 @@ class Camera:
     def stop_recording(self):
         if self.video_recorder:
             # Stop the video recorder
-            os.killpg(os.getpgid(self.video_recorder.pid), subprocess.signal.SIGTERM)
+            os.killpg(os.getpgid(self.video_recorder.pid), signal.SIGTERM)
             self.video_recorder = None
             logger.info("Recording stopped.")
         else:

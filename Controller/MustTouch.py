@@ -122,108 +122,76 @@ class MustTouch(Trainer):
         current_time = time.time()
 
         if self.state == MustTouchState.IDLE:
-            # IDLE state, waiting for the start signal
-            logger.debug("Current state: IDLE")
-            pass 
+            pass
 
         elif self.state == MustTouchState.START_TRAINING:
-            # START_TRAINING state, initializing the training session
-            logger.debug("Current state: START_TRAINING")
             logger.info("Starting training session...")
             self.write_event("StartTraining", 1)
-
-            self.current_trial = 1
+            self.current_trial = 0
             self.state = MustTouchState.START_TRIAL
 
         elif self.state == MustTouchState.START_TRIAL:
-            # START_TRIAL state, preparing for the next trial
-            logger.debug("Current state: START_TRIAL")
             self.current_trial += 1
-            if self.current_trial < self.config["num_trials"]:
+            if self.current_trial <= self.config["num_trials"]:
                 logger.info(f"Starting trial {self.current_trial}...")
                 self.write_event("StartTrial", self.current_trial)
 
+                # Load and show images for this trial
+                self.load_images()
+                self.show_images()
+                self.trial_start_time = current_time
+                self.reward_collected = False
+
                 self.state = MustTouchState.WAIT_FOR_TOUCH
             else:
-                # All trials completed, move to end training state
                 logger.info("All trials completed.")
                 self.state = MustTouchState.END_TRAINING
 
         elif self.state == MustTouchState.WAIT_FOR_TOUCH:
-            # WAIT_FOR_TOUCH state, waiting for the animal to touch the screen
-            logger.debug("Current state: WAIT_FOR_TOUCH")
-            self.load_images()
-            self.show_images()
+            # Check for 300s timeout on first trial
+            if self.current_trial == 1 and current_time - self.trial_start_time >= 300:
+                logger.info("300s Timeout - Moving to next trial")
+                self.write_event("TouchTimeout", self.current_trial)
+                self.clear_images()
+                self.state = MustTouchState.ITI_START
+                return
 
-            #First trial (has 300s timeout)
-            self.trial_start_time = current_time
-            if self.current_trial == 1: 
-                if current_time - self.reward_start_time < 300:
-                    # left screen is touched
-                    if self.chamber.left_m0.is_touched():
-                        logger.info("Left screen touched")
-                        self.write_event("LeftScreenTouched", self.current_trial)
-
-                        if self.left_image == "A01":
-                            self.state = MustTouchState.CORRECT
-                        else:
-                            self.state = MustTouchState.ERROR
-                    #right screen is touched
-                    elif self.chamber.right_m0.is_touched():
-                        logger.info("Right screen touched")
-                        self.write_event("RightScreenTouched", self.current_trial)
-
-                        if self.right_image == "A01":
-                            self.state = MustTouchTouchState.CORRECT
-                        else:
-                            self.state = MustTouchState.ERROR
-                        self.state = MustTouchState.DELIVER_REWARD_START
-
-                        # DELIVER_REWARD_START state, preparing to deliver the reward
-                        logger.debug("Current state: DELIVER_REWARD_START")
-                        logger.info(f"Preparing to deliver reward for trial {self.current_trial}...")
-                        self.reward_start_time = current_time
-                    else:
-                        self.current_trial += 1
-                        logger.info("Incorrect Response")
-                        self.state = MustTouchState.END_TRIAL
+            # Check for touches
+            if self.chamber.left_m0.is_touched():
+                logger.info("Left screen touched")
+                self.write_event("LeftScreenTouched", self.current_trial)
+                if self.left_image == "A01":
+                    self.state = MustTouchState.CORRECT
                 else:
-                    #300s timeout
-                    self.current_trial += 1
-                    logger.info("300s Timeout - Moving to next trial")
-                    self.state = MustTouchState.END_TRIAL
-            else:
-                # left screen is touched
-                if self.chamber.left_m0.is_touched():
-                    logger.info("Left screen touched")
-                    self.write_event("LeftScreenTouched", self.current_trial)
-                    if self.left_image == "A01":
-                        self.state = MustTouchState.CORRECT
-                        
-                    else:
-                        self.state = MustTouchState.ERROR
-                    self.state = MustTouchState.DELIVER_REWARD_START
+                    self.state = MustTouchState.ERROR
 
-                # right screen is touched
-                elif self.chamber.right_m0.is_touched():
-                    logger.info("Right screen touched")
-                    self.write_event("RightScreenTouched", self.current_trial)
-
-                    if self.right_image == "A01":
-                        self.state = MustTouchState.CORRECT
-                    else:
-                        self.state = MustTouchState.ERROR
-                    self.state = MustTouchState.DELIVER_REWARD_START
-                # Incorrect response: no reward, increment trial number, and repeat the trial
+            elif self.chamber.right_m0.is_touched():
+                logger.info("Right screen touched")
+                self.write_event("RightScreenTouched", self.current_trial)
+                if self.right_image == "A01":
+                    self.state = MustTouchState.CORRECT
                 else:
-                    self.current_trial += 1
-                    logger.info("Incorrect Response")
-                    self.state = MustTouchState.END_TRIAL
+                    self.state = MustTouchState.ERROR
+            # If nothing touched, stay in WAIT_FOR_TOUCH
+
+        elif self.state == MustTouchState.CORRECT:
+            logger.info(f"Correct response for trial {self.current_trial}")
+            self.write_event("CorrectTouch", self.current_trial)
+            self.clear_images()
+            self.state = MustTouchState.DELIVER_REWARD_START
+
+        elif self.state == MustTouchState.ERROR:
+            logger.info(f"Incorrect response for trial {self.current_trial}")
+            self.write_event("IncorrectTouch", self.current_trial)
+            self.clear_images()
+            self.state = MustTouchState.ITI_START
+
         elif self.state == MustTouchState.DELIVER_REWARD_START:
-            # DELIVER_REWARD_START state, preparing to deliver the reward
-            logger.debug("Current state: DELIVER_REWARD_START")
-            logger.info(f"Preparing to deliver reward for trial {self.current_trial}...")
+            logger.info(f"Delivering reward for trial {self.current_trial}...")
             self.reward_start_time = current_time
+            self.chamber.reward.dispense()
+            self.chamber.reward_led.activate()
+            self.chamber.beambreak.activate()
             self.state = MustTouchState.DELIVERING_REWARD
 
         elif self.state == MustTouchState.DELIVERING_REWARD:

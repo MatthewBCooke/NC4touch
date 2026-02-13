@@ -55,6 +55,7 @@ class PunishIncorrect(Trainer):
         self.config.ensure_param("trainer_seq_dir", "")        # Directory containing sequence file
         self.config.ensure_param("trainer_seq_file", "")       # Sequence file name
         self.config.ensure_param("correct_image", "A01")       # Image identifier for correct choice
+        self.config.ensure_param("initiation_timeout", 60)     # Max time allowed for trial initiation (WAIT_FOR_INITIATION state), reserved for initiation timeout handling
 
         # Local variables used during training
         self.current_trial = 0

@@ -43,6 +43,13 @@ class BeamBreak:
         self.read_timer = threading.Timer(self.read_interval, self._read_loop)
         self.read_timer.start()
 
+    def __del__(self):
+        """Clean up timer thread."""
+        try:
+            self.deactivate()
+        except Exception:
+            pass
+
     def activate(self):
         self.read_timer.cancel()
         self.read_timer = threading.Timer(self.read_interval, self._read_loop)

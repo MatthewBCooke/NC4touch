@@ -92,6 +92,8 @@ class Trainer(ABC):
             }
             # Write the header to the json file
             json.dump(header, self.data_file)
+            self.data_file.write('\n')
+            self.data_file.flush()
         else:
             logger.warning("Data file already open. Skipping creation.")
     
@@ -114,6 +116,8 @@ class Trainer(ABC):
                 "data": data,
             }
             json.dump(event_data, self.data_file)
+            self.data_file.write('\n')
+            self.data_file.flush()
         else:
             logger.warning("Data file is not open. Cannot write event.")
     

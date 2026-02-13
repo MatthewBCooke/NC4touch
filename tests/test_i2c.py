@@ -36,6 +36,22 @@ from M0DeviceI2C import (
 )
 
 
+def _build_mock_response(data_bytes, pad_to=32):
+    """Build a mock I2C response: [length, data..., checksum, 0xFF padding...].
+
+    Checksum = XOR of [length, data...] matching Arduino firmware.
+    """
+    length = len(data_bytes)
+    checksum = length
+    for b in data_bytes:
+        checksum ^= b
+    checksum &= 0xFF
+    response = [length] + list(data_bytes) + [checksum]
+    while len(response) < pad_to:
+        response.append(0xFF)
+    return response
+
+
 class TestChecksumCalculation(unittest.TestCase):
     """Test checksum calculation functions."""
     
@@ -138,6 +154,7 @@ class TestM0DeviceI2CCommands(unittest.TestCase):
         self.mock_pi = Mock()
         self.mock_bus = Mock()
         
+        # Patch only the SMBus class used by M0DeviceI2C, not the entire smbus2 module.
         with patch('M0DeviceI2C.smbus2.SMBus', return_value=self.mock_bus):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
@@ -150,12 +167,8 @@ class TestM0DeviceI2CCommands(unittest.TestCase):
     
     def test_send_whoareyou_command(self):
         """Test WHOAREYOU command frame construction."""
-        # Mock response
-        self.mock_bus.read_byte.return_value = 7
-        self.mock_bus.read_i2c_block_data.return_value = [
-            ord('I'), ord('D'), ord(':'), ord('M'), ord('0'), ord('_'), ord('0'),
-            0x00  # Checksum
-        ]
+        # Mock response: "ID:M0_0" with correct checksum including length byte
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ID:M0_0")
         
         response = self.m0._send_command_with_retry(I2CCommand.WHOAREYOU, timeout=1.0)
         
@@ -175,11 +188,7 @@ class TestM0DeviceI2CCommands(unittest.TestCase):
     
     def test_send_show_command(self):
         """Test SHOW command sending."""
-        # Mock ACK response
-        self.mock_bus.read_byte.return_value = 3
-        self.mock_bus.read_i2c_block_data.return_value = [
-            ord('A'), ord('C'), ord('K'), 0x00
-        ]
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ACK")
         
         result = self.m0.send_command("SHOW")
         
@@ -188,11 +197,7 @@ class TestM0DeviceI2CCommands(unittest.TestCase):
     
     def test_send_black_command(self):
         """Test BLACK command sending."""
-        # Mock ACK response
-        self.mock_bus.read_byte.return_value = 3
-        self.mock_bus.read_i2c_block_data.return_value = [
-            ord('A'), ord('C'), ord('K'), 0x00
-        ]
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ACK")
         
         result = self.m0.send_command("BLACK")
         
@@ -201,11 +206,7 @@ class TestM0DeviceI2CCommands(unittest.TestCase):
     
     def test_send_img_command(self):
         """Test IMG command with payload."""
-        # Mock ACK response
-        self.mock_bus.read_byte.return_value = 3
-        self.mock_bus.read_i2c_block_data.return_value = [
-            ord('A'), ord('C'), ord('K'), 0x00
-        ]
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ACK")
         
         result = self.m0.send_command("IMG:A01")
         
@@ -238,7 +239,9 @@ class TestRetryLogic(unittest.TestCase):
         self.mock_pi = Mock()
         self.mock_bus = Mock()
         
-        with patch('M0DeviceI2C.smbus2.SMBus', return_value=self.mock_bus):
+        mock_smbus2 = MagicMock()
+        mock_smbus2.SMBus.return_value = self.mock_bus
+        with patch('M0DeviceI2C.smbus2', mock_smbus2):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
                 id="M0_0",
@@ -257,13 +260,10 @@ class TestRetryLogic(unittest.TestCase):
             None  # Success
         ]
         
-        self.mock_bus.read_byte.return_value = 3
-        self.mock_bus.read_i2c_block_data.return_value = [
-            ord('A'), ord('C'), ord('K'), 0x00
-        ]
-        
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ACK")
+
         response = self.m0._send_command_with_retry(I2CCommand.SHOW, timeout=1.0)
-        
+
         # Should have retried and eventually succeeded
         self.assertEqual(self.mock_bus.write_i2c_block_data.call_count, 3)
     
@@ -275,10 +275,10 @@ class TestRetryLogic(unittest.TestCase):
         with self.assertRaises(I2CError):
             self.m0._send_command_with_retry(I2CCommand.SHOW, timeout=1.0)
         
-        # Should have tried MAX_RETRIES times
+        # Should have tried max_retries times
         self.assertEqual(
-            self.mock_bus.write_i2c_block_data.call_count, 
-            M0DeviceI2C.MAX_RETRIES
+            self.mock_bus.write_i2c_block_data.call_count,
+            self.m0.max_retries
         )
     
     @patch('time.sleep')
@@ -291,13 +291,10 @@ class TestRetryLogic(unittest.TestCase):
             None
         ]
         
-        self.mock_bus.read_byte.return_value = 3
-        self.mock_bus.read_i2c_block_data.return_value = [
-            ord('A'), ord('C'), ord('K'), 0x00
-        ]
-        
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ACK")
+
         self.m0._send_command_with_retry(I2CCommand.SHOW, timeout=1.0)
-        
+
         # Verify backoff delays
         sleep_calls = [call[0][0] for call in mock_sleep.call_args_list]
         
@@ -315,7 +312,9 @@ class TestChecksumValidation(unittest.TestCase):
         self.mock_pi = Mock()
         self.mock_bus = Mock()
         
-        with patch('M0DeviceI2C.smbus2.SMBus', return_value=self.mock_bus):
+        mock_smbus2 = MagicMock()
+        mock_smbus2.SMBus.return_value = self.mock_bus
+        with patch('M0DeviceI2C.smbus2', mock_smbus2):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
                 id="M0_0",
@@ -327,32 +326,22 @@ class TestChecksumValidation(unittest.TestCase):
     
     def test_valid_checksum(self):
         """Test that valid checksum passes."""
-        # Response: "ACK" with valid checksum
-        data = [ord('A'), ord('C'), ord('K')]
-        checksum = M0DeviceI2C._calculate_checksum(data)
-        
-        self.mock_bus.read_byte.return_value = len(data)
-        self.mock_bus.read_i2c_block_data.return_value = data + [checksum]
-        
-        # Mock successful write
         self.mock_bus.write_i2c_block_data.return_value = None
-        
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ACK")
+
         # Should not raise exception
         response = self.m0._send_command_with_retry(I2CCommand.SHOW, timeout=1.0)
         self.assertIsNotNone(response)
-    
+
     def test_invalid_checksum(self):
         """Test that invalid checksum raises error."""
-        # Response with wrong checksum
-        data = [ord('A'), ord('C'), ord('K')]
-        wrong_checksum = 0xFF
-        
-        self.mock_bus.read_byte.return_value = len(data)
-        self.mock_bus.read_i2c_block_data.return_value = data + [wrong_checksum]
-        
-        # Mock successful write
+        # Build response with correct structure but wrong checksum
+        bad_response = _build_mock_response(b"ACK")
+        bad_response[4] = 0xFF  # Corrupt the checksum byte
+
         self.mock_bus.write_i2c_block_data.return_value = None
-        
+        self.mock_bus.read_i2c_block_data.return_value = bad_response
+
         with self.assertRaises(I2CChecksumError):
             self.m0._send_command_with_retry(I2CCommand.SHOW, timeout=1.0)
 
@@ -365,7 +354,9 @@ class TestTouchPolling(unittest.TestCase):
         self.mock_pi = Mock()
         self.mock_bus = Mock()
         
-        with patch('M0DeviceI2C.smbus2.SMBus', return_value=self.mock_bus):
+        mock_smbus2 = MagicMock()
+        mock_smbus2.SMBus.return_value = self.mock_bus
+        with patch('M0DeviceI2C.smbus2', mock_smbus2):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
                 id="M0_0",
@@ -382,10 +373,8 @@ class TestTouchPolling(unittest.TestCase):
         touch_x = 120
         touch_y = 80
         
-        # Write response
         self.mock_bus.write_i2c_block_data.return_value = None
-        self.mock_bus.read_byte.return_value = 5
-        
+
         touch_data = [
             1,  # Status: touch detected
             (touch_x >> 8) & 0xFF,  # X high byte
@@ -393,33 +382,29 @@ class TestTouchPolling(unittest.TestCase):
             (touch_y >> 8) & 0xFF,  # Y high byte
             touch_y & 0xFF          # Y low byte
         ]
-        checksum = M0DeviceI2C._calculate_checksum(touch_data)
-        self.mock_bus.read_i2c_block_data.return_value = touch_data + [checksum]
-        
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(touch_data)
+
         # Call poll method directly
         response = self.m0._send_command_with_retry(I2CCommand.TOUCH_POLL, timeout=1.0)
-        
+
         # Verify response format
         self.assertEqual(response[0], 1, "Status should be 1 (touch detected)")
-        
+
         # Verify coordinates
         received_x = (response[1] << 8) | response[2]
         received_y = (response[3] << 8) | response[4]
         self.assertEqual(received_x, touch_x)
         self.assertEqual(received_y, touch_y)
-    
+
     def test_no_touch(self):
         """Test response when no touch detected."""
-        # Mock no-touch response
         self.mock_bus.write_i2c_block_data.return_value = None
-        self.mock_bus.read_byte.return_value = 5
-        
+
         no_touch_data = [0, 0, 0, 0, 0]  # Status = 0
-        checksum = M0DeviceI2C._calculate_checksum(no_touch_data)
-        self.mock_bus.read_i2c_block_data.return_value = no_touch_data + [checksum]
-        
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(no_touch_data)
+
         response = self.m0._send_command_with_retry(I2CCommand.TOUCH_POLL, timeout=1.0)
-        
+
         self.assertEqual(response[0], 0, "Status should be 0 (no touch)")
 
 
@@ -430,7 +415,7 @@ class TestDeviceReset(unittest.TestCase):
         """Set up test fixtures."""
         self.mock_pi = Mock()
         
-        with patch('M0DeviceI2C.smbus2.SMBus'):
+        with patch('M0DeviceI2C.smbus2', MagicMock()):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
                 id="M0_0",
@@ -438,29 +423,33 @@ class TestDeviceReset(unittest.TestCase):
                 reset_pin=25
             )
     
+    @patch('M0DeviceI2C.pigpio')
     @patch('time.sleep')
-    def test_reset_pulse_sequence(self, mock_sleep):
+    def test_reset_pulse_sequence(self, mock_sleep, mock_pigpio):
         """Test GPIO reset pulse sequence."""
+        mock_pigpio.OUTPUT = 1
+        mock_pigpio.INPUT = 0
         self.m0.reset()
-        
+
         # Verify GPIO sequence
         calls = self.mock_pi.method_calls
-        
+
         # Should set pin as output
         self.assertIn(call.set_mode(25, unittest.mock.ANY), calls)
-        
+
         # Should write LOW then HIGH
         write_calls = [c for c in calls if c[0] == 'write']
         self.assertGreater(len(write_calls), 0)
-    
+
     def test_reset_without_pin(self):
         """Test reset when no reset pin configured."""
-        m0_no_pin = M0DeviceI2C(
-            pi=self.mock_pi,
-            id="M0_0",
-            address=0x00,
-            reset_pin=None
-        )
+        with patch('M0DeviceI2C.smbus2', MagicMock()):
+            m0_no_pin = M0DeviceI2C(
+                pi=self.mock_pi,
+                id="M0_0",
+                address=0x00,
+                reset_pin=None
+            )
         
         # Should not raise exception
         m0_no_pin.reset()
@@ -472,34 +461,25 @@ class TestDeviceReset(unittest.TestCase):
 class TestI2CDiscovery(unittest.TestCase):
     """Test I2C device discovery function."""
     
-    @patch('M0DeviceI2C.smbus2.SMBus')
+    @patch('M0DeviceI2C.smbus2')
     @patch('time.sleep')
-    def test_discover_devices(self, mock_sleep, mock_smbus_class):
+    def test_discover_devices(self, mock_sleep, mock_smbus2):
         """Test discovery of I2C devices."""
         mock_bus = Mock()
-        mock_smbus_class.return_value = mock_bus
+        mock_smbus2.SMBus.return_value = mock_bus
         
         # Mock responses for 3 devices
         def read_byte_side_effect(addr):
             if addr in [0x00, 0x01, 0x02]:
-                return 7  # Length of "ID:M0_X"
+                return 0  # Probe succeeds (any value)
             raise IOError("No device")
-        
+
         def read_block_side_effect(addr, reg, length):
-            if addr == 0x00:
-                data = list(b"ID:M0_0")
-            elif addr == 0x01:
-                data = list(b"ID:M0_1")
-            elif addr == 0x02:
-                data = list(b"ID:M0_2")
-            else:
-                raise IOError("No device")
-            
-            checksum = 0
-            for byte in data:
-                checksum ^= byte
-            return data + [checksum]
-        
+            id_map = {0x00: b"ID:M0_0", 0x01: b"ID:M0_1", 0x02: b"ID:M0_2"}
+            if addr in id_map:
+                return _build_mock_response(id_map[addr], pad_to=length)
+            raise IOError("No device")
+
         mock_bus.read_byte.side_effect = read_byte_side_effect
         mock_bus.read_i2c_block_data.side_effect = read_block_side_effect
         mock_bus.write_i2c_block_data.return_value = None
@@ -515,11 +495,11 @@ class TestI2CDiscovery(unittest.TestCase):
         self.assertIn("M0_1", device_ids)
         self.assertIn("M0_2", device_ids)
     
-    @patch('M0DeviceI2C.smbus2.SMBus')
-    def test_discover_no_devices(self, mock_smbus_class):
+    @patch('M0DeviceI2C.smbus2')
+    def test_discover_no_devices(self, mock_smbus2):
         """Test discovery when no devices present."""
         mock_bus = Mock()
-        mock_smbus_class.return_value = mock_bus
+        mock_smbus2.SMBus.return_value = mock_bus
         
         # All addresses fail
         mock_bus.read_byte.side_effect = IOError("No device")
@@ -538,7 +518,9 @@ class TestThreadSafety(unittest.TestCase):
         self.mock_pi = Mock()
         self.mock_bus = Mock()
         
-        with patch('M0DeviceI2C.smbus2.SMBus', return_value=self.mock_bus):
+        mock_smbus2 = MagicMock()
+        mock_smbus2.SMBus.return_value = self.mock_bus
+        with patch('M0DeviceI2C.smbus2', mock_smbus2):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
                 id="M0_0",
@@ -550,11 +532,7 @@ class TestThreadSafety(unittest.TestCase):
     
     def test_concurrent_commands(self):
         """Test that concurrent commands are serialized."""
-        # Mock successful responses
-        self.mock_bus.read_byte.return_value = 3
-        self.mock_bus.read_i2c_block_data.return_value = [
-            ord('A'), ord('C'), ord('K'), 0x00
-        ]
+        self.mock_bus.read_i2c_block_data.return_value = _build_mock_response(b"ACK")
         
         import threading
         
@@ -583,7 +561,7 @@ class TestMessageQueue(unittest.TestCase):
         """Set up test fixtures."""
         self.mock_pi = Mock()
         
-        with patch('M0DeviceI2C.smbus2.SMBus'):
+        with patch('M0DeviceI2C.smbus2', MagicMock()):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
                 id="M0_0",
@@ -617,7 +595,9 @@ class TestStopAndCleanup(unittest.TestCase):
         self.mock_pi = Mock()
         self.mock_bus = Mock()
         
-        with patch('M0DeviceI2C.smbus2.SMBus', return_value=self.mock_bus):
+        mock_smbus2 = MagicMock()
+        mock_smbus2.SMBus.return_value = self.mock_bus
+        with patch('M0DeviceI2C.smbus2', mock_smbus2):
             self.m0 = M0DeviceI2C(
                 pi=self.mock_pi,
                 id="M0_0",

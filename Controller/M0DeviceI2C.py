@@ -143,10 +143,16 @@ class M0DeviceI2C:
             logger.warning("M0I2CConfig not available, using hardcoded defaults")
         
         # Apply config or fallback values
-        self.max_retries = 3 if config is None else self.config.max_retries
-        self.default_timeout = 2.0 if config is None else self.config.timeout
-        self.retry_backoff_base = 0.1 if config is None else self.config.retry_backoff_base
-        self.poll_interval = 0.1 if config is None else self.config.poll_interval
+        if self.config is not None:
+            self.max_retries = self.config.max_retries
+            self.default_timeout = self.config.timeout
+            self.retry_backoff_base = self.config.retry_backoff_base
+            self.poll_interval = self.config.poll_interval
+        else:
+            self.max_retries = 3
+            self.default_timeout = 2.0
+            self.retry_backoff_base = 0.1
+            self.poll_interval = 0.1
         
         # I2C bus connection
         self.bus: Optional[smbus2.SMBus] = None
@@ -293,20 +299,20 @@ class M0DeviceI2C:
         try:
             # Parse command
             if cmd == "WHOAREYOU?":
-                self._send_command_with_retry(I2CCommand.WHOAREYOU)
+                response = self._send_command_with_retry(I2CCommand.WHOAREYOU)
             elif cmd == "SHOW":
-                self._send_command_with_retry(I2CCommand.SHOW)
+                response = self._send_command_with_retry(I2CCommand.SHOW)
             elif cmd == "BLACK":
-                self._send_command_with_retry(I2CCommand.BLACK)
+                response = self._send_command_with_retry(I2CCommand.BLACK)
             elif cmd.startswith("IMG:"):
                 image_id = cmd[4:]
-                self._send_image_command(image_id)
+                response = self._send_image_command(image_id)
             else:
                 logger.warning(f"[{self.id}] Unknown command: {cmd}")
                 return False
-            
+
             logger.info(f"[{self.id}] -> {cmd}")
-            return True
+            return response is not None
             
         except Exception as e:
             logger.error(f"[{self.id}] Failed to send command '{cmd}': {e}")
@@ -388,6 +394,8 @@ class M0DeviceI2C:
         if timeout is None:
             timeout = self.default_timeout
         with self.bus_lock:
+            if self.bus is None:
+                raise I2CError(f"I2C bus not opened for {self.id}")
             try:
                 # Build command frame
                 if payload is None:
@@ -395,8 +403,9 @@ class M0DeviceI2C:
                 
                 frame_length = 1 + len(payload)  # command byte + payload
                 frame_data = [command.value] + list(payload)
-                checksum = self._calculate_checksum(frame_data)
-                
+                # Checksum covers length + data (matching Arduino firmware)
+                checksum = self._calculate_checksum([frame_length] + frame_data)
+
                 # Complete frame: [length, command, payload..., checksum]
                 frame = [frame_length] + frame_data + [checksum]
                 
@@ -418,52 +427,61 @@ class M0DeviceI2C:
     def _read_response(self, timeout: Optional[float] = None) -> Optional[bytes]:
         """
         Read response from I2C device with timeout.
-        
+
+        Uses a single I2C read transaction to get the full response.
+        Arduino response format: [length, data..., checksum]
+        Checksum covers [length, data...] (matching Arduino firmware).
+
         Args:
             timeout: Maximum time to wait for response (uses default if None)
-            
+
         Returns:
-            Optional[bytes]: Response data or None
-            
+            Optional[bytes]: Response data (without length/checksum) or None
+
         Raises:
             I2CTimeoutError: If no response within timeout
             I2CChecksumError: If checksum validation fails
         """
         if timeout is None:
             timeout = self.default_timeout
-        
+
         start_time = time.time()
-        
+
         while time.time() - start_time < timeout:
             try:
-                # Read length byte
-                length = self.bus.read_byte(self.address)
-                
-                if length == 0:
+                # Read full response in a single I2C transaction.
+                # The register byte (0) triggers onI2CReceive(1) on Arduino
+                # which is harmlessly flushed (< 3 bytes), then onI2CRequest
+                # sends the prepared response. Max response is 32 bytes.
+                raw = self.bus.read_i2c_block_data(self.address, 0, 32)
+
+                length = raw[0]
+
+                if length == 0 or length == 0xFF:
                     time.sleep(0.01)
                     continue
-                
-                # Read response data + checksum
-                data = self.bus.read_i2c_block_data(self.address, 0, length + 1)
-                
-                # Validate checksum
-                received_checksum = data[-1]
-                calculated_checksum = self._calculate_checksum(data[:-1])
-                
+
+                # Extract data and checksum
+                response_data = raw[1:1 + length]
+                received_checksum = raw[1 + length]
+
+                # Checksum covers [length, data...] (matching Arduino firmware)
+                calculated_checksum = self._calculate_checksum([length] + list(response_data))
+
                 if received_checksum != calculated_checksum:
                     raise I2CChecksumError(
                         f"Checksum mismatch: received {received_checksum:#04x}, "
                         f"calculated {calculated_checksum:#04x}"
                     )
-                
-                logger.debug(f"[{self.id}] Received I2C response: {[f'{b:#04x}' for b in data]}")
-                return bytes(data[:-1])  # Return data without checksum
-                
+
+                logger.debug(f"[{self.id}] Received I2C response: {[f'{b:#04x}' for b in raw[:length + 2]]}")
+                return bytes(response_data)
+
             except (OSError, IOError):
                 # No data available yet
                 time.sleep(0.01)
                 continue
-        
+
         raise I2CTimeoutError(f"No response from {self.id} within {timeout}s")
     
     @staticmethod
@@ -559,8 +577,9 @@ class M0DeviceI2C:
         Stop polling and close I2C bus.
         """
         logger.info(f"[{self.id}] Stopping I2C device...")
-        
-        # Stop polling thread
+
+        # Signal stop to polling thread
+        self.stop_flag.set()
         if self.poll_thread and self.poll_thread.is_alive():
             self._stop_poll_thread()
         
@@ -600,25 +619,29 @@ def discover_i2c_devices(bus_num: int = 1,
     try:
         for addr in address_range:
             try:
-                # Try to read from device
+                # Try to read from device (probe)
                 bus.read_byte(addr)
-                
+
                 # Device responded - query identity
-                # Send WHOAREYOU command
-                frame = [1, I2CCommand.WHOAREYOU.value, I2CCommand.WHOAREYOU.value]
+                # Build WHOAREYOU frame with checksum including length byte
+                cmd = I2CCommand.WHOAREYOU.value
+                length_byte = 1
+                checksum = length_byte ^ cmd
+                frame = [length_byte, cmd, checksum]
                 bus.write_i2c_block_data(addr, frame[0], frame[1:])
                 time.sleep(0.05)
-                
-                # Read response
-                length = bus.read_byte(addr)
-                if length > 0:
-                    data = bus.read_i2c_block_data(addr, 0, length + 1)
-                    device_id = bytes(data[:-1]).decode('utf-8', errors='ignore').strip('\x00')
-                    
+
+                # Read full response in single transaction
+                raw = bus.read_i2c_block_data(addr, 0, 32)
+                resp_length = raw[0]
+                if resp_length > 0 and resp_length != 0xFF:
+                    resp_data = raw[1:1 + resp_length]
+                    device_id = bytes(resp_data).decode('utf-8', errors='ignore').strip('\x00')
+
                     if device_id.startswith("ID:"):
                         devices.append((addr, device_id[3:]))  # Strip "ID:" prefix
                         logger.info(f"Found device at {addr:#04x}: {device_id}")
-                
+
             except (OSError, IOError):
                 # No device at this address
                 pass

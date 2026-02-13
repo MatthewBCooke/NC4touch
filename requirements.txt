@@ -1,0 +1,4 @@
+netifaces>=0.11.0
+nicegui>=2.19.0
+pigpio>=1.78
+pyserial>=3.5
